@@ -6,256 +6,105 @@
   <title>MeeStore - సెల్లర్ పోర్టల్</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-  </style>
 </head>
-<body class="bg-gray-50 font-sans pb-16">
-
-  <!-- హెడర్ -->
-  <header class="bg-[#9c27b0] text-white p-3.5 shadow-md flex justify-between items-center sticky top-0 z-50">
-    <div class="flex items-center space-x-2.5">
-      <a href="index.html" class="text-white hover:text-yellow-300 text-lg mr-1">
-        <i class="fa-solid fa-arrow-left"></i>
-      </a>
-      <i class="fa-solid fa-store text-2xl text-yellow-300"></i>
-      <div>
-        <h1 class="text-sm font-bold leading-tight">సెల్లర్ డ్యాష్‌బోర్డ్</h1>
-        <p class="text-[10px] text-purple-200">MeeStore పార్ట్‌నర్ పోర్టల్</p>
+<body class="bg-gray-100 p-4 pb-20 font-sans">
+  <div class="max-w-md mx-auto bg-white p-5 rounded-2xl shadow-lg">
+    <div class="flex items-center justify-between border-b pb-3 mb-4">
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-store text-purple-700 text-2xl"></i>
+        <h1 class="text-lg font-bold text-gray-800">సెల్లర్ డాష్‌బోర్డ్</h1>
       </div>
+      <a href="index.html" class="text-xs bg-purple-100 text-purple-700 font-bold px-3 py-1 rounded-full">స్టోర్‌కు వెళ్లండి</a>
     </div>
-    <span class="bg-purple-900 text-yellow-300 text-[11px] font-bold px-2.5 py-1 rounded-full border border-purple-400">
-      కమిషన్: 10%
-    </span>
-  </header>
 
-  <main class="max-w-lg mx-auto p-3 space-y-4">
-
-    <!-- ప్రొడక్ట్ యాడ్ / ఎడిట్ ఫారమ్ -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-      <div class="flex justify-between items-center border-b pb-2 mb-3">
-        <h2 id="form-heading" class="text-sm font-bold text-gray-800 flex items-center gap-2">
-          <i class="fa-solid fa-cloud-arrow-up text-[#9c27b0]"></i> కొత్త ఉత్పత్తిని జోడించండి
-        </h2>
-        <button id="cancel-edit-btn" onclick="resetForm()" class="text-xs text-red-500 font-bold hidden">రద్దు చేయండి</button>
+    <form id="product-form" onsubmit="handleProductSubmit(event)" class="space-y-3">
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1">ఉత్పత్తి పేరు*</label>
+        <input type="text" id="title" required placeholder="ఉదా: ఆర్గానిక్ కొర్రలు (1kg)" class="w-full text-xs p-2.5 border rounded-lg focus:outline-purple-600">
       </div>
 
-      <form id="seller-form" onsubmit="handleFormSubmit(event)" class="space-y-3">
-        <input type="hidden" id="edit-product-id" value="">
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1">సెల్లర్ WhatsApp నంబర్* (ఆర్డర్ల కోసం)</label>
+        <input type="tel" id="seller_phone" required placeholder="ఉదా: 919876543210 (91 తో మొదలుపెట్టండి)" class="w-full text-xs p-2.5 border rounded-lg focus:outline-purple-600">
+      </div>
 
+      <div class="grid grid-cols-2 gap-2">
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">ఉత్పత్తి పేరు (Product Title)*</label>
-          <input type="text" id="title" required placeholder="ఉదా: కొర్రలు 1kg లేదా కాటన్ కుర్తీ" class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none">
-        </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">కేటగిరీ (Category)*</label>
-          <select id="category" required class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none bg-white">
-            <option value="">-- కేటగిరీ ఎంచుకోండి --</option>
-            <option value="women">ఉమెన్ & గర్ల్స్ ఫ్యాషన్</option>
-            <option value="men">మెన్ & బాయ్స్ ఫ్యాషన్</option>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">కేటగిరీ*</label>
+          <select id="category" required class="w-full text-xs p-2.5 border rounded-lg focus:outline-purple-600">
+            <option value="grocery">కిరాణా & మిల్లెట్స్</option>
+            <option value="women">ఉమెన్ & గర్ల్స్</option>
+            <option value="men">మెన్ & బాయ్స్</option>
             <option value="kids">కిడ్స్ వేర్</option>
-            <option value="grocery">కిరాణా & ఆర్గానిక్ ప్రొవిజన్స్</option>
             <option value="home">హోమ్ & కిచెన్</option>
-            <option value="accessories">యాక్సెసరీస్ & బ్యూటీ</option>
           </select>
         </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 mb-1">అసలు ధర (MRP ₹)*</label>
-            <input type="number" id="mrp" required placeholder="999" class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 mb-1">అమ్మకపు ధర (Offer Price ₹)*</label>
-            <input type="number" id="price" required oninput="calculatePayout()" placeholder="499" class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none">
-          </div>
-        </div>
-
-        <div class="bg-purple-50 border border-purple-200 rounded-lg p-2.5 text-xs space-y-1">
-          <div class="flex justify-between text-gray-600">
-            <span>ప్లాట్‌ఫామ్ ఫీజు (10% కమిషన్):</span>
-            <span class="font-semibold text-purple-800">₹<span id="comm-fee">0</span></span>
-          </div>
-          <div class="flex justify-between text-gray-800 font-bold border-t border-purple-200 pt-1">
-            <span>సెల్లర్‌కు వచ్చే నికర మొత్తం:</span>
-            <span class="text-green-700 font-extrabold">₹<span id="seller-payout">0</span></span>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-2 gap-2.5">
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 mb-1">స్టాక్ పరిమాణం (Units)*</label>
-            <input type="number" id="stock" required placeholder="20" class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-gray-700 mb-1">బరువు (గ్రాముల్లో)*</label>
-            <input type="number" id="weight" required placeholder="500" class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none">
-          </div>
-        </div>
-
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">ఉత్పత్తి ఫోటో లింక్ (Image URL)*</label>
-          <input type="url" id="image" required placeholder="https://..." class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none">
+          <label class="block text-xs font-semibold text-gray-600 mb-1">స్టాక్ యూనిట్లు*</label>
+          <input type="number" id="stock" value="20" required class="w-full text-xs p-2.5 border rounded-lg focus:outline-purple-600">
         </div>
+      </div>
 
+      <div class="grid grid-cols-2 gap-2">
         <div>
-          <label class="block text-xs font-semibold text-gray-700 mb-1">ఉత్పత్తి వివరణ (Description)</label>
-          <textarea id="desc" rows="2" placeholder="సైజులు, కలర్స్ మొదలైన వివరాలు..." class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none"></textarea>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">అసలు ధర (MRP)*</label>
+          <input type="number" id="mrp" required placeholder="200" class="w-full text-xs p-2.5 border rounded-lg focus:outline-purple-600">
         </div>
-
-        <button type="submit" id="submit-btn" class="w-full bg-[#9c27b0] text-white py-3 rounded-lg font-bold text-xs hover:bg-purple-800 shadow transition flex items-center justify-center gap-2">
-          <i class="fa-solid fa-plus-circle text-sm"></i> ప్రొడక్ట్ లైవ్ చేయండి
-        </button>
-      </form>
-    </div>
-
-    <!-- ఉత్పత్తుల జాబితా -->
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
-      <div class="flex items-center justify-between border-b pb-2 mb-3">
-        <h3 class="text-xs font-bold text-gray-800">
-          క్లౌడ్ డేటాబేస్‌లోని ఉత్పత్తులు (<span id="count">0</span>)
-        </h3>
-        <button onclick="loadProducts()" class="text-[11px] text-[#9c27b0] font-bold">
-          <i class="fa-solid fa-rotate-right"></i> రిఫ్రెష్
-        </button>
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 mb-1">అమ్మకపు ధర (₹)*</label>
+          <input type="number" id="price" required placeholder="140" class="w-full text-xs p-2.5 border rounded-lg focus:outline-purple-600">
+        </div>
       </div>
-      <div id="product-list" class="space-y-2.5">
-        <p class="text-xs text-gray-400 text-center py-4">లోడ్ అవుతోంది...</p>
-      </div>
-    </div>
 
-  </main>
+      <div>
+        <label class="block text-xs font-semibold text-gray-600 mb-1">ఉత్పత్తి ఫోటో లింక్ (Image URL)*</label>
+        <input type="url" id="image" required placeholder="https://..." class="w-full text-xs p-2.5 border rounded-lg focus:outline-purple-600">
+      </div>
+
+      <button type="submit" id="btn-submit" class="w-full bg-[#9c27b0] text-white py-3 rounded-lg font-bold text-sm shadow hover:bg-purple-800 transition">
+        ప్రొడక్ట్ లైవ్ చేయండి
+      </button>
+    </form>
+  </div>
 
   <script>
     const API_URL = "https://meestore.onrender.com/api/products";
 
-    let loadedProductsList = [];
-
-    function calculatePayout() {
-      const price = parseFloat(document.getElementById('price').value) || 0;
-      const commission = Math.round(price * 0.10);
-      const payout = price - commission;
-      document.getElementById('comm-fee').innerText = commission;
-      document.getElementById('seller-payout').innerText = payout > 0 ? payout : 0;
-    }
-
-    async function loadProducts() {
-      const list = document.getElementById('product-list');
-      list.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">క్లౌడ్ నుండి లోడ్ అవుతోంది...</p>`;
-      
-      try {
-        const res = await fetch(API_URL);
-        loadedProductsList = await res.json();
-        document.getElementById('count').innerText = loadedProductsList.length;
-
-        if (!loadedProductsList || loadedProductsList.length === 0) {
-          list.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">ఇంకా ఏ ఉత్పత్తులూ లేవు.</p>`;
-          return;
-        }
-
-        list.innerHTML = loadedProductsList.map(p => `
-          <div class="flex items-center gap-3 border rounded-lg p-2 bg-gray-50">
-            <img src="${p.image}" class="w-12 h-12 object-cover rounded border" onerror="this.src='https://placehold.co/100x100?text=No+Img'">
-            <div class="flex-1 min-w-0">
-              <h4 class="text-xs font-bold text-gray-800 truncate">${p.title}</h4>
-              <div class="text-[10px] text-gray-500 mt-0.5">
-                <span>ధర: <b>₹${p.price}</b></span> | <span>స్టాక్: <b>${p.stock}</b></span>
-              </div>
-            </div>
-            <!-- ఎడిట్ బటన్ -->
-            <button onclick="startEdit(${p.id})" class="bg-purple-100 text-[#9c27b0] hover:bg-purple-200 text-xs px-2.5 py-1 rounded font-bold">
-              <i class="fa-solid fa-pen-to-square"></i> ఎడిట్
-            </button>
-          </div>
-        `).join('');
-      } catch (err) {
-        list.innerHTML = `<p class="text-xs text-red-500 text-center py-4">డేటాబేస్ కనెక్ట్ కాలేదు.</p>`;
-      }
-    }
-
-    // ఎడిట్ బటన్ నొక్కినప్పుడు ఫారమ్‌లోకి డేటా నింపడం
-    function startEdit(id) {
-      const prod = loadedProductsList.find(p => p.id === id);
-      if (!prod) return;
-
-      document.getElementById('edit-product-id').value = prod.id;
-      document.getElementById('title').value = prod.title;
-      document.getElementById('category').value = prod.category;
-      document.getElementById('mrp').value = prod.mrp;
-      document.getElementById('price').value = prod.price;
-      document.getElementById('stock').value = prod.stock;
-      document.getElementById('weight').value = prod.weight || 500;
-      document.getElementById('image').value = prod.image;
-      document.getElementById('desc').value = prod.desc || '';
-
-      calculatePayout();
-
-      document.getElementById('form-heading').innerHTML = `<i class="fa-solid fa-pen-to-square text-[#9c27b0]"></i> ఉత్పత్తిని సవరించండి (ID: ${prod.id})`;
-      document.getElementById('submit-btn').innerHTML = `<i class="fa-solid fa-check text-sm"></i> వివరాలను అప్‌డేట్ చేయండి`;
-      document.getElementById('cancel-edit-btn').classList.remove('hidden');
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function resetForm() {
-      document.getElementById('seller-form').reset();
-      document.getElementById('edit-product-id').value = '';
-      document.getElementById('form-heading').innerHTML = `<i class="fa-solid fa-cloud-arrow-up text-[#9c27b0]"></i> కొత్త ఉత్పత్తిని జోడించండి`;
-      document.getElementById('submit-btn').innerHTML = `<i class="fa-solid fa-plus-circle text-sm"></i> ప్రొడక్ట్ లైవ్ చేయండి`;
-      document.getElementById('cancel-edit-btn').classList.add('hidden');
-      calculatePayout();
-    }
-
-    // సేవ్ లేదా అప్‌డేట్ చేయడం
-    async function handleFormSubmit(e) {
+    async function handleProductSubmit(e) {
       e.preventDefault();
-      const btn = document.getElementById('submit-btn');
-      const editId = document.getElementById('edit-product-id').value;
-
+      const btn = document.getElementById("btn-submit");
+      btn.innerText = "అప్‌లోడ్ అవుతోంది...";
       btn.disabled = true;
-      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> ప్రాసెస్ అవుతోంది...`;
 
-      const prodData = {
-        title: document.getElementById('title').value,
-        category: document.getElementById('category').value,
-        mrp: parseFloat(document.getElementById('mrp').value),
-        price: parseFloat(document.getElementById('price').value),
-        stock: parseInt(document.getElementById('stock').value),
-        weight: parseInt(document.getElementById('weight').value),
-        image: document.getElementById('image').value,
-        desc: document.getElementById('desc').value
+      const payload = {
+        title: document.getElementById("title").value,
+        seller_phone: document.getElementById("seller_phone").value.replace(/\D/g, ''),
+        category: document.getElementById("category").value,
+        mrp: parseFloat(document.getElementById("mrp").value),
+        price: parseFloat(document.getElementById("price").value),
+        stock: parseInt(document.getElementById("stock").value),
+        image: document.getElementById("image").value
       };
 
       try {
-        const url = editId ? `${API_URL}/${editId}` : API_URL;
-        const method = editId ? 'PUT' : 'POST';
-
-        const res = await fetch(url, {
-          method: method,
+        const res = await fetch(API_URL, {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(prodData)
+          body: JSON.stringify(payload)
         });
-
-        if (res.ok) {
-          alert(editId ? "✅ ఉత్పత్తి విజయవంతంగా అప్‌డేట్ చేయబడింది!" : "✅ కొత్త ఉత్పత్తి క్లౌడ్‌లో సేవ్ అయింది!");
-          resetForm();
-          loadProducts();
+        if(res.ok) {
+          alert("ఉత్పత్తి విజయవంతంగా లైవ్ అయ్యింది!");
+          document.getElementById("product-form").reset();
         } else {
-          alert("సేవ్ చేయడంలో లోపం తలెత్తింది.");
+          alert("ఎర్రర్ వచ్చింది, మళ్ళీ ప్రయత్నించండి.");
         }
-      } catch (err) {
-        alert("సర్వర్ కనెక్ట్ కాలేదు: " + err.message);
+      } catch(err) {
+        alert("సర్వర్‌కు కనెక్ట్ కాలేకపోయాం. కొద్దిసేపటి తర్వాత ప్రయత్నించండి.");
       } finally {
+        btn.innerText = "ప్రొడక్ట్ లైవ్ చేయండి";
         btn.disabled = false;
-        if (!editId) {
-          btn.innerHTML = `<i class="fa-solid fa-plus-circle text-sm"></i> ప్రొడక్ట్ లైవ్ చేయండి`;
-        }
       }
     }
-
-    loadProducts();
   </script>
 </body>
 </html>
