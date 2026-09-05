@@ -7,14 +7,28 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f7f8fa; padding-bottom: 70px; }
+    body { background-color: #f7f8fa; padding-bottom: 75px; }
+
+    /* 1 సెకను MeeStore లోగో స్ప్లాష్ స్క్రీన్ */
+    #splashScreen {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(135deg, #9c27b0, #6a1b9a);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 99999; color: white;
+      animation: autoHideSplash 0.4s ease 1s forwards;
+      pointer-events: none;
+    }
+    @keyframes autoHideSplash {
+      to { opacity: 0; visibility: hidden; display: none; }
+    }
+    .splash-logo { width: 85px; height: 85px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 42px; color: #9c27b0; box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
 
     /* Top Bar */
     .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
     .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.3rem; }
     .avatar-wrapper { position: relative; width: 38px; height: 38px; cursor: pointer; }
     .avatar-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #9c27b0; }
-    .camera-badge { position: absolute; bottom: -2px; right: -2px; background: #9c27b0; color: white; border-radius: 50%; width: 14px; height: 14px; font-size: 8px; display: flex; align-items: center; justify-content: center; }
+    .camera-badge { position: absolute; bottom: -2px; right: -2px; background: #9c27b0; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 8px; display: flex; align-items: center; justify-content: center; }
 
     /* Search */
     .search-box { padding: 8px 12px; background: white; }
@@ -26,7 +40,7 @@
     .cat-btn { border-radius: 18px; font-size: 0.8rem; padding: 5px 12px; border: 1px solid #ddd; background: white; color: #444; cursor: pointer; }
     .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; font-weight: 600; }
 
-    /* Grid */
+    /* Product Cards */
     .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
     .product-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); display: flex; flex-direction: column; }
     .product-img { width: 100%; height: 150px; object-fit: cover; }
@@ -35,7 +49,7 @@
     .product-title { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .product-meta { font-size: 0.75rem; color: #777; margin-bottom: 4px; }
     .product-price { font-size: 1rem; font-weight: 700; color: #9c27b0; margin-bottom: 8px; }
-    .btn-buy { background: #9c27b0; color: white; border: none; padding: 6px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; width: 100%; margin-top: auto; }
+    .btn-buy { background: #9c27b0; color: white; border: none; padding: 7px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; width: 100%; margin-top: auto; }
 
     /* Bottom Navigation */
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: white; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
@@ -48,17 +62,23 @@
     .cat-item-row { background: white; border-radius: 8px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(0,0,0,0.05); cursor: pointer; }
     
     /* 100% Reliable Popups / Modals */
-    .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 2000; justify-content: center; align-items: center; padding: 15px; }
-    .modal-content { background: white; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; max-height: 85vh; overflow-y: auto; }
+    .custom-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 20000; justify-content: center; align-items: center; padding: 15px; }
+    .modal-content { background: white; width: 100%; max-width: 380px; border-radius: 12px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
     .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px; }
     .form-control { width: 100%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
-    .btn-submit { width: 100%; background: #9c27b0; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; }
-    .btn-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
+    .btn-submit { width: 100%; background: #9c27b0; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 0.95rem; }
+    .btn-close { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #666; }
   </style>
 </head>
 <body>
 
-  <!-- Top Header -->
+  <!-- MeeStore 1-Second Splash Screen -->
+  <div id="splashScreen">
+    <div class="splash-logo mb-3"><i class="fa-solid fa-bag-shopping"></i></div>
+    <h2 style="font-weight: 800; letter-spacing: 1px;">MeeStore</h2>
+  </div>
+
+  <!-- Top Bar -->
   <div class="top-header">
     <div style="display: flex; align-items: center; gap: 8px;">
       <label for="buyerPicInput" class="avatar-wrapper" title="ప్రొఫైల్ ఫోటో">
@@ -72,10 +92,10 @@
       </div>
     </div>
     <div style="display: flex; gap: 8px;">
-      <button onclick="openBuyerModal()" style="background: #f3e5f5; border: 1px solid #9c27b0; color: #9c27b0; border-radius: 15px; padding: 4px 10px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">
+      <button onclick="openBuyerModal()" style="background: #f3e5f5; border: 1px solid #9c27b0; color: #9c27b0; border-radius: 15px; padding: 5px 12px; font-size: 0.8rem; font-weight: 700; cursor: pointer;">
         <i class="fa-solid fa-user me-1"></i>ఖాతా
       </button>
-      <button onclick="openCartModal()" style="background: white; border: 1px solid #ddd; border-radius: 15px; padding: 4px 10px; font-size: 0.8rem; cursor: pointer;">
+      <button onclick="openCartModal()" style="background: white; border: 1px solid #ddd; border-radius: 15px; padding: 5px 10px; font-size: 0.85rem; cursor: pointer;">
         <i class="fa-solid fa-cart-shopping"></i> <span id="cartCount" style="color: red; font-weight: bold;">0</span>
       </button>
     </div>
@@ -89,7 +109,7 @@
   <!-- Horizontal Scroll Categories -->
   <div class="cat-scroll" id="catScroll">
     <button class="cat-btn active" onclick="filterCat('all', this)">అన్నీ (All)</button>
-    <button class="cat-btn" onclick="filterCat('కిరాణా & సిరిధాన్యాలు', this)">🌾 కిరాణా</button>
+    <button class="cat-btn" onclick="filterCat('కిరాణా & సిరిధాన్యాలు', this)">🌾 కిరాణా & ఫుడ్</button>
     <button class="cat-btn" onclick="filterCat('జనరల్ & పూజా స్టోర్', this)">🪔 జనరల్</button>
     <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
     <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
@@ -98,18 +118,29 @@
     <button class="cat-btn" onclick="filterCat('Home & Kitchen', this)">🏠 Home & Kitchen</button>
   </div>
 
-  <!-- Home Main Content -->
+  <!-- Home Main Content (Default గానే ప్రొడక్ట్ కనిపిస్తుంది) -->
   <div id="homeArea">
-    <div class="product-grid" id="productGrid"></div>
+    <div class="product-grid" id="productGrid">
+      <div class="product-card">
+        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" class="product-img">
+        <div class="card-body">
+          <span class="badge">కిరాణా & సిరిధాన్యాలు</span>
+          <div class="product-title">Little millets (కొర్రలు)</div>
+          <div class="product-meta">బరువు: <b>500g</b></div>
+          <div class="product-price">₹20</div>
+          <button class="btn-buy" onclick="addToCartDirect('Little millets (కొర్రలు)', 20)">కొనండి</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- Dedicated Categories View -->
+  <!-- Dedicated Categories View (కేటగిరీలు బటన్ నొక్కినప్పుడు వస్తుంది) -->
   <div id="categoriesView" class="cat-list-view" style="display: none;">
     <h3 style="margin-bottom: 12px; font-size: 1.1rem; color: #333;"><i class="fa-solid fa-shapes"></i> అన్ని కేటగిరీలు</h3>
     
     <div class="cat-item-row" onclick="selectCatDirect('కిరాణా & సిరిధాన్యాలు')">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 1.5rem;">🌾</span>
+        <span style="font-size: 1.6rem;">🌾</span>
         <div><b>కిరాణా & సిరిధాన్యాలు</b><div style="font-size: 0.75rem; color: #777;">ఆయిల్స్, పిండి, ఆర్గానిక్ ఫుడ్</div></div>
       </div>
       <i class="fa-solid fa-chevron-right" style="color: #bbb;"></i>
@@ -117,15 +148,15 @@
 
     <div class="cat-item-row" onclick="selectCatDirect('జనరల్ & పూజా స్టోర్')">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 1.5rem;">🪔</span>
-        <div><b>జనరల్ & పూజా స్టోర్</b><div style="font-size: 0.75rem; color: #777;">దీపాలు, నిత్యావసరాలు</div></div>
+        <span style="font-size: 1.6rem;">🪔</span>
+        <div><b>జనరల్ & పూజా స్టోర్</b><div style="font-size: 0.75rem; color: #777;">దీపాలు, పూజా సామాగ్రి</div></div>
       </div>
       <i class="fa-solid fa-chevron-right" style="color: #bbb;"></i>
     </div>
 
     <div class="cat-item-row" onclick="selectCatDirect('Women Fashion')">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 1.5rem;">👗</span>
+        <span style="font-size: 1.6rem;">👗</span>
         <div><b>Women Fashion</b><div style="font-size: 0.75rem; color: #777;">చీరలు, కుర్తీలు, దుస్తులు</div></div>
       </div>
       <i class="fa-solid fa-chevron-right" style="color: #bbb;"></i>
@@ -133,23 +164,23 @@
 
     <div class="cat-item-row" onclick="selectCatDirect('Men Fashion')">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 1.5rem;">👕</span>
-        <div><b>Men Fashion</b><div style="font-size: 0.75rem; color: #777;">షర్టులు, టీ-షర్టులు, జీన్స్</div></div>
+        <span style="font-size: 1.6rem;">👕</span>
+        <div><b>Men Fashion</b><div style="font-size: 0.75rem; color: #777;">షర్టులు, టీ-షర్టులు, ప్యాంట్స్</div></div>
       </div>
       <i class="fa-solid fa-chevron-right" style="color: #bbb;"></i>
     </div>
 
     <div class="cat-item-row" onclick="selectCatDirect('ఫ్యాన్సీ & జ్యువెలరీ')">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 1.5rem;">💍</span>
-        <div><b>ఫ్యాన్సీ & జ్యువెలరీ</b><div style="font-size: 0.75rem; color: #777;">గాజులు, నెక్లెస్‌లు, ఫ్యాన్సీ</div></div>
+        <span style="font-size: 1.6rem;">💍</span>
+        <div><b>ఫ్యాన్సీ & జ్యువెలరీ</b><div style="font-size: 0.75rem; color: #777;">గాజులు, నెక్లెస్‌లు, చెవిరింగులు</div></div>
       </div>
       <i class="fa-solid fa-chevron-right" style="color: #bbb;"></i>
     </div>
 
     <div class="cat-item-row" onclick="selectCatDirect('ఫుట్‌వేర్')">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 1.5rem;">👠</span>
+        <span style="font-size: 1.6rem;">👠</span>
         <div><b>ఫుట్‌వేర్</b><div style="font-size: 0.75rem; color: #777;">చెప్పులు & షూస్</div></div>
       </div>
       <i class="fa-solid fa-chevron-right" style="color: #bbb;"></i>
@@ -157,7 +188,7 @@
 
     <div class="cat-item-row" onclick="selectCatDirect('Home & Kitchen')">
       <div style="display: flex; align-items: center; gap: 10px;">
-        <span style="font-size: 1.5rem;">🏠</span>
+        <span style="font-size: 1.6rem;">🏠</span>
         <div><b>Home & Kitchen</b><div style="font-size: 0.75rem; color: #777;">వంటగది సామాగ్రి, బెడ్‌షీట్స్</div></div>
       </div>
       <i class="fa-solid fa-chevron-right" style="color: #bbb;"></i>
@@ -184,7 +215,7 @@
     </button>
   </div>
 
-  <!-- Buyer Login & Register Modal (Direct & Reliable) -->
+  <!-- Buyer Login & Register Modal -->
   <div id="buyerModal" class="custom-modal">
     <div class="modal-content">
       <div class="modal-header">
@@ -259,7 +290,6 @@
     let allProducts = [], cart = [];
     let curBuyer = JSON.parse(localStorage.getItem('meestore_buyer'));
 
-    // Navigation Switcher
     function switchNav(view) {
       const home = document.getElementById('homeArea');
       const cats = document.getElementById('categoriesView');
@@ -273,6 +303,7 @@
         cats.style.display = 'block';
         bCat.classList.add('active');
         bHome.classList.remove('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         home.style.display = 'block';
         hScroll.style.display = 'flex';
@@ -284,10 +315,11 @@
 
     function selectCatDirect(catName) {
       switchNav('home');
-      renderProducts(allProducts.filter(p => p.category && p.category.includes(catName)));
+      if (allProducts.length > 0) {
+        renderProducts(allProducts.filter(p => p.category && p.category.includes(catName)));
+      }
     }
 
-    // Modal Handlers
     function openBuyerModal() {
       document.getElementById('buyerModal').style.display = 'flex';
       syncBuyerUI();
@@ -305,7 +337,6 @@
       document.getElementById('tabRegBtn').style.color = !isLog ? 'white' : '#333';
     }
 
-    // Profile Photo (Camera/Gallery)
     function uploadBuyerPic(input) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -339,7 +370,6 @@
       }
     }
 
-    // Authentication Handlers
     async function handleBuyerLogin(e) {
       e.preventDefault();
       try {
@@ -356,8 +386,9 @@
           localStorage.setItem('meestore_buyer', JSON.stringify(d));
           curBuyer = d;
           syncBuyerUI();
+          alert("స్వాగతం, " + d.name + "!");
         } else alert(d.error);
-      } catch (err) { alert("సర్వర్ తో కనెక్ట్ కాలేకపోయాం"); }
+      } catch (err) { alert("లాగిన్ కాలేకపోయాం. దయచేసి నెట్‌వర్క్ చెక్ చేయండి."); }
     }
 
     async function handleBuyerRegister(e) {
@@ -368,4 +399,137 @@
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify({
             name: document.getElementById('bRegName').value,
-            phone: document.getElementByI
+            phone: document.getElementById('bRegPhone').value,
+            address: document.getElementById('bRegAddr').value,
+            password: document.getElementById('bRegPass').value
+          })
+        });
+        const d = await res.json();
+        if (res.ok) {
+          alert("రిజిస్ట్రేషన్ పూర్తయింది! లాగిన్ అవ్వండి.");
+          toggleAuthTab(true);
+        } else alert(d.error);
+      } catch (err) { alert("రిజిస్ట్రేషన్ ఫెయిల్ అయింది."); }
+    }
+
+    function logoutBuyer() {
+      localStorage.removeItem('meestore_buyer');
+      curBuyer = null;
+      syncBuyerUI();
+      closeBuyerModal();
+    }
+
+    async function loadBuyerOrders() {
+      try {
+        const res = await fetch(`${API}/buyer/orders/${curBuyer.id}`);
+        const list = await res.json();
+        const div = document.getElementById('myOrdersList');
+        if (!list || list.length === 0) { div.innerHTML = "<small>ఇంకా ఆర్డర్లు లేవు</small>"; return; }
+        div.innerHTML = list.map(o => `
+          <div style="background: white; border: 1px solid #eee; padding: 8px; border-radius: 6px; margin-bottom: 6px;">
+            <div style="display:flex; justify-content:space-between; font-weight:600;"><span>${o.product_name}</span><span>₹${o.amount}</span></div>
+            <small style="color:#666;">స్టేటస్: <b>${o.status}</b></small>
+          </div>
+        `).join('');
+      } catch(e) {}
+    }
+
+    async function loadProducts() {
+      try {
+        const res = await fetch(`${API}/products`);
+        if (res.ok) {
+          const list = await res.json();
+          if (list && list.length > 0) {
+            allProducts = list;
+            renderProducts(allProducts);
+          }
+        }
+      } catch (e) {}
+      syncBuyerUI();
+    }
+
+    function renderProducts(list) {
+      const grid = document.getElementById('productGrid');
+      if (!list || list.length === 0) return;
+      grid.innerHTML = list.map(p => `
+        <div class="product-card">
+          <img src="${p.image_url}" class="product-img" onerror="this.src='https://via.placeholder.com/200'">
+          <div class="card-body">
+            <span class="badge">${p.category || 'General'}</span>
+            <div class="product-title">${p.name}</div>
+            <div class="product-meta">బరువు: <b>${p.weight || 'N/A'}</b></div>
+            <div class="product-price">₹${p.price}</div>
+            <button class="btn-buy" onclick="addToCart(${p.id})">కొనండి</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addToCartDirect(name, price) {
+      cart.push({ name: name, price: price, seller_upi: 'mujahidsdghf9@ybl', seller_phone: '9177411712' });
+      updateCartUI();
+      openCartModal();
+    }
+
+    function addToCart(id) {
+      const it = allProducts.find(p => p.id === id);
+      if (it) cart.push(it);
+      updateCartUI();
+      openCartModal();
+    }
+
+    function updateCartUI() {
+      document.getElementById('cartCount').innerText = cart.length;
+      const list = document.getElementById('cartItemList');
+      const box = document.getElementById('cartTotalBox');
+      if (cart.length === 0) { list.innerHTML = "<p style='text-align:center; color:#888;'>కార్ట్ ఖాళీగా ఉంది</p>"; box.style.display = 'none'; return; }
+      box.style.display = 'block';
+      let total = 0;
+      list.innerHTML = cart.map(it => {
+        total += Number(it.price);
+        return `<div style="display:flex; justify-content:space-between; padding: 6px 0; border-bottom: 1px solid #eee;"><span>${it.name}</span><b>₹${it.price}</b></div>`;
+      }).join('');
+      document.getElementById('cartTotalVal').innerText = total;
+
+      const upi = (cart[0] && cart[0].seller_upi) ? cart[0].seller_upi : 'mujahidsdghf9@ybl';
+      const link = `upi://pay?pa=${upi}&pn=MeeStore&am=${total}&cu=INR`;
+      document.getElementById('btnDirectUpi').href = link;
+      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(link)}`;
+    }
+
+    async function completeOrder() {
+      if (!curBuyer) { alert("ఆర్డర్ చేయడానికి ముందుగా లాగిన్ అవ్వండి!"); openBuyerModal(); return; }
+      const it = cart[0];
+      const res = await fetch(`${API}/orders/place`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          buyer_id: curBuyer.id,
+          seller_id: it.seller_id,
+          product_name: it.name,
+          amount: it.price,
+          buyer_name: curBuyer.name,
+          buyer_phone: curBuyer.phone,
+          buyer_address: curBuyer.address,
+          payment_mode: "UPI Prepaid"
+        })
+      });
+      if (res.ok) {
+        const msg = `🛒 *MeeStore Order!*\nవస్తువు: ${it.name}\nధర: ₹${it.price}\nకస్టమర్: ${curBuyer.name} (${curBuyer.phone})\nచిరునామా: ${curBuyer.address}`;
+        window.open(`https://wa.me/91${it.seller_phone || '9177411712'}?text=${encodeURIComponent(msg)}`);
+        cart = [];
+        updateCartUI();
+        closeCartModal();
+      }
+    }
+
+    function filterCat(cat, btn) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProducts(cat === 'all' ? allProducts : allProducts.filter(p => p.category && p.category.includes(cat)));
+    }
+
+    loadProducts();
+  </script>
+</body>
+</html>
