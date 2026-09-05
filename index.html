@@ -39,24 +39,27 @@
     </div>
   </nav>
 
-  <!-- Search & Meesho Categories -->
+  <!-- Search & All Categories -->
   <div class="container mt-2">
     <div class="input-group mb-2 shadow-sm rounded-pill overflow-hidden">
       <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
       <input type="text" id="searchInput" class="form-control border-start-0" placeholder="వస్తువులను వెతకండి...">
     </div>
 
-    <!-- కేటగిరీ బటన్స్ (మీషో మోడల్) -->
+    <!-- పూర్తి కేటగిరీ బటన్లు -->
     <div class="cat-scroll">
       <button class="cat-btn active" onclick="filterCat('all', this)">అన్నీ (All)</button>
+      <button class="cat-btn" onclick="filterCat('కిరాణా & మినరల్స్', this)">🌾 కిరాణా & మినరల్స్</button>
+      <button class="cat-btn" onclick="filterCat('జనరల్ & పూజా స్టోర్', this)">🪔 జనరల్ & పూజా స్టోర్</button>
       <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
       <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
-      <button class="cat-btn" onclick="filterCat('Kids & Toys', this)">👶 Kids & Toys</button>
-      <button class="cat-btn" onclick="filterCat('Beauty & Health', this)">💄 Beauty & Health</button>
+      <button class="cat-btn" onclick="filterCat('ఫ్యాన్సీ & జ్యువెలరీ', this)">💍 ఫ్యాన్సీ & జ్యువెలరీ</button>
+      <button class="cat-btn" onclick="filterCat('ఫుట్‌వేర్', this)">👠 ఫుట్‌వేర్</button>
       <button class="cat-btn" onclick="filterCat('Home & Kitchen', this)">🏠 Home & Kitchen</button>
+      <button class="cat-btn" onclick="filterCat('Beauty & Health', this)">💄 Beauty & Health</button>
+      <button class="cat-btn" onclick="filterCat('Kids & Toys', this)">👶 Kids & Toys</button>
       <button class="cat-btn" onclick="filterCat('Electronics & Accessories', this)">📱 Electronics</button>
-      <button class="cat-btn" onclick="filterCat('Grocery & Millets', this)">🌾 Grocery & Millets</button>
-      <button class="cat-btn" onclick="filterCat('Bags & Footwear', this)">👜 Bags & Footwear</button>
+      <button class="cat-btn" onclick="filterCat('Bags & Luggage', this)">👜 Bags & Luggage</button>
     </div>
   </div>
 
@@ -68,7 +71,7 @@
     </div>
     <div id="emptyMsg" class="text-center py-5 text-muted d-none">
       <i class="fa-solid fa-box-open fa-3x mb-3 text-secondary"></i>
-      <h5>ఉత్పత్తులు ఏవీ లేవు</h5>
+      <h5>ఈ కేటగిరీలో ఉత్పత్తులు ఏవీ లేవు</h5>
     </div>
     <div id="productGrid" class="row row-cols-2 row-cols-md-4 g-3"></div>
   </div>
@@ -107,8 +110,6 @@
         <!-- Direct UPI & QR Display Area -->
         <div id="upiPaymentSection" class="p-3 bg-light rounded text-center border mb-3">
           <p class="small text-muted mb-2 fw-bold">మొబైల్ యాప్ ద్వారా పేమెంట్ చేయడానికి:</p>
-          
-          <!-- డైరెక్ట్ GPay / PhonePe ఓపెన్ అయ్యే బటన్ -->
           <a id="btnDirectUpi" href="#" class="btn-upi-app">
             <i class="fa-solid fa-mobile-screen-button me-2"></i>Pay via GPay / PhonePe / Paytm
           </a>
@@ -136,7 +137,6 @@
     let allProducts = [];
     let cart = [];
 
-    // ప్రొడక్ట్స్ లోడ్ చేయడం
     async function loadProducts() {
       try {
         const res = await fetch(`${API_BASE}/api/products`);
@@ -182,7 +182,6 @@
       });
     }
 
-    // కేటగిరీ ఫిల్టర్
     function filterCat(category, btn) {
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -194,14 +193,12 @@
       }
     }
 
-    // సెర్చ్ ఫిల్టర్
     document.getElementById('searchInput').addEventListener('input', (e) => {
       const q = e.target.value.toLowerCase();
       const filtered = allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q)));
       renderProducts(filtered);
     });
 
-    // కార్ట్ ఫంక్షన్స్
     function addToCart(productId) {
       const item = allProducts.find(p => p.id === productId);
       if (!item) return;
@@ -252,23 +249,19 @@
       document.getElementById('upiPaymentSection').style.display = isPrepaid ? 'block' : 'none';
     }
 
-    // డైనమిక్ డైరెక్ట్ UPI Intent & QR Code
     function setupDirectUpi(amount) {
       const firstItem = cart[0];
       const upiId = (firstItem && firstItem.seller_upi) ? firstItem.seller_upi : 'mujahidsdghf9@ybl';
       const storeName = "MeeStore Order";
       
-      // డైరెక్ట్ మొబైల్ UPI లింక్ (GPay, PhonePe, Paytm డైరెక్ట్‌గా ఓపెన్ అవుతాయి)
       const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(storeName)}&am=${amount}&cu=INR`;
       document.getElementById('btnDirectUpi').setAttribute('href', upiDeepLink);
 
-      // కంప్యూటర్ లేదా స్కానింగ్ కోసం QR Code
       const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiDeepLink)}`;
       document.getElementById('qrImage').src = qrApi;
       document.getElementById('upiIdDisplay').innerText = upiId;
     }
 
-    // వాట్సాప్ ఆర్డర్
     function sendOrderToWhatsApp() {
       const name = document.getElementById('custName').value.trim();
       const phone = document.getElementById('custPhone').value.trim();
