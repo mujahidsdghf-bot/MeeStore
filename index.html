@@ -7,30 +7,30 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background-color: #f5f6f8; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: #f5f6f8; font-family: sans-serif; }
     .navbar-brand { font-weight: 800; color: #9c27b0 !important; font-size: 1.4rem; }
-    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 10px 0; -webkit-overflow-scrolling: touch; }
+    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 10px 0; }
     .cat-scroll::-webkit-scrollbar { display: none; }
-    .cat-btn { border-radius: 20px; font-size: 0.85rem; padding: 6px 14px; border: 1px solid #e0e0e0; background: white; color: #333; }
-    .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; font-weight: 600; }
-    .product-card { border: none; border-radius: 10px; overflow: hidden; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: column; }
-    .product-img { width: 100%; height: 190px; object-fit: cover; }
-    .price-text { color: #9c27b0; font-weight: 700; font-size: 1.15rem; }
-    .mrp-text { text-decoration: line-through; color: #888; font-size: 0.85rem; }
-    .btn-buy { background: #9c27b0; color: white; border: none; font-size: 0.9rem; font-weight: 600; }
+    .cat-btn { border-radius: 20px; font-size: 0.85rem; padding: 6px 14px; border: 1px solid #e0e0e0; background: white; }
+    .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
+    .product-card { border: none; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: column; }
+    .product-img { width: 100%; height: 180px; object-fit: cover; }
+    .btn-buy { background: #9c27b0; color: white; font-weight: 600; border: none; }
     .btn-buy:hover { background: #7b1fa2; color: white; }
-    .btn-upi-app { background: #1b8755; color: white; font-weight: 600; border-radius: 8px; padding: 12px; text-decoration: none; display: block; text-align: center; margin-bottom: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); }
-    .btn-upi-app:hover { background: #146c43; color: white; }
   </style>
 </head>
 <body>
 
-  <!-- Top Navbar -->
+  <!-- Navbar -->
   <nav class="navbar navbar-expand bg-white sticky-top border-bottom py-2">
     <div class="container">
       <a class="navbar-brand" href="index.html"><i class="fa-solid fa-bag-shopping me-1"></i>MeeStore</a>
       <div class="d-flex align-items-center gap-2">
-        <a href="seller.html" class="btn btn-outline-primary btn-sm rounded-pill"><i class="fa-solid fa-store me-1"></i>సెల్లర్ అవ్వండి</a>
+        <!-- బయ్యర్ అకౌంట్ బటన్ -->
+        <button id="buyerAuthBtn" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="openBuyerModal()">
+          <i class="fa-solid fa-user me-1"></i>లాగిన్
+        </button>
+        <a href="seller.html" class="btn btn-outline-primary btn-sm rounded-pill"><i class="fa-solid fa-store me-1"></i>సెల్లర్</a>
         <button class="btn btn-light position-relative" data-bs-toggle="offcanvas" data-bs-target="#cartDrawer">
           <i class="fa-solid fa-cart-shopping fs-5"></i>
           <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
@@ -39,14 +39,8 @@
     </div>
   </nav>
 
-  <!-- Search & All Categories -->
+  <!-- Categories -->
   <div class="container mt-2">
-    <div class="input-group mb-2 shadow-sm rounded-pill overflow-hidden">
-      <span class="input-group-text bg-white border-end-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-      <input type="text" id="searchInput" class="form-control border-start-0" placeholder="వస్తువులను వెతకండి...">
-    </div>
-
-    <!-- పూర్తి కేటగిరీ బటన్లు -->
     <div class="cat-scroll">
       <button class="cat-btn active" onclick="filterCat('all', this)">అన్నీ (All)</button>
       <button class="cat-btn" onclick="filterCat('కిరాణా & మినరల్స్', this)">🌾 కిరాణా & మినరల్స్</button>
@@ -63,69 +57,73 @@
     </div>
   </div>
 
-  <!-- Product Grid -->
+  <!-- Products Grid -->
   <div class="container my-3">
-    <div id="loading" class="text-center py-5">
-      <div class="spinner-border text-primary" role="status"></div>
-      <p class="text-muted mt-2">ఉత్పత్తులు లోడ్ అవుతున్నాయి...</p>
-    </div>
-    <div id="emptyMsg" class="text-center py-5 text-muted d-none">
-      <i class="fa-solid fa-box-open fa-3x mb-3 text-secondary"></i>
-      <h5>ఈ కేటగిరీలో ఉత్పత్తులు ఏవీ లేవు</h5>
-    </div>
     <div id="productGrid" class="row row-cols-2 row-cols-md-4 g-3"></div>
   </div>
 
-  <!-- Cart & Checkout Offcanvas -->
+  <!-- బయ్యర్ లాగిన్ / మై ఆర్డర్స్ మోడల్ -->
+  <div class="modal fade" id="buyerModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title fw-bold" id="buyerModalTitle">బయ్యర్ లాగిన్</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="buyerAuthForms">
+            <ul class="nav nav-tabs mb-3">
+              <li class="nav-item"><button class="nav-link active" onclick="toggleBAuth(true)">లాగిన్</button></li>
+              <li class="nav-item"><button class="nav-link" onclick="toggleBAuth(false)">రిజిస్ట్రేషన్</button></li>
+            </ul>
+            <form id="bLoginForm">
+              <div class="mb-2"><input type="tel" id="bLogPhone" class="form-control" placeholder="మొబైల్ నంబర్" required></div>
+              <div class="mb-3"><input type="password" id="bLogPass" class="form-control" placeholder="పాస్‌వర్డ్" required></div>
+              <button type="submit" class="btn btn-primary w-100" style="background:#9c27b0; border:none;">లాగిన్</button>
+            </form>
+            <form id="bRegForm" class="d-none">
+              <div class="mb-2"><input type="text" id="bRegName" class="form-control" placeholder="మీ పేరు" required></div>
+              <div class="mb-2"><input type="tel" id="bRegPhone" class="form-control" placeholder="మొబైల్ నంబర్" required></div>
+              <div class="mb-2"><textarea id="bRegAddr" class="form-control" placeholder="పూర్తి చిరునామా" required></textarea></div>
+              <div class="mb-3"><input type="password" id="bRegPass" class="form-control" placeholder="పాస్‌వర్డ్" required></div>
+              <button type="submit" class="btn btn-success w-100">రిజిస్టర్ అవ్వండి</button>
+            </form>
+          </div>
+
+          <!-- లాగిన్ అయిన బయ్యర్ ఆర్డర్లు & రిటర్న్ సెక్షన్ -->
+          <div id="buyerOrdersSection" class="d-none">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h6 class="fw-bold mb-0">నా ఆర్డర్లు (My Orders)</h6>
+              <button class="btn btn-sm btn-outline-danger" onclick="logoutBuyer()">లాగౌట్</button>
+            </div>
+            <div id="buyerOrdersList"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cart Drawer -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="cartDrawer">
-    <div class="offcanvas-header bg-light border-bottom">
-      <h5 class="offcanvas-title fw-bold"><i class="fa-solid fa-cart-arrow-down me-2"></i>మీ కార్ట్</h5>
+    <div class="offcanvas-header bg-light">
+      <h5 class="offcanvas-title fw-bold">మీ కార్ట్</h5>
       <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body">
-      <div id="cartItemsList" class="mb-3"></div>
-      
-      <div id="checkoutFormArea" class="d-none">
-        <h6 class="fw-bold mt-3 mb-2 border-bottom pb-1">డెలివరీ చిరునామా</h6>
-        <div class="mb-2">
-          <input type="text" id="custName" class="form-control form-control-sm" placeholder="మీ పూర్తి పేరు" required>
-        </div>
-        <div class="mb-2">
-          <input type="tel" id="custPhone" class="form-control form-control-sm" placeholder="మొబైల్ నంబర్" required>
-        </div>
-        <div class="mb-3">
-          <textarea id="custAddress" class="form-control form-control-sm" rows="2" placeholder="ఇంటి నంబర్, వీధి, ఏరియా, పిన్‌కోడ్" required></textarea>
-        </div>
-
-        <h6 class="fw-bold mb-2 border-bottom pb-1">పేమెంట్ విధానం</h6>
-        <div class="form-check">
-          <input class="form-check-input" type="radio" name="payMethod" id="payPrepaid" value="prepaid" checked onchange="togglePayView()">
-          <label class="form-check-label fw-bold" for="payPrepaid">Prepaid (UPI / GPay / PhonePe)</label>
-        </div>
-        <div class="form-check mb-3">
-          <input class="form-check-input" type="radio" name="payMethod" id="payCod" value="cod" onchange="togglePayView()">
-          <label class="form-check-label" for="payCod">క్యాష్ ఆన్ డెలివరీ (COD)</label>
-        </div>
-
-        <!-- Direct UPI & QR Display Area -->
-        <div id="upiPaymentSection" class="p-3 bg-light rounded text-center border mb-3">
-          <p class="small text-muted mb-2 fw-bold">మొబైల్ యాప్ ద్వారా పేమెంట్ చేయడానికి:</p>
-          <a id="btnDirectUpi" href="#" class="btn-upi-app">
-            <i class="fa-solid fa-mobile-screen-button me-2"></i>Pay via GPay / PhonePe / Paytm
+      <div id="cartItemsList"></div>
+      <div id="checkoutFormArea" class="d-none mt-3">
+        <div class="p-3 bg-light rounded text-center mb-3">
+          <a id="btnDirectUpi" href="#" class="btn btn-success w-100 fw-bold mb-2">
+            <i class="fa-solid fa-mobile-screen me-2"></i>Pay via UPI (GPay / PhonePe)
           </a>
-          
-          <div class="text-muted small my-2">- లేదా స్కానర్ కోసం -</div>
-          <img id="qrImage" src="" alt="UPI QR" class="img-fluid rounded border p-1 bg-white mb-2" style="max-width: 150px;">
-          <p class="small text-muted mb-0">UPI ID: <span id="upiIdDisplay" class="fw-bold text-dark"></span></p>
+          <img id="qrImage" src="" class="img-fluid border p-1 bg-white" style="max-width: 140px;">
         </div>
-
         <div class="d-flex justify-content-between fw-bold fs-5 mb-3">
-          <span>మొత్తం బిల్లు:</span>
+          <span>మొత్తం:</span>
           <span class="text-primary">₹<span id="cartTotal">0</span></span>
         </div>
-
-        <button class="btn btn-success w-100 py-2 fw-bold" onclick="sendOrderToWhatsApp()">
-          <i class="fa-brands fa-whatsapp me-2 fs-5"></i>ఆర్డర్ కన్ఫర్మ్ చేసి పంపండి
+        <button class="btn btn-success w-100 py-2 fw-bold" onclick="completeOrder()">
+          <i class="fa-brands fa-whatsapp me-2"></i>ఆర్డర్ కన్ఫర్మ్ చేయండి
         </button>
       </div>
     </div>
@@ -133,164 +131,168 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    const API_BASE = "https://meestore.onrender.com";
-    let allProducts = [];
-    let cart = [];
+    const API = "https://meestore.onrender.com/api";
+    let allProducts = [], cart = [];
+    let curBuyer = JSON.parse(localStorage.getItem('meestore_buyer'));
 
     async function loadProducts() {
-      try {
-        const res = await fetch(`${API_BASE}/api/products`);
-        allProducts = await res.json();
-        document.getElementById('loading').classList.add('d-none');
-        renderProducts(allProducts);
-      } catch (err) {
-        document.getElementById('loading').innerHTML = '<span class="text-danger fw-bold">ఉత్పత్తులు లోడ్ కాలేదు. దయచేసి రీఫ్రెష్ చేయండి.</span>';
-      }
+      const res = await fetch(`${API}/products`);
+      allProducts = await res.json();
+      renderProducts(allProducts);
+      updateBuyerNav();
     }
 
     function renderProducts(list) {
       const grid = document.getElementById('productGrid');
-      const emptyMsg = document.getElementById('emptyMsg');
-      grid.innerHTML = "";
-
-      if (!list || list.length === 0) {
-        emptyMsg.classList.remove('d-none');
-        return;
-      }
-      emptyMsg.classList.add('d-none');
-
-      list.forEach(p => {
-        const col = document.createElement('div');
-        col.className = 'col';
-        col.innerHTML = `
-          <div class="product-card">
-            <img src="${p.image_url}" class="product-img" onerror="this.src='https://via.placeholder.com/300x200?text=No+Image'">
-            <div class="p-3 d-flex flex-column flex-grow-1">
-              <span class="badge bg-light text-secondary mb-1 align-self-start" style="font-size: 0.7rem;">${p.category || 'General'}</span>
-              <h6 class="fw-bold mb-1 text-truncate" title="${p.name}">${p.name}</h6>
-              <div class="mb-3">
-                <span class="price-text">₹${p.price}</span>
-                ${p.mrp ? `<span class="mrp-text ms-2">₹${p.mrp}</span>` : ''}
-              </div>
-              <button class="btn btn-buy w-100 mt-auto rounded-pill" onclick="addToCart(${p.id})">
-                <i class="fa-solid fa-cart-plus me-1"></i>కొనండి
-              </button>
+      grid.innerHTML = list.map(p => `
+        <div class="col">
+          <div class="product-card p-2">
+            <img src="${p.image_url}" class="product-img rounded" onerror="this.src='https://via.placeholder.com/200'">
+            <div class="p-2 d-flex flex-column flex-grow-1">
+              <span class="small text-muted">${p.category || 'General'}</span>
+              <div class="fw-bold text-truncate">${p.name}</div>
+              <div class="fw-bold text-primary my-1">₹${p.price}</div>
+              <button class="btn btn-buy btn-sm rounded-pill mt-auto" onclick="addToCart(${p.id})">కొనండి</button>
             </div>
           </div>
-        `;
-        grid.appendChild(col);
-      });
+        </div>
+      `).join('');
     }
 
-    function filterCat(category, btn) {
+    function filterCat(cat, btn) {
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      if (category === 'all') {
-        renderProducts(allProducts);
-      } else {
-        const filtered = allProducts.filter(p => p.category === category);
-        renderProducts(filtered);
-      }
+      renderProducts(cat === 'all' ? allProducts : allProducts.filter(p => p.category === cat));
     }
 
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-      const q = e.target.value.toLowerCase();
-      const filtered = allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q)));
-      renderProducts(filtered);
-    });
-
-    function addToCart(productId) {
-      const item = allProducts.find(p => p.id === productId);
-      if (!item) return;
-      cart.push(item);
-      updateCartUI();
-      const offcanvas = new bootstrap.Offcanvas(document.getElementById('cartDrawer'));
-      offcanvas.show();
+    function addToCart(id) {
+      cart.push(allProducts.find(p => p.id === id));
+      updateCart();
+      new bootstrap.Offcanvas(document.getElementById('cartDrawer')).show();
     }
 
-    function removeFromCart(index) {
-      cart.splice(index, 1);
-      updateCartUI();
-    }
-
-    function updateCartUI() {
+    function updateCart() {
       document.getElementById('cartCount').innerText = cart.length;
-      const listArea = document.getElementById('cartItemsList');
-      const formArea = document.getElementById('checkoutFormArea');
-      listArea.innerHTML = "";
-
-      if (cart.length === 0) {
-        listArea.innerHTML = '<p class="text-center text-muted py-4">మీ కార్ట్ ఖాళీగా ఉంది</p>';
-        formArea.classList.add('d-none');
-        return;
-      }
-
-      formArea.classList.remove('d-none');
+      const list = document.getElementById('cartItemsList');
+      const area = document.getElementById('checkoutFormArea');
+      if(cart.length === 0) { list.innerHTML = "కార్ట్ ఖాళీగా ఉంది"; area.classList.add('d-none'); return; }
+      area.classList.remove('d-none');
       let total = 0;
-      cart.forEach((item, idx) => {
-        total += Number(item.price);
-        listArea.innerHTML += `
-          <div class="d-flex justify-content-between align-items-center border-bottom py-2">
-            <div>
-              <div class="fw-bold">${item.name}</div>
-              <div class="text-muted small">₹${item.price}</div>
-            </div>
-            <button class="btn btn-sm btn-outline-danger" onclick="removeFromCart(${idx})"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `;
-      });
-
+      list.innerHTML = cart.map((it, idx) => {
+        total += Number(it.price);
+        return `<div class="d-flex justify-content-between py-1 border-bottom"><div>${it.name}</div><b>₹${it.price}</b></div>`;
+      }).join('');
       document.getElementById('cartTotal').innerText = total;
-      setupDirectUpi(total);
+
+      const upi = cart[0].seller_upi || 'mujahidsdghf9@ybl';
+      const link = `upi://pay?pa=${upi}&pn=MeeStore&am=${total}&cu=INR`;
+      document.getElementById('btnDirectUpi').href = link;
+      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=${encodeURIComponent(link)}`;
     }
 
-    function togglePayView() {
-      const isPrepaid = document.getElementById('payPrepaid').checked;
-      document.getElementById('upiPaymentSection').style.display = isPrepaid ? 'block' : 'none';
-    }
-
-    function setupDirectUpi(amount) {
-      const firstItem = cart[0];
-      const upiId = (firstItem && firstItem.seller_upi) ? firstItem.seller_upi : 'mujahidsdghf9@ybl';
-      const storeName = "MeeStore Order";
-      
-      const upiDeepLink = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(storeName)}&am=${amount}&cu=INR`;
-      document.getElementById('btnDirectUpi').setAttribute('href', upiDeepLink);
-
-      const qrApi = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(upiDeepLink)}`;
-      document.getElementById('qrImage').src = qrApi;
-      document.getElementById('upiIdDisplay').innerText = upiId;
-    }
-
-    function sendOrderToWhatsApp() {
-      const name = document.getElementById('custName').value.trim();
-      const phone = document.getElementById('custPhone').value.trim();
-      const address = document.getElementById('custAddress').value.trim();
-
-      if (!name || !phone || !address) {
-        alert("దయచేసి పేరు, ఫోన్ నంబర్ మరియు పూర్తి చిరునామా ఎంటర్ చేయండి.");
-        return;
-      }
-
-      const isPrepaid = document.getElementById('payPrepaid').checked;
-      const payMode = isPrepaid ? "Prepaid (UPI పేమెంట్ పూర్తయింది, స్క్రీన్‌షాట్ జతచేస్తున్నాను)" : "Cash on Delivery (COD)";
-      const total = document.getElementById('cartTotal').innerText;
-
-      let itemsText = "";
-      cart.forEach((it, i) => {
-        itemsText += `${i + 1}. ${it.name} - ₹${it.price}\n`;
+    async function completeOrder() {
+      if(!curBuyer) { alert("ఆర్డర్ చేయడానికి ముందుగా లాగిన్ అవ్వండి!"); openBuyerModal(); return; }
+      const it = cart[0];
+      const res = await fetch(`${API}/orders/place`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          buyer_id: curBuyer.id,
+          seller_id: it.seller_id,
+          product_name: it.name,
+          amount: it.price,
+          buyer_name: curBuyer.name,
+          buyer_phone: curBuyer.phone,
+          buyer_address: curBuyer.address,
+          payment_mode: "UPI Prepaid"
+        })
       });
+      if(res.ok) {
+        const msg = `🛒 *MeeStore Order Placed!*\nవస్తువు: ${it.name}\nధర: ₹${it.price}\nకస్టమర్: ${curBuyer.name} (${curBuyer.phone})\nఅడ్రస్: ${curBuyer.address}`;
+        window.open(`https://wa.me/91${it.seller_phone || '9177411712'}?text=${encodeURIComponent(msg)}`);
+        cart = [];
+        updateCart();
+      }
+    }
 
-      const message = `🛒 *కొత్త MeeStore ఆర్డర్!*\n\n` +
-                      `👤 *కస్టమర్:* ${name} (${phone})\n` +
-                      `📍 *అడ్రస్:* ${address}\n` +
-                      `💳 *పేమెంట్ విధానం:* ${payMode}\n\n` +
-                      `📦 *ఆర్డర్ చేసిన వస్తువులు:*\n${itemsText}\n` +
-                      `💰 *మొత్తం బిల్లు:* ₹${total}`;
+    // బయ్యర్ ఆథెంటికేషన్ లాజిక్
+    function openBuyerModal() {
+      new bootstrap.Modal(document.getElementById('buyerModal')).show();
+      if(curBuyer) loadBuyerOrders();
+    }
+    function toggleBAuth(isLog) {
+      document.getElementById('bLoginForm').classList.toggle('d-none', !isLog);
+      document.getElementById('bRegForm').classList.toggle('d-none', isLog);
+    }
+    document.getElementById('bRegForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const res = await fetch(`${API}/buyer/register`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          name: document.getElementById('bRegName').value,
+          phone: document.getElementById('bRegPhone').value,
+          address: document.getElementById('bRegAddr').value,
+          password: document.getElementById('bRegPass').value
+        })
+      });
+      const d = await res.json();
+      if(res.ok) { alert("రిజిస్ట్రేషన్ పూర్తయింది! లాగిన్ అవ్వండి."); toggleBAuth(true); } else alert(d.error);
+    };
+    document.getElementById('bLoginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const res = await fetch(`${API}/buyer/login`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({
+          phone: document.getElementById('bLogPhone').value,
+          password: document.getElementById('bLogPass').value
+        })
+      });
+      const d = await res.json();
+      if(res.ok) {
+        localStorage.setItem('meestore_buyer', JSON.stringify(d));
+        curBuyer = d;
+        updateBuyerNav();
+        loadBuyerOrders();
+      } else alert(d.error);
+    };
 
-      const sellerPhone = (cart[0] && cart[0].seller_phone) ? cart[0].seller_phone : '9177411712';
-      const waUrl = `https://wa.me/91${sellerPhone}?text=${encodeURIComponent(message)}`;
-      window.open(waUrl, '_blank');
+    function updateBuyerNav() {
+      const btn = document.getElementById('buyerAuthBtn');
+      if(curBuyer) { btn.innerHTML = `<i class="fa-solid fa-user-check me-1"></i>${curBuyer.name}`; }
+    }
+
+    async function loadBuyerOrders() {
+      document.getElementById('buyerAuthForms').classList.add('d-none');
+      document.getElementById('buyerOrdersSection').classList.remove('d-none');
+      const res = await fetch(`${API}/buyer/orders/${curBuyer.id}`);
+      const list = await res.json();
+      document.getElementById('buyerOrdersList').innerHTML = list.map(o => `
+        <div class="card p-2 mb-2 border-0 bg-light">
+          <div class="d-flex justify-content-between fw-bold"><span>${o.product_name}</span><span>₹${o.amount}</span></div>
+          <div class="small text-muted">స్టేటస్: <span class="badge bg-info text-dark">${o.status}</span></div>
+          ${o.status !== 'Return Requested' ? `<button class="btn btn-sm btn-outline-danger mt-2" onclick="requestReturn(${o.id}, ${o.seller_id}, ${o.amount})">రిటర్న్ & రీఫండ్ కోరండి</button>` : '<span class="text-danger small mt-1">రిటర్న్ రిక్వెస్ట్ పంపబడింది</span>'}
+        </div>
+      `).join('');
+    }
+
+    async function requestReturn(orderId, sellerId, amt) {
+      const reason = prompt("రిటర్న్ చేయడానికి గల కారణం తెలపండి (ఉదా: డ్యామేజ్ లేదా సైజ్ సరిపోలేదు):");
+      if(!reason) return;
+      await fetch(`${API}/orders/return`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({ order_id: orderId, seller_id: sellerId, buyer_id: curBuyer.id, reason: reason, refund_amount: amt })
+      });
+      alert("రిటర్న్ రిక్వెస్ట్ సెల్లర్‌కు పంపబడింది!");
+      loadBuyerOrders();
+    }
+
+    function logoutBuyer() {
+      localStorage.removeItem('meestore_buyer');
+      curBuyer = null;
+      location.reload();
     }
 
     window.onload = loadProducts;
