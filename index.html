@@ -9,18 +9,17 @@
   <style>
     body { background-color: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-bottom: 70px; }
     
-    /* 1. యాప్ ఓపెనింగ్ స్ప్లాష్ స్క్రీన్ (Splash Screen) */
+    /* స్ప్లాష్ స్క్రీన్ */
     #splashScreen {
       position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(135deg, #9c27b0, #6a1b9a);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 9999; color: white; transition: opacity 0.6s ease-out;
+      z-index: 9999; color: white; transition: opacity 0.5s ease-out;
     }
-    .splash-logo { width: 90px; height: 90px; background: white; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 45px; color: #9c27b0; box-shadow: 0 10px 25px rgba(0,0,0,0.25); animation: zoomIn 0.8s ease; }
-    @keyframes zoomIn { from { transform: scale(0.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .splash-logo { width: 90px; height: 90px; background: white; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 45px; color: #9c27b0; box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
 
     .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #f0f0f0; }
-    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; letter-spacing: -0.5px; }
+    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; }
     .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #9c27b0; }
     
     .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 8px 12px; background: white; border-bottom: 1px solid #eee; }
@@ -32,25 +31,25 @@
     .product-img { width: 100%; height: 165px; object-fit: cover; }
     .btn-buy-app { background: #9c27b0; color: white; border: none; font-size: 0.85rem; font-weight: 600; padding: 6px; border-radius: 6px; }
 
-    /* Bottom Nav Bar */
+    /* కింద మీషో తరహా బాటమ్ బార్ */
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: white; border-top: 1px solid #e5e5e5; display: flex; justify-content: space-around; align-items: center; z-index: 1050; }
     .nav-item-btn { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #666; font-size: 0.72rem; border: none; background: transparent; }
     .nav-item-btn i { font-size: 1.15rem; margin-bottom: 2px; }
     .nav-item-btn.active { color: #9c27b0; font-weight: 700; }
 
-    .cat-grid-box { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+    .cat-grid-box { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.05); cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <!-- 1. స్ప్లాష్ స్క్రీన్ (MeeStore Logo) -->
+  <!-- MeeStore Splash Screen -->
   <div id="splashScreen">
     <div class="splash-logo mb-3"><i class="fa-solid fa-bag-shopping"></i></div>
     <h2 class="fw-bold tracking-wide">MeeStore</h2>
     <div class="spinner-border spinner-border-sm text-light mt-3" role="status"></div>
   </div>
 
-  <!-- Top Header with MeeStore Logo & Profile -->
+  <!-- Top Header -->
   <div class="top-header">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <div class="d-flex align-items-center gap-2">
@@ -60,7 +59,7 @@
         <input type="file" id="profilePhotoInput" accept="image/*" class="d-none" onchange="uploadBuyerProfilePic(this)">
         <div>
           <span class="brand-title"><i class="fa-solid fa-bag-shopping me-1"></i>MeeStore</span>
-          <div class="small text-muted" style="font-size: 0.72rem;" id="welcomeUserText">హలో, గెస్ట్!</div>
+          <div class="small text-muted" style="font-size: 0.72rem;" id="welcomeUserText">హలో, లాగిన్ అవ్వండి</div>
         </div>
       </div>
       <button class="btn btn-light position-relative p-2" data-bs-toggle="offcanvas" data-bs-target="#cartDrawer">
@@ -76,35 +75,34 @@
     </div>
   </div>
 
-  <!-- Horizontal Categories Bar -->
+  <!-- Horizontal Scroll Categories -->
   <div class="cat-scroll" id="catScroll">
     <button class="cat-btn active" onclick="filterCat('all', this)">అన్నీ (All)</button>
-    <button class="cat-btn" onclick="filterCat('కిరాణా & మినరల్స్', this)">🌾 కిరాణా & మినరల్స్</button>
-    <button class="cat-btn" onclick="filterCat('జనరల్ & పూజా స్టోర్', this)">🪔 జనరల్ స్టోర్</button>
+    <button class="cat-btn" onclick="filterCat('కిరాణా & మినరల్స్', this)">🌾 కిరాణా</button>
+    <button class="cat-btn" onclick="filterCat('జనరల్ & పూజా స్టోర్', this)">🪔 జనరల్</button>
     <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
     <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
-    <button class="cat-btn" onclick="filterCat('ఫ్యాన్సీ & జ్యువెలరీ', this)">💍 ఫ్యాన్సీ & జ్యువెలరీ</button>
+    <button class="cat-btn" onclick="filterCat('ఫ్యాన్సీ & జ్యువెలరీ', this)">💍 జ్యువెలరీ</button>
     <button class="cat-btn" onclick="filterCat('ఫుట్‌వేర్', this)">👠 ఫుట్‌వేర్</button>
     <button class="cat-btn" onclick="filterCat('Home & Kitchen', this)">🏠 Home & Kitchen</button>
-    <button class="cat-btn" onclick="filterCat('Beauty & Health', this)">💄 Beauty & Health</button>
   </div>
 
-  <!-- Home Main Products Area -->
+  <!-- Products Main Area -->
   <div id="homeArea">
     <div class="container px-2 my-2">
       <div id="productGrid" class="row row-cols-2 g-2"></div>
     </div>
   </div>
 
-  <!-- Full Categories Page View (కేటగిరీలు నొక్కినప్పుడు ఓపెన్ అవుతుంది) -->
+  <!-- Categories Dedicated View -->
   <div id="categoriesView" class="container px-3 my-3 d-none">
     <h5 class="fw-bold mb-3 text-secondary"><i class="fa-solid fa-shapes me-2"></i>అన్ని కేటగిరీలు</h5>
     <div class="row row-cols-2 g-3">
       <div class="col" onclick="selectCategoryDirect('కిరాణా & మినరల్స్')">
-        <div class="cat-grid-box"><div class="fs-2 mb-1">🌾</div><h6 class="fw-bold mb-0">కిరాణా & సిరిధాన్యాలు</h6></div>
+        <div class="cat-grid-box"><div class="fs-2 mb-1">🌾</div><h6 class="fw-bold mb-0">కిరాణా & ధాన్యాలు</h6></div>
       </div>
       <div class="col" onclick="selectCategoryDirect('జనరల్ & పూజా స్టోర్')">
-        <div class="cat-grid-box"><div class="fs-2 mb-1">🪔</div><h6 class="fw-bold mb-0">జనరల్ & పూజా స్టోర్</h6></div>
+        <div class="cat-grid-box"><div class="fs-2 mb-1">🪔</div><h6 class="fw-bold mb-0">జనరల్ స్టోర్</h6></div>
       </div>
       <div class="col" onclick="selectCategoryDirect('Women Fashion')">
         <div class="cat-grid-box"><div class="fs-2 mb-1">👗</div><h6 class="fw-bold mb-0">Women Fashion</h6></div>
@@ -116,7 +114,7 @@
         <div class="cat-grid-box"><div class="fs-2 mb-1">💍</div><h6 class="fw-bold mb-0">ఫ్యాన్సీ & జ్యువెలరీ</h6></div>
       </div>
       <div class="col" onclick="selectCategoryDirect('ఫుట్‌వేర్')">
-        <div class="cat-grid-box"><div class="fs-2 mb-1">👠</div><h6 class="fw-bold mb-0">ఫుట్‌వేర్ & చెప్పులు</h6></div>
+        <div class="cat-grid-box"><div class="fs-2 mb-1">👠</div><h6 class="fw-bold mb-0">ఫుట్‌వేర్</h6></div>
       </div>
       <div class="col" onclick="selectCategoryDirect('Home & Kitchen')">
         <div class="cat-grid-box"><div class="fs-2 mb-1">🏠</div><h6 class="fw-bold mb-0">Home & Kitchen</h6></div>
@@ -127,7 +125,7 @@
     </div>
   </div>
 
-  <!-- Bottom Navigation -->
+  <!-- Bottom Navigation Bar -->
   <div class="bottom-nav">
     <button class="nav-item-btn active" id="btnNavHome" onclick="switchNav('home')">
       <i class="fa-solid fa-house"></i>
@@ -147,7 +145,7 @@
     </button>
   </div>
 
-  <!-- Buyer Modal & Cart Drawer -->
+  <!-- Buyer Modal -->
   <div class="modal fade" id="buyerModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -164,7 +162,7 @@
             <form id="bLoginForm">
               <div class="mb-2"><input type="tel" id="bLogPhone" class="form-control" placeholder="మొబైల్ నంబర్" required></div>
               <div class="mb-3"><input type="password" id="bLogPass" class="form-control" placeholder="పాస్‌వర్డ్" required></div>
-              <button type="submit" class="btn btn-primary w-100" style="background:#9c27b0; border:none;">లాగిన్ అవ్వండి</button>
+              <button type="submit" class="btn btn-primary w-100" style="background:#9c27b0; border:none;">లాగిన్</button>
             </form>
             <form id="bRegForm" class="d-none">
               <div class="mb-2"><input type="text" id="bRegName" class="form-control" placeholder="మీ పేరు" required></div>
@@ -192,6 +190,7 @@
     </div>
   </div>
 
+  <!-- Cart Drawer -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="cartDrawer">
     <div class="offcanvas-header bg-light">
       <h5 class="offcanvas-title fw-bold">మీ కార్ట్</h5>
@@ -221,18 +220,16 @@
     let allProducts = [], cart = [];
     let curBuyer = JSON.parse(localStorage.getItem('meestore_buyer'));
 
-    // Splash screen hide after 1.5 seconds
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        const sp = document.getElementById('splashScreen');
+    // కచ్చితంగా 1 సెకనులో స్ప్లాష్ స్క్రీన్‌ను క్లోజ్ చేసే డైరెక్ట్ టైమర్
+    setTimeout(() => {
+      const sp = document.getElementById('splashScreen');
+      if (sp) {
         sp.style.opacity = '0';
-        setTimeout(() => sp.style.display = 'none', 600);
-      }, 1500);
-      loadProducts();
-      checkSavedProfilePic();
-    });
+        setTimeout(() => { sp.style.display = 'none'; }, 400);
+      }
+    }, 1000);
 
-    // Profile Photo Camera/Gallery Upload
+    // Profile Photo Camera / Gallery Upload
     function uploadBuyerProfilePic(input) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -245,6 +242,7 @@
         reader.readAsDataURL(input.files[0]);
       }
     }
+
     function checkSavedProfilePic() {
       const saved = localStorage.getItem('meestore_avatar');
       if(saved) {
@@ -253,7 +251,7 @@
       }
     }
 
-    // Switch between Home & Categories Page View
+    // Switch Views
     function switchNav(view) {
       const homeArea = document.getElementById('homeArea');
       const catView = document.getElementById('categoriesView');
@@ -285,6 +283,7 @@
         renderProducts(allProducts);
       } catch(e) {}
       syncBuyerUI();
+      checkSavedProfilePic();
     }
 
     function renderProducts(list) {
@@ -309,6 +308,11 @@
       btn.classList.add('active');
       renderProducts(cat === 'all' ? allProducts : allProducts.filter(p => p.category === cat));
     }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q))));
+    });
 
     function addToCart(id) {
       cart.push(allProducts.find(p => p.id === id));
@@ -400,4 +404,10 @@
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({
-          phone: document.getElementById(
+          phone: document.getElementById('bLogPhone').value,
+          password: document.getElementById('bLogPass').value
+        })
+      });
+      const d = await res.json();
+      if(res.ok) {
+        localSt
