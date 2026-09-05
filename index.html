@@ -1,104 +1,113 @@
 <!DOCTYPE html>
 <html lang="te">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MeeStore - ఆన్‌లైన్ షాపింగ్</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
   <style>
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, sans-serif; }
+    body { background-color: #f8fafc; color: #1e293b; padding-bottom: 70px; }
+    header { background: #8b1d9f; color: #fff; padding: 12px 16px; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-size: 20px; font-weight: bold; }
+    .header-actions { display: flex; align-items: center; gap: 14px; }
+    .seller-btn { background: #eab308; color: #000; padding: 5px 10px; border-radius: 20px; text-decoration: none; font-size: 12px; font-weight: bold; }
+    .cart-btn { position: relative; font-size: 20px; cursor: pointer; }
+    .cart-badge { position: absolute; top: -8px; right: -10px; background: #ef4444; color: white; border-radius: 50%; font-size: 11px; padding: 2px 6px; font-weight: bold; }
+    .search-box { padding: 10px 16px; background: #fff; border-bottom: 1px solid #e2e8f0; }
+    .search-box input { width: 100%; padding: 8px 14px; border-radius: 20px; border: 1px solid #cbd5e1; outline: none; }
+    .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 16px; }
+    .product-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); display: flex; flex-direction: column; }
+    .product-card img { width: 100%; height: 140px; object-fit: cover; }
+    .product-details { padding: 10px; flex-grow: 1; display: flex; flex-direction: column; }
+    .product-title { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .product-price { font-size: 15px; font-weight: bold; }
+    .original-price { font-size: 12px; color: #94a3b8; text-decoration: line-through; margin-left: 5px; }
+    .add-btn { width: 100%; background: #8b1d9f; color: #fff; border: none; padding: 8px; border-radius: 6px; margin-top: 8px; font-weight: 600; cursor: pointer; }
+    .cart-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: flex-end; }
+    .cart-content { background: #fff; width: 100%; max-width: 450px; height: 100%; display: flex; flex-direction: column; padding: 16px; overflow-y: auto; }
+    .cart-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+    .close-btn { font-size: 22px; cursor: pointer; border: none; background: none; }
+    .cart-items { flex-grow: 1; overflow-y: auto; margin: 12px 0; }
+    .cart-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .input-group { margin-bottom: 10px; }
+    .input-group label { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+    .input-group input, .input-group textarea { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; }
+    .payment-modes { display: flex; gap: 15px; margin: 10px 0; font-size: 13px; }
+    #upi-section { display: none; text-align: center; margin: 12px 0; padding: 14px; border: 1px dashed #8b1d9f; border-radius: 10px; background: #faf5ff; }
+    #upi-qr { width: 160px; height: 160px; margin: 8px auto; border: 2px solid #ddd; border-radius: 8px; background: #fff; display: block; }
+    .order-btn { width: 100%; background: #16a34a; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 15px; cursor: pointer; }
   </style>
 </head>
-<body class="bg-gray-100 font-sans pb-24">
+<body>
 
-  <header class="sticky top-0 z-50 bg-[#9c27b0] text-white p-3 shadow-md">
-    <div class="flex items-center justify-between mb-2">
-      <div class="flex items-center space-x-2">
-        <i class="fa-solid fa-bag-shopping text-2xl text-yellow-300"></i>
-        <span class="text-xl font-bold tracking-wide">MeeStore</span>
+  <header>
+    <div class="logo"><i class="fa-solid fa-bag-shopping"></i> MeeStore</div>
+    <div class="header-actions">
+      <a href="seller.html" class="seller-btn">సెల్లర్ అవ్వండి</a>
+      <div class="cart-btn" onclick="openCart()">
+        <i class="fa-solid fa-cart-shopping"></i>
+        <span class="cart-badge" id="cart-count">0</span>
       </div>
-      <div class="flex items-center space-x-3">
-        <a href="seller.html" class="bg-purple-900 border border-yellow-300 text-yellow-300 text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
-          <i class="fa-solid fa-store"></i> సెల్లర్ అవ్వండి
-        </a>
-        <button onclick="openCart()" class="relative p-1">
-          <i class="fa-solid fa-cart-shopping text-xl"></i>
-          <span id="cart-badge" class="absolute -top-1 -right-2 bg-yellow-400 text-black text-xs font-extrabold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
-        </button>
-      </div>
-    </div>
-    <div class="relative">
-      <input type="text" id="search-box" onkeyup="filterProducts()" placeholder="చీరలు, కుర్తీలు, కిరాణా లేదా బ్రాండ్స్ వెతకండి..." class="w-full pl-10 pr-4 py-2 rounded-lg text-gray-800 text-xs focus:outline-none bg-white shadow-inner">
-      <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
     </div>
   </header>
 
-  <section class="bg-white py-3 border-b shadow-sm">
-    <div class="flex space-x-4 overflow-x-auto no-scrollbar px-3 text-center">
-      <div onclick="selectCategory('all')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
-        <div class="w-12 h-12 p-3 bg-pink-100 rounded-full flex items-center justify-center text-[#9c27b0] text-base font-bold border border-[#9c27b0]"><i class="fa-solid fa-border-all"></i></div>
-        <span class="text-[11px] font-semibold mt-1 text-gray-700">అన్నీ</span>
-      </div>
-      <div onclick="selectCategory('grocery')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
-        <div class="w-12 h-12 p-3 bg-green-50 rounded-full flex items-center justify-center text-green-600 text-base border border-green-200"><i class="fa-solid fa-wheat-awn"></i></div>
-        <span class="text-[11px] font-semibold mt-1 text-gray-700">కిరాణా & మిల్లెట్స్</span>
-      </div>
-      <div onclick="selectCategory('women')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
-        <div class="w-12 h-12 p-3 bg-pink-50 rounded-full flex items-center justify-center text-pink-600 text-base border border-pink-200"><i class="fa-solid fa-person-dress"></i></div>
-        <span class="text-[11px] font-semibold mt-1 text-gray-700">ఉమెన్ & గర్ల్స్</span>
-      </div>
-      <div onclick="selectCategory('men')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
-        <div class="w-12 h-12 p-3 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 text-base border border-blue-200"><i class="fa-solid fa-person"></i></div>
-        <span class="text-[11px] font-semibold mt-1 text-gray-700">మెన్ & బాయ్స్</span>
-      </div>
-    </div>
-  </section>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="ఉత్పత్తులను వెతకండి..." onkeyup="renderProducts()" />
+  </div>
 
-  <main class="px-3 py-3">
-    <div id="product-grid" class="grid grid-cols-2 gap-2.5"></div>
-  </main>
+  <div class="product-grid" id="products-container">
+    <p style="grid-column: span 2; text-align: center; padding: 30px;">ఉత్పత్తులు లోడ్ అవుతున్నాయి...</p>
+  </div>
 
-  <!-- కార్ట్ & డెలివరీ చెక్అవుట్ మోడల్ -->
-  <div id="cart-modal" class="fixed inset-0 bg-black/60 z-50 flex justify-end hidden">
-    <div class="bg-white w-full max-w-sm h-full flex flex-col p-4 shadow-2xl overflow-y-auto no-scrollbar">
-      <div class="flex justify-between items-center pb-3 border-b">
-        <h2 class="text-base font-bold text-gray-800">ఆర్డర్ చెక్అవుట్</h2>
-        <button onclick="closeCart()" class="text-gray-400 text-2xl">&times;</button>
+  <!-- Cart Modal -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <div class="cart-header">
+        <h3>షాపింగ్ కార్ట్</h3>
+        <button class="close-btn" onclick="closeCart()">&times;</button>
       </div>
-      
-      <div id="cart-items" class="py-2 space-y-2 border-b mb-3"></div>
 
-      <!-- డెలివరీ వివరాల ఫారమ్ -->
-      <form onsubmit="submitCustomerOrder(event)" class="space-y-2.5">
-        <h3 class="text-xs font-bold text-gray-700">డెలివరీ వివరాలు</h3>
-        <input type="text" id="cust_name" required placeholder="మీ పూర్తి పేరు" class="w-full text-xs p-2 border rounded">
-        <input type="tel" id="cust_phone" required placeholder="మొబైల్ నంబర్" class="w-full text-xs p-2 border rounded">
-        <textarea id="cust_address" required rows="2" placeholder="పూర్తి అడ్రస్, డోర్ నం, ల్యాండ్‌మార్క్, పిన్‌కోడ్" class="w-full text-xs p-2 border rounded"></textarea>
+      <div class="cart-items" id="cartItems"></div>
 
-        <h3 class="text-xs font-bold text-gray-700 mt-2">పేమెంట్ విధానం ఎంచుకోండి</h3>
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <label class="border p-2 rounded flex items-center gap-1.5 cursor-pointer has-[:checked]:border-purple-600 has-[:checked]:bg-purple-50">
-            <input type="radio" name="payment_mode" value="COD" checked class="accent-purple-700">
-            <span>క్యాష్ ఆన్ డెలివరీ (COD)</span>
-          </label>
-          <label class="border p-2 rounded flex items-center gap-1.5 cursor-pointer has-[:checked]:border-purple-600 has-[:checked]:bg-purple-50">
-            <input type="radio" name="payment_mode" value="Prepaid (UPI)" class="accent-purple-700">
-            <span>Prepaid (UPI ఆన్‌లైన్)</span>
-          </label>
+      <div style="border-top: 1px solid #e2e8f0; padding-top: 10px;">
+        <h4 style="margin-bottom: 8px; font-size: 14px;">డెలివరీ వివరాలు</h4>
+        <div class="input-group">
+          <label>మీ పూర్తి పేరు</label>
+          <input type="text" id="custName" required />
+        </div>
+        <div class="input-group">
+          <label>మొబైల్ నంబర్</label>
+          <input type="tel" id="custPhone" required />
+        </div>
+        <div class="input-group">
+          <label>పూర్తి అడ్రస్</label>
+          <textarea id="custAddress" rows="2" required></textarea>
         </div>
 
-        <div class="border-t pt-2 flex justify-between text-sm font-bold text-gray-800">
+        <label style="font-size: 12px; font-weight: 600;">పేమెంట్ విధానం ఎంచుకోండి</label>
+        <div class="payment-modes">
+          <label><input type="radio" name="paymentMode" value="COD" checked onchange="togglePaymentMode()" /> క్యాష్ ఆన్ డెలివరీ (COD)</label>
+          <label><input type="radio" name="paymentMode" value="Prepaid" onchange="togglePaymentMode()" /> Prepaid (UPI ఆన్‌లైన్)</label>
+        </div>
+
+        <!-- Dynamic UPI QR -->
+        <div id="upi-section">
+          <p style="font-size: 13px; font-weight: bold; color: #6b21a8;">సెల్లర్ QR కోడ్ స్కాన్ చేసి పేమెంట్ చేయండి:</p>
+          <img id="upi-qr" src="" alt="Seller UPI QR" />
+          <p style="font-size: 12px;">UPI ID: <strong id="upi-id-display">--</strong></p>
+          <p style="font-size: 11px; color: #dc2626; margin-top: 4px;">*చెల్లించిన స్క్రీన్‌షాట్‌ను ఆర్డర్‌తో పాటు వాట్సాప్‌లో పంపగలరు.</p>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; margin: 12px 0;">
           <span>మొత్తం బిల్లు:</span>
-          <span class="text-[#9c27b0]">₹<span id="cart-total">0</span></span>
+          <span id="cartTotal">₹0</span>
         </div>
 
-        <button type="submit" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-xs shadow hover:bg-green-700 flex items-center justify-center gap-2">
-          <i class="fa-brands fa-whatsapp text-base"></i>
-          <span>ఆర్డర్ కన్ఫర్మ్ చేసి పంపండి</span>
+        <button class="order-btn" onclick="sendOrderWhatsApp()">
+          <i class="fa-brands fa-whatsapp"></i> ఆర్డర్ కన్ఫర్మ్ చేసి పంపండి
         </button>
-      </form>
+      </div>
     </div>
   </div>
 
@@ -111,91 +120,110 @@
       try {
         const res = await fetch(API_URL);
         allProducts = await res.json();
-      } catch(e) {
-        allProducts = [];
+        renderProducts();
+      } catch (e) {
+        document.getElementById('products-container').innerHTML = '<p style="grid-column: span 2; text-align: center; color: red;">ఉత్పత్తులు లోడ్ కాలేదు.</p>';
       }
-      renderProducts(allProducts);
     }
 
-    function renderProducts(items) {
-      const grid = document.getElementById("product-grid");
-      if(!items || items.length === 0) {
-        grid.innerHTML = `<p class="col-span-2 text-center text-xs text-gray-400 py-8">ఉత్పత్తులు లోడ్ అవుతున్నాయి...</p>`;
+    function renderProducts() {
+      const container = document.getElementById('products-container');
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = allProducts.filter(p => p.name.toLowerCase().includes(search));
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="grid-column: span 2; text-align: center;">ఉత్పత్తులు లేవు.</p>';
         return;
       }
-      grid.innerHTML = items.map(p => `
-        <div class="bg-white rounded-lg shadow-sm border p-2 flex flex-col justify-between">
-          <img src="${p.image}" class="w-full h-32 object-cover rounded" onerror="this.src='https://placehold.co/300x200?text=Product'">
-          <div class="mt-2">
-            <h4 class="text-xs font-semibold text-gray-800 line-clamp-1">${p.title}</h4>
-            <div class="flex items-center space-x-1 mt-1">
-              <span class="text-sm font-bold">₹${p.price}</span>
-              <span class="text-[10px] text-gray-400 line-through">₹${p.mrp}</span>
-            </div>
-            <button onclick="addToCart(${p.id})" class="mt-2 w-full bg-[#9c27b0] text-white text-xs py-1.5 rounded font-semibold">Add to Cart</button>
+
+      container.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <img src="${p.image_url || 'https://via.placeholder.com/150'}" alt="${p.name}" />
+          <div class="product-details">
+            <div class="product-title">${p.name}</div>
+            <div class="product-price">₹${p.price} <span class="original-price">₹${p.mrp || p.price}</span></div>
+            <button class="add-btn" onclick="addToCart(${p.id})">Add to Cart</button>
           </div>
         </div>
       `).join('');
     }
 
     function addToCart(id) {
-      const item = allProducts.find(p => p.id === id);
-      if(item) {
-        cart.push(item);
-        document.getElementById("cart-badge").innerText = cart.length;
-        document.getElementById("cart-badge").classList.remove("hidden");
+      const prod = allProducts.find(p => p.id === id);
+      if (prod) {
+        cart.push(prod);
+        updateCartUI();
       }
     }
 
-    function openCart() {
-      if(cart.length === 0) return alert("కార్ట్ ఖాళీగా ఉంది!");
-      let total = 0;
-      document.getElementById("cart-items").innerHTML = cart.map(i => {
-        total += Number(i.price);
-        return `<div class="flex justify-between text-xs py-1"><span>${i.title}</span><span class="font-bold">₹${i.price}</span></div>`;
-      }).join('');
-      document.getElementById("cart-total").innerText = total;
-      document.getElementById("cart-modal").classList.remove("hidden");
-    }
-
-    function closeCart() {
-      document.getElementById("cart-modal").classList.add("hidden");
-    }
-
-    function filterProducts() {
-      const q = document.getElementById("search-box").value.toLowerCase();
-      renderProducts(allProducts.filter(p => p.title.toLowerCase().includes(q)));
-    }
-
-    function selectCategory(cat) {
-      if(cat === 'all') renderProducts(allProducts);
-      else renderProducts(allProducts.filter(p => p.category === cat));
-    }
-
-    function submitCustomerOrder(e) {
-      e.preventDefault();
-      const name = document.getElementById("cust_name").value;
-      const phone = document.getElementById("cust_phone").value;
-      const addr = document.getElementById("cust_address").value;
-      const payMode = document.querySelector('input[name="payment_mode"]:checked').value;
-      const total = document.getElementById("cart-total").innerText;
+    function updateCartUI() {
+      document.getElementById('cart-count').innerText = cart.length;
+      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
+      document.getElementById('cartTotal').innerText = `₹${total}`;
       
-      const targetPhone = cart[0].seller_phone || "919999999999";
+      document.getElementById('cartItems').innerHTML = cart.map((item, idx) => `
+        <div class="cart-item">
+          <span>${item.name} - ₹${item.price}</span>
+          <button onclick="removeFromCart(${idx})" style="color: red; border: none; background: none;">🗑️</button>
+        </div>
+      `).join('');
 
-      let msg = `🛒 *కొత్త MeeStore ఆర్డర్!*%0A%0A`;
-      msg += `👤 *కస్టమర్:* ${name} (${phone})%0A`;
-      msg += `📍 *అడ్రస్:* ${addr}%0A`;
-      msg += `💳 *పేమెంట్ విధానం:* ${payMode}%0A%0A`;
-      msg += `📦 *ఆర్డర్ చేసిన వస్తువులు:*%0A`;
-      cart.forEach((i, idx) => {
-        msg += `${idx+1}. ${i.title} - ₹${i.price}%0A`;
-      });
-      msg += `%0A💰 *మొత్తం బిల్లు:* ₹${total}`;
-
-      window.open(`https://wa.me/${targetPhone}?text=${msg}`, '_blank');
+      togglePaymentMode();
     }
 
-    loadProducts();
+    function removeFromCart(idx) {
+      cart.splice(idx, 1);
+      updateCartUI();
+    }
+
+    function togglePaymentMode() {
+      const isPrepaid = document.querySelector('input[name="paymentMode"]:checked')?.value === 'Prepaid';
+      const upiSection = document.getElementById('upi-section');
+      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
+      
+      if (isPrepaid && total > 0) {
+        upiSection.style.display = 'block';
+        
+        // సంబంధిత సెల్లర్ UPI ID ని కార్ట్ లోని ప్రొడక్ట్ నుండి తీసుకుంటుంది
+        const sellerUpiId = cart[0]?.seller_upi || "mujahidsdghf9@ybl";
+        const upiUrl = `upi://pay?pa=${sellerUpiId}&pn=MeeStore%20Seller&am=${total}&cu=INR`;
+        
+        document.getElementById('upi-qr').src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiUrl)}`;
+        document.getElementById('upi-id-display').innerText = sellerUpiId;
+      } else {
+        upiSection.style.display = 'none';
+      }
+    }
+
+    function openCart() { document.getElementById('cartModal').style.display = 'flex'; }
+    function closeCart() { document.getElementById('cartModal').style.display = 'none'; }
+
+    function sendOrderWhatsApp() {
+      if (cart.length === 0) return alert("కార్ట్ ఖాళీగా ఉంది!");
+      const name = document.getElementById('custName').value.trim();
+      const phone = document.getElementById('custPhone').value.trim();
+      const address = document.getElementById('custAddress').value.trim();
+      const paymentMode = document.querySelector('input[name="paymentMode"]:checked').value;
+
+      if (!name || !phone || !address) return alert("అన్ని వివరాలు నమోదు చేయండి.");
+
+      const total = cart.reduce((sum, item) => sum + Number(item.price), 0);
+      const sellerPhone = cart[0]?.seller_phone || "919963636575";
+
+      let itemsText = cart.map((item, idx) => `${idx + 1}. ${item.name} - ₹${item.price}`).join('\n');
+      let payStatus = paymentMode === 'Prepaid' ? "Prepaid (UPI పేమెంట్ పూర్తయింది, స్క్రీన్‌షాట్ జతచేస్తున్నాను)" : "Cash on Delivery (COD)";
+
+      let msg = `🛒 *కొత్త MeeStore ఆర్డర్!*\n\n` +
+                `👤 *కస్టమర్:* ${name} (${phone})\n` +
+                `📍 *అడ్రస్:* ${address}\n` +
+                `💳 *పేమెంట్ విధానం:* ${payStatus}\n\n` +
+                `📦 *ఆర్డర్ చేసిన వస్తువులు:*\n${itemsText}\n\n` +
+                `💰 *మొత్తం బిల్లు:* ₹${total}`;
+
+      window.open(`https://wa.me/${sellerPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+    }
+
+    window.onload = loadProducts;
   </script>
 </body>
 </html>
