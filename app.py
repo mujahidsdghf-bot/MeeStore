@@ -1,22 +1,29 @@
 import os
-import psycopg2
-from psycopg2.extras import RealDictCursor
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 app = Flask(__name__)
 CORS(app)
 
-# Render లో ఇచ్చిన PostgreSQL DATABASE_URL
-DATABASE_URL = os.environ.get('DATABASE_URL')
+# Render PostgreSQL URL ని సరిదిద్దడం (postgres:// ని postgresql:// గా మారుస్తుంది)
+raw_url = os.environ.get('DATABASE_URL', '')
+if raw_url.startswith('postgres://'):
+    DATABASE_URL = raw_url.replace('postgres://', 'postgresql://', 1)
+else:
+    DATABASE_URL = raw_url
 
-def get_db_connection():
+def get_db():
     return psycopg2.connect(DATABASE_URL, sslmode='require')
 
-# డేటాబేస్ టేబుల్ సిద్ధం చేయడం
+# డేటాబేస్ టేబుల్ మరియు seller_upi కాలమ్ సిద్ధం చేయడం
 def init_db():
+    if not DATABASE_URL:
+        print("DATABASE_URL కనుగొనబడలేదు!")
+        return
     try:
-        conn = get_db_connection()
+        conn = get_db()
         cur = conn.cursor()
         cur.execute('''
             CREATE TABLE IF NOT EXISTS products (
@@ -37,32 +44,36 @@ def init_db():
         conn.commit()
         cur.close()
         conn.close()
-        print("PostgreSQL Database Initialized Successfully!")
+        print("PostgreSQL Database Ready!")
     except Exception as e:
-        print(f"Database Init Error: {e}")
+        print("DB Init Error:", e)
 
-# యాప్ స్టార్ట్ అయ్యేటప్పుడు టేబుల్ క్రియేట్ అవుతుంది
+# సర్వర్ స్టార్ట్ అవ్వగానే టేబుల్ క్రియేట్ అవుతుంది
 init_db()
 
-# 1. అన్ని ఉత్పత్తులను తెచ్చే API
+@app.route('/', methods=['GET'])
+def home():
+    return "MeeStore Backend is Running Live!", 200
+
+# 1. ప్రొడక్ట్స్ లిస్ట్ తెచ్చే API
 @app.route('/api/products', methods=['GET'])
 def get_products():
     try:
-        conn = get_db_connection()
+        conn = get_db()
         cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute('SELECT * FROM products ORDER BY id DESC;')
-        products = cur.fetchall()
+        items = cur.fetchall()
         cur.close()
         conn.close()
-        return jsonify(products), 200
+        return jsonify(items), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-# 2. కొత్త ఉత్పత్తిని జోడించే API
+# 2. కొత్త ప్రొడక్ట్ యాడ్ చేసే API
 @app.route('/api/products', methods=['POST'])
 def add_product():
     try:
-        data = request.json
+        data = request.get_json(force=True)
         name = data.get('name')
         category = data.get('category')
         mrp = data.get('mrp')
@@ -71,7 +82,7 @@ def add_product():
         seller_phone = data.get('seller_phone')
         seller_upi = data.get('seller_upi')
 
-        conn = get_db_connection()
+        conn = get_db()
         cur = conn.cursor(cursor_factory=RealDictCursor)
         cur.execute('''
             INSERT INTO products (name, category, mrp, price, image_url, seller_phone, seller_upi)
@@ -79,11 +90,11 @@ def add_product():
             RETURNING *;
         ''', (name, category, mrp, price, image_url, seller_phone, seller_upi))
         
-        new_prod = cur.fetchone()
+        saved_item = cur.fetchone()
         conn.commit()
         cur.close()
         conn.close()
-        return jsonify(new_prod), 201
+        return jsonify(saved_item), 201
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
