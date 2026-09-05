@@ -10,15 +10,19 @@
     * { box-sizing: border-box; }
     body { background-color: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-bottom: 75px; margin: 0; }
     
-    /* 1. స్ప్లాష్ స్క్రీన్ - 1.5 సెకన్లలో ఆటోమేటిక్‌గా ఫేడ్ అయ్యేలా */
+    /* స్ప్లాష్ స్క్రీన్ - 1 సెకనులో ఆటోమేటిక్ గా డిలీట్ అయిపోతుంది */
     #splashScreen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: linear-gradient(135deg, #9c27b0, #6a1b9a);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       z-index: 99999; color: white;
-      transition: opacity 0.5s ease;
+      animation: dismissNow 0.5s ease-out 1s forwards;
+      pointer-events: none;
     }
-    .splash-logo { width: 90px; height: 90px; background: white; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 45px; color: #9c27b0; box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+    @keyframes dismissNow {
+      to { opacity: 0; visibility: hidden; display: none; }
+    }
+    .splash-logo { width: 85px; height: 85px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 42px; color: #9c27b0; box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
 
     /* Top Header */
     .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
@@ -37,7 +41,6 @@
     .product-card { border: none; border-radius: 10px; background: white; overflow: hidden; box-shadow: 0 1px 5px rgba(0,0,0,0.06); height: 100%; display: flex; flex-direction: column; }
     .product-img { width: 100%; height: 160px; object-fit: cover; }
     .btn-buy-app { background: #9c27b0; color: white; border: none; font-size: 0.85rem; font-weight: 600; padding: 7px; border-radius: 6px; }
-    .btn-buy-app:hover { background: #7b1fa2; }
 
     /* Bottom Navigation */
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 58px; background: white; border-top: 1px solid #e0e0e0; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
@@ -45,17 +48,16 @@
     .nav-item-btn i { font-size: 1.2rem; margin-bottom: 3px; }
     .nav-item-btn.active { color: #9c27b0; font-weight: 700; }
 
-    /* Categories Full View */
+    /* Categories View */
     .cat-item-row { background: white; border-radius: 10px; padding: 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; box-shadow: 0 1px 3px rgba(0,0,0,0.04); cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <!-- MeeStore Splash Screen -->
-  <div id="splashScreen">
+  <!-- స్ప్లాష్ స్క్రీన్ (ఎక్కడ క్లిక్ చేసినా వెంటనే హోమ్‌పేజీ ఓపెన్ అవుతుంది) -->
+  <div id="splashScreen" onclick="this.style.display='none'">
     <div class="splash-logo mb-3"><i class="fa-solid fa-bag-shopping"></i></div>
     <h2 class="fw-bold tracking-wide">MeeStore</h2>
-    <div class="spinner-border spinner-border-sm text-light mt-3" role="status"></div>
   </div>
 
   <!-- Top Header with Brand & Profile Camera -->
@@ -95,7 +97,6 @@
     <button class="cat-btn" onclick="filterCat('ఫ్యాన్సీ & జ్యువెలరీ', this)">💍 జ్యువెలరీ</button>
     <button class="cat-btn" onclick="filterCat('ఫుట్‌వేర్', this)">👠 ఫుట్‌వేర్</button>
     <button class="cat-btn" onclick="filterCat('Home & Kitchen', this)">🏠 Home & Kitchen</button>
-    <button class="cat-btn" onclick="filterCat('Beauty & Health', this)">💄 Beauty & Health</button>
   </div>
 
   <!-- Products Main Area -->
@@ -109,7 +110,7 @@
     </div>
   </div>
 
-  <!-- Dedicated Categories View (కేటగిరీలు బటన్ నొక్కినప్పుడు వరుసగా వచ్చే పేజీ) -->
+  <!-- Dedicated Categories View -->
   <div id="categoriesView" class="container px-3 my-3 d-none">
     <h5 class="fw-bold mb-3 text-secondary"><i class="fa-solid fa-shapes me-2"></i>అన్ని కేటగిరీలు (Categories)</h5>
     
@@ -275,14 +276,11 @@
     let allProducts = [], cart = [];
     let curBuyer = JSON.parse(localStorage.getItem('meestore_buyer'));
 
-    // స్ప్లాష్ స్క్రీన్ 1.5 సెకన్లలో కచ్చితంగా రిమూవ్ అయ్యే లాజిక్
+    // స్క్రీన్ 1 సెకన్ లో కచ్చితంగా రిమూవ్ అయ్యేలా JS బ్యాకప్
     setTimeout(() => {
       const sp = document.getElementById('splashScreen');
-      if (sp) {
-        sp.style.opacity = '0';
-        setTimeout(() => { sp.style.display = 'none'; }, 500);
-      }
-    }, 1500);
+      if (sp) sp.style.display = 'none';
+    }, 1000);
 
     // Profile Photo Upload (Camera / Gallery)
     function uploadBuyerPic(input) {
@@ -395,4 +393,6 @@
     function updateCart() {
       document.getElementById('cartCount').innerText = cart.length;
       const list = document.getElementById('cartItemsList');
-      const area = document.getElementById('c
+      const area = document.getElementById('checkoutArea');
+      if (cart.length === 0) { list.innerHTML = "కార్ట్ ఖాళీగా ఉంది"; area.classList.add('d-none'); return; }
+      area.classList.rem
