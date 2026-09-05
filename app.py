@@ -140,6 +140,31 @@ def create_order():
         "commission": commission,
         "seller_payout": seller_payout
     }), 201
+    
+# ఉత్పత్తి వివరాలను అప్‌డేట్ చేయడం (Update Product)
+@app.route('/api/products/<int:product_id>', methods=['PUT'])
+def update_product(product_id):
+    data = request.json
+    title = data.get("title")
+    category = data.get("category")
+    price = float(data.get("price", 0))
+    mrp = float(data.get("mrp", 0))
+    stock = int(data.get("stock", 0))
+    weight = int(data.get("weight", 500))
+    image = data.get("image")
+    description = data.get("desc", "")
+
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute('''
+        UPDATE products 
+        SET title = ?, category = ?, price = ?, mrp = ?, stock = ?, weight = ?, image = ?, description = ?
+        WHERE id = ?
+    ''', (title, category, price, mrp, stock, weight, image, description, product_id))
+    conn.commit()
+    conn.close()
+
+    return jsonify({"status": "success", "message": "ఉత్పత్తి విజయవంతంగా అప్‌డేట్ చేయబడింది!"}), 200
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
