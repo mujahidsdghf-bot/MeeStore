@@ -10,23 +10,27 @@
     * { box-sizing: border-box; }
     body { background-color: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-bottom: 75px; margin: 0; }
     
-    /* Splash Screen Overlay */
-    #splashScreen {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    /* Splash Banner - హోమ్‌పేజీని బ్లాక్ చేయదు, 1.5 సెకన్లలో స్మూత్‌గా పైకి వెళ్ళిపోతుంది */
+    #splashBanner {
       background: linear-gradient(135deg, #9c27b0, #6a1b9a);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 999999; color: white; cursor: pointer;
+      color: white;
+      text-align: center;
+      padding: 18px 10px;
+      animation: slideUpFade 0.5s ease-out 1.5s forwards;
     }
-    .splash-logo { width: 85px; height: 85px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 42px; color: #9c27b0; box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+    @keyframes slideUpFade {
+      to { height: 0; padding: 0; margin: 0; opacity: 0; display: none; visibility: hidden; }
+    }
+    .splash-logo-mini { width: 45px; height: 45px; background: white; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 22px; color: #9c27b0; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
 
-    /* Header */
+    /* Top Header */
     .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
     .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; }
     .avatar-wrapper { position: relative; width: 42px; height: 42px; cursor: pointer; }
     .avatar-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #9c27b0; }
     .camera-badge { position: absolute; bottom: -2px; right: -2px; background: #9c27b0; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 9px; display: flex; align-items: center; justify-content: center; border: 1px solid white; }
 
-    /* Categories Horizontal Scroll */
+    /* Horizontal Categories */
     .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 8px 12px; background: white; border-bottom: 1px solid #eee; }
     .cat-scroll::-webkit-scrollbar { display: none; }
     .cat-btn { border-radius: 18px; font-size: 0.8rem; padding: 5px 12px; border: 1px solid #ddd; background: white; color: #444; }
@@ -43,20 +47,20 @@
     .nav-item-btn i { font-size: 1.2rem; margin-bottom: 3px; }
     .nav-item-btn.active { color: #9c27b0; font-weight: 700; }
 
-    /* Categories View Items */
+    /* Category List View */
     .cat-item-row { background: white; border-radius: 10px; padding: 14px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; border: 1px solid #eee; box-shadow: 0 1px 3px rgba(0,0,0,0.04); cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <!-- 1 సెకనులో ఆటోమేటిక్‌గా రిమూవ్ అయ్యే స్ప్లాష్ స్క్రీన్ (ఎక్కడ టచ్ చేసినా వెంటనే వెళ్లిపోతుంది) -->
-  <div id="splashScreen" onclick="removeSplash()">
-    <div class="splash-logo mb-3"><i class="fa-solid fa-bag-shopping"></i></div>
-    <h2 class="fw-bold tracking-wide">MeeStore</h2>
-    <small class="text-white-50 mt-2">లోడ్ అవుతోంది... (లేదా ఇక్కడ టచ్ చేయండి)</small>
+  <!-- MeeStore Welcome Splash Banner (హోమ్‌పేజీని బ్లాక్ చేయదు) -->
+  <div id="splashBanner">
+    <div class="splash-logo-mini mb-1"><i class="fa-solid fa-bag-shopping"></i></div>
+    <div class="fw-bold fs-5">MeeStore</div>
+    <small style="font-size: 0.75rem;">షాపింగ్ ప్రపంచానికి స్వాగతం</small>
   </div>
 
-  <!-- Top Header with Brand & Profile Camera -->
+  <!-- Top Header with Profile & Brand -->
   <div class="top-header">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <div class="d-flex align-items-center gap-2">
@@ -99,14 +103,24 @@
   <div id="homeArea">
     <div class="container px-2 my-2">
       <div id="productGrid" class="row row-cols-2 g-2">
-        <div class="col-12 text-center py-5 text-muted">
-          <div class="spinner-border spinner-border-sm text-primary me-2"></div>ఉత్పత్తులు లోడ్ అవుతున్నాయి...
+        <!-- Defaults directly loaded to avoid infinite wait -->
+        <div class="col">
+          <div class="product-card p-2">
+            <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" class="product-img rounded">
+            <div class="p-2 d-flex flex-column flex-grow-1">
+              <span class="badge bg-light text-secondary mb-1 align-self-start" style="font-size:0.65rem;">కిరాణా & సిరిధాన్యాలు</span>
+              <div class="fw-bold text-truncate" style="font-size:0.85rem;">Little millets (కొర్రలు)</div>
+              <div class="small text-muted" style="font-size:0.75rem;">బరువు: 500g</div>
+              <div class="fw-bold text-primary my-1">₹20</div>
+              <button class="btn btn-buy-app w-100 mt-auto" onclick="addToCartDirect('Little millets', 20)">కొనండి</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Dedicated Categories View (కేటగిరీలు బటన్ నొక్కితే వచ్చే వ్యూ) -->
+  <!-- Dedicated Categories View (కేటగిరీలు బటన్ నొక్కినప్పుడు ఓపెన్ అవుతుంది) -->
   <div id="categoriesView" class="container px-3 my-3 d-none">
     <h5 class="fw-bold mb-3 text-secondary"><i class="fa-solid fa-shapes me-2"></i>అన్ని కేటగిరీలు</h5>
     
@@ -187,7 +201,7 @@
     </button>
   </div>
 
-  <!-- Buyer Login/Register Modal -->
+  <!-- Buyer Modal -->
   <div class="modal fade" id="buyerModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -258,18 +272,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-    // 1. స్ప్లాష్ స్క్రీన్ రిమూవల్ - కచ్చితంగా 1 సెకనులో DOM నుండి తొలగిపోతుంది
-    function removeSplash() {
-      const sp = document.getElementById('splashScreen');
-      if (sp) sp.remove();
-    }
-    setTimeout(removeSplash, 1000);
-
     const API = "https://meestore.onrender.com/api";
     let allProducts = [], cart = [];
     let curBuyer = JSON.parse(localStorage.getItem('meestore_buyer'));
 
-    // ప్రొఫైల్ ఫోటో అప్‌లోడ్
     function uploadBuyerPic(input) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -293,7 +299,6 @@
       }
     }
 
-    // వ్యూల మధ్య మారడం (హోమ్ & కేటగిరీలు)
     function switchNav(view) {
       const homeArea = document.getElementById('homeArea');
       const catView = document.getElementById('categoriesView');
@@ -323,7 +328,6 @@
       renderProducts(matched.length ? matched : allProducts.filter(p => p.category === catName));
     }
 
-    // ప్రొడక్ట్స్ లోడ్ చేయడం
     async function loadProducts() {
       try {
         const res = await fetch(`${API}/products`);
@@ -331,19 +335,14 @@
           allProducts = await res.json();
           renderProducts(allProducts);
         }
-      } catch (e) {
-        document.getElementById('productGrid').innerHTML = '<div class="col-12 text-center py-4 text-muted">సర్వర్ నుండి డేటా లోడ్ కాలేదు. రీఫ్రెష్ చేయండి.</div>';
-      }
+      } catch (e) {}
       syncBuyerUI();
       checkSavedAvatar();
     }
 
     function renderProducts(list) {
       const grid = document.getElementById('productGrid');
-      if (!list || list.length === 0) {
-        grid.innerHTML = '<div class="col-12 text-center py-5 text-muted"><i class="fa-solid fa-box-open fa-2x mb-2 text-secondary"></i><br>వస్తువులు ఏవీ లేవు</div>';
-        return;
-      }
+      if (!list || list.length === 0) return;
       grid.innerHTML = list.map(p => `
         <div class="col">
           <div class="product-card p-2">
@@ -360,19 +359,21 @@
       `).join('');
     }
 
+    function addToCartDirect(name, price) {
+      cart.push({ name: name, price: price, seller_upi: 'mujahidsdghf9@ybl', seller_phone: '9177411712' });
+      updateCart();
+      new bootstrap.Offcanvas(document.getElementById('cartDrawer')).show();
+    }
+
     function filterCat(cat, btn) {
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
       renderProducts(cat === 'all' ? allProducts : allProducts.filter(p => p.category === cat));
     }
 
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-      const q = e.target.value.toLowerCase();
-      renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q))));
-    });
-
     function addToCart(id) {
-      cart.push(allProducts.find(p => p.id === id));
+      const item = allProducts.find(p => p.id === id);
+      if (item) cart.push(item);
       updateCart();
       new bootstrap.Offcanvas(document.getElementById('cartDrawer')).show();
     }
@@ -391,5 +392,4 @@
       document.getElementById('cartTotal').innerText = total;
 
       const upi = (cart[0] && cart[0].seller_upi) ? cart[0].seller_upi : 'mujahidsdghf9@ybl';
-      const link = `upi://pay?pa=${upi}&pn=MeeStore&am=${total}&cu=INR`;
-      document.getEl
+      const link = `upi://pay?pa=${upi}&pn=Mee
