@@ -4,195 +4,256 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MeeStore - సెల్లర్ హబ్</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background-color: #f8f9fa; font-family: sans-serif; }
-    .header-bar { background-color: #9c27b0; color: white; padding: 15px; }
-    .card-box { background: white; border-radius: 12px; padding: 22px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-    .preview-box { width: 100%; height: 160px; border: 2px dashed #9c27b0; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #fafafa; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: #f8f9fa; padding-bottom: 40px; }
+    .header { background: #9c27b0; color: white; padding: 14px; display: flex; justify-content: space-between; align-items: center; }
+    .card { background: white; border-radius: 10px; padding: 18px; margin: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .form-group { margin-bottom: 12px; }
+    .form-label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #333; }
+    .form-input, .form-select { width: 100%; padding: 9px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
+    .row { display: flex; gap: 10px; }
+    .col { flex: 1; }
+    .preview-box { width: 100%; height: 160px; border: 2px dashed #9c27b0; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #fafafa; overflow: hidden; margin-bottom: 8px; }
     .preview-box img { width: 100%; height: 100%; object-fit: contain; }
+    .btn { background: #9c27b0; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
+    .auth-tab { display: flex; gap: 8px; margin-bottom: 15px; }
+    .auth-tab button { flex: 1; padding: 8px; border: 1px solid #9c27b0; background: white; border-radius: 6px; cursor: pointer; }
+    .auth-tab button.active { background: #9c27b0; color: white; font-weight: bold; }
   </style>
 </head>
 <body>
-  <div class="header-bar d-flex justify-content-between align-items-center">
-    <h5 class="mb-0 fw-bold"><i class="fa-solid fa-store me-2"></i>MeeStore Seller Hub</h5>
-    <a href="index.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-left me-1"></i>స్టోర్‌కి వెళ్లండి</a>
+
+  <div class="header">
+    <div style="font-weight: 700; font-size: 1.1rem;"><i class="fa-solid fa-store me-1"></i>MeeStore Seller Hub</div>
+    <a href="index.html" style="color: white; text-decoration: none; font-size: 0.85rem; border: 1px solid white; padding: 4px 10px; border-radius: 15px;">స్టోర్‌కి వెళ్లండి</a>
   </div>
 
-  <div class="container my-4">
-    <!-- Login / Registration -->
-    <div id="authSection" class="row justify-content-center">
-      <div class="col-md-5">
-        <div class="card-box">
-          <ul class="nav nav-pills nav-justified mb-3">
-            <li class="nav-item"><button class="nav-link active" onclick="toggleAuth(true)">లాగిన్</button></li>
-            <li class="nav-item"><button class="nav-link" onclick="toggleAuth(false)">కొత్త సెల్లర్</button></li>
-          </ul>
-          <form id="loginForm">
-            <div class="mb-2"><input type="tel" id="loginPhone" class="form-control" placeholder="మొబైల్ నంబర్" required></div>
-            <div class="mb-3"><input type="password" id="loginPass" class="form-control" placeholder="పాస్‌వర్డ్" required></div>
-            <button type="submit" class="btn btn-primary w-100" style="background:#9c27b0; border:none;">లాగిన్ అవ్వండి</button>
-          </form>
-          <form id="regForm" class="d-none">
-            <div class="mb-2"><input type="text" id="regShop" class="form-control" placeholder="దుకాణం / బ్రాండ్ పేరు" required></div>
-            <div class="mb-2"><input type="tel" id="regPhone" class="form-control" placeholder="మొబైల్ నంబర్" required></div>
-            <div class="mb-2"><input type="text" id="regUpi" class="form-control" placeholder="మీ UPI ID" required></div>
-            <div class="mb-3"><input type="password" id="regPass" class="form-control" placeholder="పాస్‌వర్డ్" required></div>
-            <button type="submit" class="btn btn-success w-100">ఖాతా సృష్టించండి</button>
-          </form>
-        </div>
-      </div>
+  <!-- Login/Register -->
+  <div id="authBox" class="card" style="max-width: 420px; margin: 20px auto;">
+    <div class="auth-tab">
+      <button id="sLogBtn" class="active" onclick="toggleSellerAuth(true)">లాగిన్</button>
+      <button id="sRegBtn" onclick="toggleSellerAuth(false)">కొత్త సెల్లర్</button>
     </div>
 
-    <!-- Seller Dashboard -->
-    <div id="dashboardSection" class="d-none">
-      <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4 class="fw-bold text-secondary" id="welcomeShopName">హలో సెల్లర్!</h4>
-        <button class="btn btn-outline-danger btn-sm" onclick="logout()">లాగౌట్</button>
+    <form id="sLoginForm" onsubmit="handleSellerLogin(event)">
+      <div class="form-group">
+        <label class="form-label">మొబైల్ నంబర్</label>
+        <input type="tel" id="sLogPhone" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">పాస్‌వర్డ్</label>
+        <input type="password" id="sLogPass" class="form-input" required>
+      </div>
+      <button type="submit" class="btn">లాగిన్ అవ్వండి</button>
+    </form>
+
+    <form id="sRegForm" style="display: none;" onsubmit="handleSellerRegister(event)">
+      <div class="form-group">
+        <label class="form-label">దుకాణం / బ్రాండ్ పేరు</label>
+        <input type="text" id="sRegShop" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">మొబైల్ నంబర్</label>
+        <input type="tel" id="sRegPhone" class="form-input" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">మీ UPI ID (డైరెక్ట్ పేమెంట్స్ కోసం)</label>
+        <input type="text" id="sRegUpi" class="form-input" placeholder="name@upi" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">పాస్‌వర్డ్</label>
+        <input type="password" id="sRegPass" class="form-input" required>
+      </div>
+      <button type="submit" class="btn" style="background: #2e7d32;">ఖాతా సృష్టించండి</button>
+    </form>
+  </div>
+
+  <!-- Seller Add Product Dashboard -->
+  <div id="dashBox" style="display: none;">
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
+        <h3 id="welcomeShop" style="font-size: 1.1rem; color: #9c27b0;">హలో సెల్లర్!</h3>
+        <button onclick="logoutSeller()" style="background: #e53935; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">లాగౌట్</button>
       </div>
 
-      <!-- Add Product with Complete Specifications -->
-      <div class="card-box mb-4">
-        <h5 class="fw-bold mb-3" style="color:#9c27b0;">కొత్త ప్రొడక్ట్ పూర్తి వివరాలతో జోడించండి</h5>
-        <form id="addProductForm">
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-bold">ఉత్పత్తి పేరు (Product Name)</label>
-              <input type="text" id="pName" class="form-control" placeholder="ఉదా: రాగి పిండి, కొర్రలు, కాటన్ చీర" required>
-            </div>
-            <div class="col-md-6">
-              <label class="form-label fw-bold">కేటగిరీ</label>
-              <select id="pCategory" class="form-select" onchange="toggleFoodFields(this.value)" required>
-                <option value="కిరాణా & సిరిధాన్యాలు">🌾 కిరాణా & సిరిధాన్యాలు (ఆహార పదార్థాలు)</option>
-                <option value="జనరల్ & పూజా స్టోర్">🪔 జనరల్ & పూజా స్టోర్</option>
-                <option value="Women Fashion">👗 Women Fashion</option>
-                <option value="Men Fashion">👕 Men Fashion</option>
-                <option value="ఫ్యాన్సీ & జ్యువెలరీ">💍 ఫ్యాన్సీ & జ్యువెలరీ</option>
-                <option value="ఫుట్‌వేర్">👠 ఫుట్‌వేర్</option>
-                <option value="Home & Kitchen">🏠 Home & Kitchen</option>
-                <option value="Beauty & Health">💄 Beauty & Health</option>
-              </select>
-            </div>
-
-            <!-- కెమెరా & గ్యాలరీ అప్‌లోడ్ (లింక్ అవసరం లేదు) -->
-            <div class="col-md-12">
-              <label class="form-label fw-bold">ప్రొడక్ట్ ఫోటో (కెమెరా లేదా గ్యాలరీ నుండి తీసుకోండి)</label>
-              <div class="preview-box mb-2" id="previewContainer">
-                <span class="text-muted"><i class="fa-solid fa-camera fa-2x me-2"></i>ఫోటో ఇంకా ఎంచుకోలేదు</span>
-              </div>
-              <input type="file" id="productImageFile" class="form-control" accept="image/*" onchange="previewProductImg(this)" required>
-            </div>
-
-            <!-- ధర & స్టాక్ -->
-            <div class="col-md-4">
-              <label class="form-label fw-bold">అమ్మకపు ధర (₹)</label>
-              <input type="number" id="pPrice" class="form-control" placeholder="ఉదా: 250" required>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-bold">అందుబాటులో ఉన్న స్టాక్</label>
-              <input type="number" id="pStock" class="form-control" value="10" required>
-            </div>
-            <div class="col-md-4">
-              <label class="form-label fw-bold">రంగు (Color)</label>
-              <input type="text" id="pColor" class="form-control" placeholder="ఉదా: నాచురల్ బ్రౌన్ / వైట్">
-            </div>
-
-            <!-- కొలతలు & బరువు (కొరియర్ & షిప్పింగ్ కోసం) -->
-            <div class="col-md-3">
-              <label class="form-label fw-bold">బరువు (Weight)</label>
-              <input type="text" id="pWeight" class="form-control" placeholder="ఉదా: 500g లేదా 1kg" required>
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-bold">కొలతలు (L x W x H)</label>
-              <input type="text" id="pDimensions" class="form-control" placeholder="ఉదా: 15x10x5 cm">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-bold">మెటీరియల్ రకం</label>
-              <input type="text" id="pMaterial" class="form-control" placeholder="ఆర్గానిక్ / కాటన్ / ప్లాస్టిక్">
-            </div>
-            <div class="col-md-3">
-              <label class="form-label fw-bold">మెటీరియల్ నేచర్ (హానికరమా?)</label>
-              <select id="pHazard" class="form-select">
-                <option value="Non-Hazardous">సాధారణమైనది (సురక్షితం)</option>
-                <option value="Fragile">పగిలిపోయే స్వభావం (గాజు/మట్టి)</option>
-                <option value="Liquid">ద్రవ పదార్థం (నూనెలు/లిక్విడ్)</option>
-                <option value="Hazardous">మండే స్వభావం / ప్రమాదకరం</option>
-              </select>
-            </div>
-
-            <!-- ఆహార పదార్థాలు అయితే FSSAI లైసెన్స్ & ఎక్స్‌పైరీ డేట్ -->
-            <div class="col-md-6" id="fssaiBox">
-              <label class="form-label fw-bold text-success">FSSAI ఫుడ్ లైసెన్స్ నంబర్</label>
-              <input type="text" id="pFssai" class="form-control" placeholder="14 అంకెల FSSAI నంబర్">
-            </div>
-            <div class="col-md-6" id="expiryBox">
-              <label class="form-label fw-bold">వ్యాలిడిటీ / ఎక్స్‌పైరీ డేట్ (Expiry)</label>
-              <input type="date" id="pExpiry" class="form-control">
-            </div>
-
-            <div class="col-12 mt-3">
-              <button type="submit" id="btnLive" class="btn btn-primary w-100 py-2 fw-bold" style="background:#9c27b0; border:none;">
-                <i class="fa-solid fa-cloud-arrow-up me-2"></i>ప్రొడక్ట్ పూర్తి వివరాలతో లైవ్ చేయండి
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-
-      <!-- ఇన్వెంటరీ టేబుల్ -->
-      <div class="card-box">
-        <h5 class="fw-bold mb-3">మీ ఇన్వెంటరీ లిస్ట్</h5>
-        <div class="table-responsive">
-          <table class="table table-bordered align-middle">
-            <thead class="table-light">
-              <tr>
-                <th>ఫోటో</th>
-                <th>పేరు</th>
-                <th>కేటగిరీ</th>
-                <th>ధర</th>
-                <th>బరువు</th>
-                <th>స్టాక్</th>
-              </tr>
-            </thead>
-            <tbody id="inventoryList"></tbody>
-          </table>
+      <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #444;">కొత్త సరుకు పూర్తి వివరాలు జోడించండి</h4>
+      <form onsubmit="handleAddProduct(event)">
+        
+        <div class="form-group">
+          <label class="form-label">ఉత్పత్తి పేరు (Product Name)</label>
+          <input type="text" id="pName" class="form-input" placeholder="ఉదా: రాగి పిండి, చీర, చెప్పులు" required>
         </div>
-      </div>
+
+        <div class="form-group">
+          <label class="form-label">కేటగిరీ</label>
+          <select id="pCategory" class="form-select" onchange="checkFoodCategory(this.value)" required>
+            <option value="కిరాణా & సిరిధాన్యాలు">🌾 కిరాణా & సిరిధాన్యాలు (ఆహార పదార్థాలు)</option>
+            <option value="జనరల్ & పూజా స్టోర్">🪔 జనరల్ & పూజా స్టోర్</option>
+            <option value="Women Fashion">👗 Women Fashion</option>
+            <option value="Men Fashion">👕 Men Fashion</option>
+            <option value="ఫ్యాన్సీ & జ్యువెలరీ">💍 ఫ్యాన్సీ & జ్యువెలరీ</option>
+            <option value="ఫుట్‌వేర్">👠 ఫుట్‌వేర్</option>
+            <option value="Home & Kitchen">🏠 Home & Kitchen</option>
+          </select>
+        </div>
+
+        <!-- Direct Camera / Gallery Selection -->
+        <div class="form-group">
+          <label class="form-label">ఫోటో (కెమెరా లేదా గ్యాలరీ నుండి తీసుకోండి)</label>
+          <div class="preview-box" id="previewContainer">
+            <span style="color: #999;"><i class="fa-solid fa-camera fa-2x"></i><br>ఫోటో ఎంచుకోండి</span>
+          </div>
+          <input type="file" id="pImgInput" accept="image/*" class="form-input" onchange="previewImage(this)" required>
+        </div>
+
+        <div class="row">
+          <div class="col form-group">
+            <label class="form-label">ధర (₹)</label>
+            <input type="number" id="pPrice" class="form-input" required>
+          </div>
+          <div class="col form-group">
+            <label class="form-label">స్టాక్ (సంఖ్య)</label>
+            <input type="number" id="pStock" class="form-input" value="10" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col form-group">
+            <label class="form-label">బరువు (Weight - గ్రాములు/కేజీల్లో)</label>
+            <input type="text" id="pWeight" class="form-input" placeholder="ఉదా: 500g / 1kg" required>
+          </div>
+          <div class="col form-group">
+            <label class="form-label">కొలతలు (L x W x H)</label>
+            <input type="text" id="pDim" class="form-input" placeholder="ఉదా: 15x10x5 cm">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col form-group">
+            <label class="form-label">మెటీరియల్ రకం</label>
+            <input type="text" id="pMat" class="form-input" placeholder="ఆర్గానిక్ / కాటన్ / గ్లాస్">
+          </div>
+          <div class="col form-group">
+            <label class="form-label">రంగు (Color)</label>
+            <input type="text" id="pColor" class="form-input" placeholder="ఉదా: రెడ్, బ్రౌన్">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">మెటీరియల్ స్వభావం (హానికరమా కాదా?)</label>
+          <select id="pHazard" class="form-select">
+            <option value="Non-Hazardous">సాధారణమైనది (సురక్షితమైన వస్తువు)</option>
+            <option value="Fragile">పగిలిపోయే వస్తువు (గాజు/మట్టి)</option>
+            <option value="Liquid">ద్రవ పదార్థం (Liquid/నూనెలు)</option>
+            <option value="Hazardous">ప్రమాదకరమైనది / మండే స్వభావం</option>
+          </select>
+        </div>
+
+        <!-- Food items license & validity -->
+        <div id="foodSection">
+          <div class="form-group">
+            <label class="form-label" style="color: #2e7d32;">FSSAI ఫుడ్ లైసెన్స్ నంబర్</label>
+            <input type="text" id="pFssai" class="form-input" placeholder="14 అంకెల FSSAI నంబర్">
+          </div>
+          <div class="form-group">
+            <label class="form-label">వ్యాలిడిటీ / ఎక్స్‌పైరీ తేదీ (Expiry Date)</label>
+            <input type="date" id="pExpiry" class="form-input">
+          </div>
+        </div>
+
+        <button type="submit" id="btnLive" class="btn">
+          <i class="fa-solid fa-cloud-arrow-up me-1"></i>ప్రొడక్ట్ లైవ్ చేయండి
+        </button>
+      </form>
     </div>
   </div>
 
   <script>
     const API = "https://meestore.onrender.com/api";
     let curSeller = JSON.parse(localStorage.getItem('meestore_seller'));
-    let selectedImageBase64 = "";
+    let imgBase64 = "";
 
-    function toggleAuth(isLogin) {
-      document.getElementById('loginForm').classList.toggle('d-none', !isLogin);
-      document.getElementById('regForm').classList.toggle('d-none', isLogin);
+    function toggleSellerAuth(isLog) {
+      document.getElementById('sLoginForm').style.display = isLog ? 'block' : 'none';
+      document.getElementById('sRegForm').style.display = isLog ? 'none' : 'block';
+      document.getElementById('sLogBtn').classList.toggle('active', isLog);
+      document.getElementById('sRegBtn').classList.toggle('active', !isLog);
     }
 
-    // Camera & Gallery Image Picker
-    function previewProductImg(input) {
+    function previewImage(input) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          selectedImageBase64 = e.target.result;
-          document.getElementById('previewContainer').innerHTML = `<img src="${selectedImageBase64}">`;
+          imgBase64 = e.target.result;
+          document.getElementById('previewContainer').innerHTML = `<img src="${imgBase64}">`;
         };
         reader.readAsDataURL(input.files[0]);
       }
     }
 
-    function toggleFoodFields(cat) {
-      const isFood = cat.includes('కిరాణా') || cat.includes('ఫుడ్');
-      document.getElementById('fssaiBox').style.display = isFood ? 'block' : 'none';
-      document.getElementById('expiryBox').style.display = isFood ? 'block' : 'none';
+    function checkFoodCategory(val) {
+      const isFood = val.includes('కిరాణా');
+      document.getElementById('foodSection').style.display = isFood ? 'block' : 'none';
     }
 
-    document.getElementById('addProductForm').onsubmit = async (e) => {
+    async function handleSellerLogin(e) {
       e.preventDefault();
-      if (!selectedImageBase64) { alert("దయచేసి ప్రొడక్ట్ ఫోటోను కెమెరా లేదా గ్యాలరీ ద్వారా ఎంచుకోండి!"); return; }
+      try {
+        const res = await fetch(`${API}/seller/login`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            phone: document.getElementById('sLogPhone').value,
+            password: document.getElementById('sLogPass').value
+          })
+        });
+        const d = await res.json();
+        if (res.ok) {
+          localStorage.setItem('meestore_seller', JSON.stringify(d));
+          curSeller = d;
+          showDashboard();
+        } else alert(d.error);
+      } catch(err) { alert("లాగిన్ కాలేకపోయాం"); }
+    }
+
+    async function handleSellerRegister(e) {
+      e.preventDefault();
+      try {
+        const res = await fetch(`${API}/seller/register`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            shop_name: document.getElementById('sRegShop').value,
+            phone: document.getElementById('sRegPhone').value,
+            upi_id: document.getElementById('sRegUpi').value,
+            password: document.getElementById('sRegPass').value
+          })
+        });
+        const d = await res.json();
+        if (res.ok) {
+          alert("రిజిస్ట్రేషన్ పూర్తయింది! లాగిన్ అవ్వండి.");
+          toggleSellerAuth(true);
+        } else alert(d.error);
+      } catch(err) { alert("రిజిస్ట్రేషన్ ఫెయిల్ అయింది"); }
+    }
+
+    function showDashboard() {
+      if (!curSeller) return;
+      document.getElementById('authBox').style.display = 'none';
+      document.getElementById('dashBox').style.display = 'block';
+      document.getElementById('welcomeShop').innerText = `హలో, ${curSeller.shop_name}!`;
+    }
+
+    function logoutSeller() {
+      localStorage.removeItem('meestore_seller');
+      location.reload();
+    }
+
+    async function handleAddProduct(e) {
+      e.preventDefault();
+      if (!imgBase64) { alert("దయచేసి కెమెరా లేదా గ్యాలరీ నుండి ఫోటో ఎంచుకోండి!"); return; }
 
       const btn = document.getElementById('btnLive');
       btn.disabled = true;
@@ -205,81 +266,34 @@
         price: document.getElementById('pPrice').value,
         mrp: document.getElementById('pPrice').value,
         stock: document.getElementById('pStock').value,
-        image_url: selectedImageBase64,
+        image_url: imgBase64,
         seller_phone: curSeller.phone,
         seller_upi: curSeller.upi_id,
         weight: document.getElementById('pWeight').value,
+        dimensions: document.getElementById('pDim').value,
+        material: document.getElementById('pMat').value,
         color: document.getElementById('pColor').value,
-        dimensions: document.getElementById('pDimensions').value,
-        material: document.getElementById('pMaterial').value,
         hazard_type: document.getElementById('pHazard').value,
         fssai: document.getElementById('pFssai').value,
         expiry: document.getElementById('pExpiry').value
       };
 
-      const res = await fetch(`${API}/products`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(payload)
-      });
-
-      if (res.ok) {
-        alert("🎉 ప్రొడక్ట్ అన్ని వివరాలతో విజయవంతంగా లైవ్ అయ్యింది!");
-        loadDashboard();
-        document.getElementById('addProductForm').reset();
-        document.getElementById('previewContainer').innerHTML = `<span class="text-muted"><i class="fa-solid fa-camera fa-2x me-2"></i>ఫోటో ఇంకా ఎంచుకోలేదు</span>`;
-        selectedImageBase64 = "";
-      }
+      try {
+        const res = await fetch(`${API}/products`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          alert("🎉 ప్రొడక్ట్ విజయవంతంగా లైవ్ చేయబడింది!");
+          location.href = "index.html";
+        }
+      } catch(err) { alert("సేవ్ చేయడం కుదరలేదు"); }
       btn.disabled = false;
-      btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-2"></i>ప్రొడక్ట్ పూర్తి వివరాలతో లైవ్ చేయండి`;
-    };
-
-    document.getElementById('loginForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const res = await fetch(`${API}/seller/login`, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({
-          phone: document.getElementById('loginPhone').value,
-          password: document.getElementById('loginPass').value
-        })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        localStorage.setItem('meestore_seller', JSON.stringify(data));
-        curSeller = data;
-        loadDashboard();
-      } else alert(data.error);
-    };
-
-    async function loadDashboard() {
-      if (!curSeller) return;
-      document.getElementById('authSection').classList.add('d-none');
-      document.getElementById('dashboardSection').classList.remove('d-none');
-      document.getElementById('welcomeShopName').innerText = curSeller.shop_name;
-
-      const res = await fetch(`${API}/seller/dashboard/${curSeller.id}`);
-      const data = await res.json();
-
-      const tbl = document.getElementById('inventoryList');
-      tbl.innerHTML = data.products.map(p => `
-        <tr>
-          <td><img src="${p.image_url}" style="width:45px; height:45px; object-fit:cover; border-radius:4px;"></td>
-          <td><b>${p.name}</b></td>
-          <td>${p.category}</td>
-          <td>₹${p.price}</td>
-          <td>${p.weight || 'N/A'}</td>
-          <td><span class="badge bg-success">${p.stock}</span></td>
-        </tr>
-      `).join('');
+      btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-1"></i>ప్రొడక్ట్ లైవ్ చేయండి`;
     }
 
-    function logout() {
-      localStorage.removeItem('meestore_seller');
-      location.reload();
-    }
-
-    if (curSeller) loadDashboard();
+    if (curSeller) showDashboard();
   </script>
 </body>
 </html>
