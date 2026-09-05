@@ -7,153 +7,215 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    .header-bar { background-color: #9c27b0; color: white; padding: 15px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
-    .card-box { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); margin-top: 20px; }
-    .btn-submit { background-color: #9c27b0; color: white; font-weight: 600; border: none; padding: 12px; }
-    .btn-submit:hover { background-color: #7b1fa2; color: white; }
-    .payout-box { background-color: #f3e5f5; border: 1px dashed #9c27b0; border-radius: 8px; padding: 12px; }
+    body { background-color: #f8f9fa; font-family: sans-serif; }
+    .header-bar { background-color: #9c27b0; color: white; padding: 15px; }
+    .card-box { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
   </style>
 </head>
 <body>
+  <div class="header-bar d-flex justify-content-between align-items-center">
+    <h5 class="mb-0 fw-bold"><i class="fa-solid fa-store me-2"></i>MeeStore Seller Hub</h5>
+    <a href="index.html" class="btn btn-outline-light btn-sm">స్టోర్‌కి వెళ్లండి</a>
+  </div>
 
-  <header class="header-bar d-flex justify-content-between align-items-center">
-    <div class="h4 mb-0 fw-bold"><i class="fa-solid fa-store me-2"></i>MeeStore Seller Hub</div>
-    <a href="index.html" class="btn btn-outline-light btn-sm"><i class="fa-solid fa-arrow-left me-1"></i> స్టోర్‌కి వెళ్లండి</a>
-  </header>
-
-  <div class="container mb-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
+  <div class="container my-4">
+    <!-- లాగిన్/రిజిస్ట్రేషన్ సెక్షన్ -->
+    <div id="authSection" class="row justify-content-center">
+      <div class="col-md-5">
         <div class="card-box">
-          <h4 class="mb-4 text-center fw-bold text-secondary">కొత్త ఉత్పత్తిని జోడించండి</h4>
-          
-          <form id="sellerForm">
-            <div class="mb-3">
-              <label class="form-label fw-bold">ఉత్పత్తి పేరు (Product Name)</label>
-              <input type="text" class="form-control" id="name" placeholder="ఉదా: కొర్రలు, చీర, లేడీస్ చెప్పులు, ఫేస్ క్రీమ్" required>
-            </div>
+          <ul class="nav nav-pills nav-justified mb-3" id="pills-tab">
+            <li class="nav-item"><button class="nav-link active" onclick="toggleAuth(true)">లాగిన్</button></li>
+            <li class="nav-item"><button class="nav-link" onclick="toggleAuth(false)">కొత్త సెల్లర్ రిజిస్టర్</button></li>
+          </ul>
 
-            <div class="mb-3">
-              <label class="form-label fw-bold">కేటగిరీ ఎంచుకోండి (Category)</label>
-              <select class="form-select" id="category" required>
-                <option value="">-- కేటగిరీని ఎంచుకోండి --</option>
-                <option value="కిరాణా & మినరల్స్">🌾 కిరాణా & మినరల్స్ (కిరాణా, సిరిధాన్యాలు, ఆయిల్స్)</option>
-                <option value="జనరల్ & పూజా స్టోర్">🪔 జనరల్ & పూజా స్టోర్ (నిత్యావసరాలు, పూజా సామాగ్రి)</option>
-                <option value="Women Fashion">👗 Women Fashion (శారీలు, కుర్తీలు, డ్రెస్సెస్)</option>
-                <option value="Men Fashion">👕 Men Fashion (షర్టులు, జీన్స్, టీ-షర్టులు)</option>
-                <option value="ఫ్యాన్సీ & జ్యువెలరీ">💍 ఫ్యాన్సీ & జ్యువెలరీ (గాజులు, చైన్లు, ఇమిటేషన్ జ్యువెలరీ)</option>
-                <option value="ఫుట్‌వేర్">👠 ఫుట్‌వేర్ (లేడీస్ & జెంట్స్ చెప్పులు, షూస్)</option>
-                <option value="Home & Kitchen">🏠 Home & Kitchen (వంటగది పాత్రలు, బెడ్‌షీట్స్)</option>
-                <option value="Beauty & Health">💄 Beauty & Health (కాస్మెటిక్స్, ఆయుర్వేదిక్)</option>
-                <option value="Kids & Toys">👶 Kids & Toys (పిల్లల దుస్తులు, బొమ్మలు)</option>
-                <option value="Electronics & Accessories">📱 Electronics (మొబైల్ కవర్లు, హెడ్‌ఫోన్స్, వాచ్‌లు)</option>
-                <option value="Bags & Luggage">👜 Bags & Luggage (హ్యాండ్‌బ్యాగ్స్, ట్రావెల్ బ్యాగ్స్)</option>
+          <form id="loginForm">
+            <div class="mb-2"><input type="tel" id="loginPhone" class="form-control" placeholder="మొబైల్ నంబర్" required></div>
+            <div class="mb-3"><input type="password" id="loginPass" class="form-control" placeholder="పాస్‌వర్డ్" required></div>
+            <button type="submit" class="btn btn-primary w-100" style="background:#9c27b0; border:none;">లాగిన్ అవ్వండి</button>
+          </form>
+
+          <form id="regForm" class="d-none">
+            <div class="mb-2"><input type="text" id="regShop" class="form-control" placeholder="దుకాణం / బ్రాండ్ పేరు" required></div>
+            <div class="mb-2"><input type="tel" id="regPhone" class="form-control" placeholder="మొబైల్ నంబర్" required></div>
+            <div class="mb-2"><input type="text" id="regUpi" class="form-control" placeholder="మీ UPI ID" required></div>
+            <div class="mb-3"><input type="password" id="regPass" class="form-control" placeholder="పాస్‌వర్డ్" required></div>
+            <button type="submit" class="btn btn-success w-100">ఖాతా సృష్టించండి</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- సెల్లర్ డ్యాష్‌బోర్డ్ -->
+    <div id="dashboardSection" class="d-none">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4 class="fw-bold text-secondary" id="welcomeShopName">హలో సెల్లర్!</h4>
+        <button class="btn btn-outline-danger btn-sm" onclick="logout()">లాగౌట్</button>
+      </div>
+
+      <div class="row g-3 mb-4">
+        <div class="col-6 col-md-4">
+          <div class="card-box text-center">
+            <div class="text-muted small">మొత్తం ఆదాయం (Net)</div>
+            <h4 class="text-success fw-bold mt-1">₹<span id="dashEarnings">0</span></h4>
+          </div>
+        </div>
+        <div class="col-6 col-md-4">
+          <div class="card-box text-center">
+            <div class="text-muted small">లైవ్ వస్తువులు</div>
+            <h4 class="text-primary fw-bold mt-1"><span id="dashLiveItems">0</span></h4>
+          </div>
+        </div>
+        <div class="col-12 col-md-4">
+          <div class="card-box text-center">
+            <div class="text-muted small">రిటర్న్స్ & రీఫండ్స్</div>
+            <h4 class="text-danger fw-bold mt-1"><span id="dashReturns">0</span></h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- వస్తువును యాడ్ చేసే ఫారమ్ -->
+      <div class="card-box mb-4">
+        <h5 class="fw-bold mb-3">కొత్త ప్రొడక్ట్ జోడించండి</h5>
+        <form id="addProductForm">
+          <div class="row g-2">
+            <div class="col-md-4"><input type="text" id="pName" class="form-control" placeholder="ఉత్పత్తి పేరు" required></div>
+            <div class="col-md-4">
+              <select id="pCategory" class="form-select" required>
+                <option value="కిరాణా & మినరల్స్">🌾 కిరాణా & మినరల్స్</option>
+                <option value="జనరల్ & పూజా స్టోర్">🪔 జనరల్ & పూజా స్టోర్</option>
+                <option value="Women Fashion">👗 Women Fashion</option>
+                <option value="Men Fashion">👕 Men Fashion</option>
+                <option value="ఫ్యాన్సీ & జ్యువెలరీ">💍 ఫ్యాన్సీ & జ్యువెలరీ</option>
+                <option value="ఫుట్‌వేర్">👠 ఫుట్‌వేర్</option>
+                <option value="Home & Kitchen">🏠 Home & Kitchen</option>
+                <option value="Beauty & Health">💄 Beauty & Health</option>
+                <option value="Kids & Toys">👶 Kids & Toys</option>
+                <option value="Electronics & Accessories">📱 Electronics</option>
+                <option value="Bags & Luggage">👜 Bags & Luggage</option>
               </select>
             </div>
+            <div class="col-md-2"><input type="number" id="pPrice" class="form-control" placeholder="ధర (₹)" required></div>
+            <div class="col-md-2"><input type="number" id="pStock" class="form-control" placeholder="స్టాక్ (సంఖ్య)" value="10" required></div>
+            <div class="col-md-8"><input type="url" id="pImg" class="form-control" placeholder="ఫోటో లింక్ URL" required></div>
+            <div class="col-md-4"><button type="submit" class="btn btn-primary w-100" style="background:#9c27b0; border:none;">లైవ్ చేయండి</button></div>
+          </div>
+        </form>
+      </div>
 
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">అసలు ధర - MRP (₹)</label>
-                <input type="number" class="form-control" id="mrp" placeholder="ఉదా: 499" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">కస్టమర్ అమ్మకపు ధర (₹)</label>
-                <input type="number" class="form-control" id="price" placeholder="ఉదా: 200" oninput="calculatePayout()" required>
-              </div>
-            </div>
-
-            <!-- 2% ప్లాట్‌ఫామ్ ఫీజు కాలిక్యులేషన్ బాక్స్ (సెల్లర్ కు మాత్రమే కనిపిస్తుంది) -->
-            <div id="payoutBox" class="payout-box mb-3 d-none">
-              <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>MeeStore సర్వీస్ ఫీజు (2%):</span>
-                <span>- ₹<span id="feeAmount">0</span></span>
-              </div>
-              <div class="d-flex justify-content-between fw-bold text-dark">
-                <span>మీ బ్యాంక్ ఖాతాకు చేరే మొత్తం (Net Payout):</span>
-                <span class="text-success fs-6">₹<span id="netPayout">0</span></span>
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label class="form-label fw-bold">ఫోటో లింక్ (Image URL)</label>
-              <input type="url" class="form-control" id="imageUrl" placeholder="https://example.com/photo.jpg" required>
-            </div>
-
-            <div class="row">
-              <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">మీ వాట్సాప్ నంబర్ (WhatsApp Number)</label>
-                <input type="tel" class="form-control" id="sellerPhone" placeholder="10 అంకెల మొబైల్ నంబర్" required>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label class="form-label fw-bold">మీ UPI ID (డైరెక్ట్ పేమెంట్స్ కోసం)</label>
-                <input type="text" class="form-control" id="sellerUpi" placeholder="ఉదా: name@upi లేదా 9876543210@ybl" required>
-              </div>
-            </div>
-
-            <button type="submit" id="btnSubmit" class="btn btn-submit w-100 mt-2">
-              <i class="fa-solid fa-cloud-arrow-up me-2"></i>ప్రొడక్ట్ లైవ్ చేయండి
-            </button>
-          </form>
+      <!-- సెల్లర్ సొంత వస్తువుల జాబితా -->
+      <div class="card-box">
+        <h5 class="fw-bold mb-3">మీ ఇన్వెంటరీ (వస్తువులు & స్టాక్)</h5>
+        <div class="table-responsive">
+          <table class="table table-bordered align-middle">
+            <thead class="table-light">
+              <tr>
+                <th>పేరు</th>
+                <th>కేటగిరీ</th>
+                <th>ధర</th>
+                <th>ప్రస్తుత స్టాక్</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryList"></tbody>
+          </table>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    const API_BASE = "https://meestore.onrender.com";
+    const API = "https://meestore.onrender.com/api";
+    let curSeller = JSON.parse(localStorage.getItem('meestore_seller'));
 
-    function calculatePayout() {
-      const priceVal = parseFloat(document.getElementById('price').value);
-      const box = document.getElementById('payoutBox');
-      if (priceVal && priceVal > 0) {
-        const fee = (priceVal * 0.02).toFixed(2);
-        const net = (priceVal - fee).toFixed(2);
-        document.getElementById('feeAmount').innerText = fee;
-        document.getElementById('netPayout').innerText = net;
-        box.classList.remove('d-none');
-      } else {
-        box.classList.add('d-none');
-      }
+    function toggleAuth(isLogin) {
+      document.getElementById('loginForm').classList.toggle('d-none', !isLogin);
+      document.getElementById('regForm').classList.toggle('d-none', isLogin);
     }
 
-    document.getElementById('sellerForm').addEventListener('submit', async function(e) {
+    document.getElementById('regForm').onsubmit = async (e) => {
       e.preventDefault();
-      const btn = document.getElementById('btnSubmit');
-      btn.disabled = true;
-      btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>సేవ్ అవుతోంది...`;
+      const res = await fetch(`${API}/seller/register`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          shop_name: document.getElementById('regShop').value,
+          phone: document.getElementById('regPhone').value,
+          upi_id: document.getElementById('regUpi').value,
+          password: document.getElementById('regPass').value
+        })
+      });
+      const data = await res.json();
+      if(res.ok) { alert("రిజిస్ట్రేషన్ పూర్తయింది! లాగిన్ అవ్వండి."); toggleAuth(true); }
+      else alert(data.error);
+    };
 
-      const payload = {
-        name: document.getElementById('name').value.trim(),
-        category: document.getElementById('category').value,
-        mrp: parseFloat(document.getElementById('mrp').value),
-        price: parseFloat(document.getElementById('price').value),
-        image_url: document.getElementById('imageUrl').value.trim(),
-        seller_phone: document.getElementById('sellerPhone').value.trim(),
-        seller_upi: document.getElementById('sellerUpi').value.trim()
-      };
+    document.getElementById('loginForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const res = await fetch(`${API}/seller/login`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          phone: document.getElementById('loginPhone').value,
+          password: document.getElementById('loginPass').value
+        })
+      });
+      const data = await res.json();
+      if(res.ok) {
+        localStorage.setItem('meestore_seller', JSON.stringify(data));
+        curSeller = data;
+        loadDashboard();
+      } else alert(data.error);
+    };
 
-      try {
-        const res = await fetch(`${API_BASE}/api/products`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+    async function loadDashboard() {
+      if(!curSeller) return;
+      document.getElementById('authSection').classList.add('d-none');
+      document.getElementById('dashboardSection').classList.remove('d-none');
+      document.getElementById('welcomeShopName').innerText = curSeller.shop_name;
 
-        if (res.ok) {
-          alert("🎉 ఉత్పత్తి విజయవంతంగా లైవ్ చేయబడింది!");
-          window.location.href = "index.html";
-        } else {
-          const errData = await res.json();
-          alert("ఎర్రర్: " + (errData.error || "సేవ్ చేయడం కుదరలేదు"));
-        }
-      } catch (err) {
-        alert("సర్వర్‌తో కనెక్ట్ కాలేకపోయాం. దయచేసి ఇంటర్నెట్ చెక్ చేసుకోండి.");
-      } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-2"></i>ప్రొడక్ట్ లైవ్ చేయండి`;
-      }
-    });
+      const res = await fetch(`${API}/seller/dashboard/${curSeller.id}`);
+      const data = await res.json();
+      document.getElementById('dashEarnings').innerText = data.total_payout;
+      document.getElementById('dashLiveItems').innerText = data.products.length;
+      document.getElementById('dashReturns').innerText = data.returns.length;
+
+      const tbl = document.getElementById('inventoryList');
+      tbl.innerHTML = data.products.map(p => `
+        <tr>
+          <td><b>${p.name}</b></td>
+          <td>${p.category}</td>
+          <td>₹${p.price}</td>
+          <td><span class="badge bg-success">${p.stock} Units</span></td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('addProductForm').onsubmit = async (e) => {
+      e.preventDefault();
+      const res = await fetch(`${API}/products`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          seller_id: curSeller.id,
+          name: document.getElementById('pName').value,
+          category: document.getElementById('pCategory').value,
+          price: document.getElementById('pPrice').value,
+          mrp: document.getElementById('pPrice').value,
+          stock: document.getElementById('pStock').value,
+          image_url: document.getElementById('pImg').value,
+          seller_phone: curSeller.phone,
+          seller_upi: curSeller.upi_id
+        })
+      });
+      if(res.ok) { alert("ప్రొడక్ట్ లైవ్ అయ్యింది!"); loadDashboard(); }
+    };
+
+    function logout() {
+      localStorage.removeItem('meestore_seller');
+      location.reload();
+    }
+
+    if(curSeller) loadDashboard();
   </script>
 </body>
-</html>
+  </html>
+  
