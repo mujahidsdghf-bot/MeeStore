@@ -1,90 +1,165 @@
-  <!-- స్క్రిప్ట్ లాజిక్ (హైబ్రిడ్ ఫాల్‌బ్యాక్ సిస్టమ్) -->
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MeeStore - ఆన్‌లైన్ షాపింగ్</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-gray-100 font-sans pb-24">
+
+  <!-- 1. హెడర్ & సెర్చ్ బార్ -->
+  <header class="sticky top-0 z-50 bg-[#9c27b0] text-white p-3 shadow-md">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center space-x-2">
+        <i class="fa-solid fa-bag-shopping text-2xl text-yellow-300"></i>
+        <span class="text-xl font-bold tracking-wide">MeeStore</span>
+      </div>
+      <div class="flex items-center space-x-3">
+        <a href="seller.html" class="bg-purple-900 border border-yellow-300 text-yellow-300 text-[11px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1">
+          <i class="fa-solid fa-store"></i> సెల్లర్ అవ్వండి
+        </a>
+        <button onclick="openCart()" class="relative p-1">
+          <i class="fa-solid fa-cart-shopping text-xl"></i>
+          <span id="cart-badge" class="absolute -top-1 -right-2 bg-yellow-400 text-black text-xs font-extrabold rounded-full h-5 w-5 flex items-center justify-center hidden">0</span>
+        </button>
+      </div>
+    </div>
+    <div class="relative">
+      <input type="text" id="search-box" onkeyup="filterProducts()" placeholder="చీరలు, కుర్తీలు, కిరాణా లేదా బ్రాండ్స్ వెతకండి..." class="w-full pl-10 pr-4 py-2 rounded-lg text-gray-800 text-xs focus:outline-none bg-white shadow-inner">
+      <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3 text-gray-400 text-xs"></i>
+    </div>
+  </header>
+
+  <!-- 2. కేటగిరీలు -->
+  <section class="bg-white py-3 border-b shadow-sm">
+    <div class="flex space-x-4 overflow-x-auto no-scrollbar px-3 text-center">
+      <div onclick="selectCategory('all')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
+        <div class="w-12 h-12 p-3 bg-pink-100 rounded-full flex items-center justify-center text-[#9c27b0] text-base font-bold border border-[#9c27b0]">
+          <i class="fa-solid fa-border-all"></i>
+        </div>
+        <span class="text-[11px] font-semibold mt-1 text-gray-700">అన్నీ</span>
+      </div>
+      <div onclick="selectCategory('women')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
+        <div class="w-12 h-12 p-3 bg-pink-50 rounded-full flex items-center justify-center text-pink-600 text-base border border-pink-200">
+          <i class="fa-solid fa-person-dress"></i>
+        </div>
+        <span class="text-[11px] font-semibold mt-1 text-gray-700">ఉమెన్ & గర్ల్స్</span>
+      </div>
+      <div onclick="selectCategory('men')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
+        <div class="w-12 h-12 p-3 bg-blue-50 rounded-full flex items-center justify-center text-blue-600 text-base border border-blue-200">
+          <i class="fa-solid fa-person"></i>
+        </div>
+        <span class="text-[11px] font-semibold mt-1 text-gray-700">మెన్ & బాయ్స్</span>
+      </div>
+      <div onclick="selectCategory('kids')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
+        <div class="w-12 h-12 p-3 bg-yellow-50 rounded-full flex items-center justify-center text-yellow-600 text-base border border-yellow-200">
+          <i class="fa-solid fa-baby"></i>
+        </div>
+        <span class="text-[11px] font-semibold mt-1 text-gray-700">కిడ్స్ వేర్</span>
+      </div>
+      <div onclick="selectCategory('grocery')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
+        <div class="w-12 h-12 p-3 bg-green-50 rounded-full flex items-center justify-center text-green-600 text-base border border-green-200">
+          <i class="fa-solid fa-wheat-awn"></i>
+        </div>
+        <span class="text-[11px] font-semibold mt-1 text-gray-700">కిరాణా & మిల్లెట్స్</span>
+      </div>
+      <div onclick="selectCategory('home')" class="cursor-pointer flex-shrink-0 flex flex-col items-center">
+        <div class="w-12 h-12 p-3 bg-orange-50 rounded-full flex items-center justify-center text-orange-600 text-base border border-orange-200">
+          <i class="fa-solid fa-kitchen-set"></i>
+        </div>
+        <span class="text-[11px] font-semibold mt-1 text-gray-700">హోమ్ & కిచెన్</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. ఆఫర్ బ్యానర్ -->
+  <section class="p-3">
+    <div class="bg-gradient-to-r from-purple-700 to-indigo-600 rounded-xl p-3.5 text-white shadow flex justify-between items-center">
+      <div>
+        <span class="bg-yellow-400 text-purple-900 text-[10px] font-extrabold px-2 py-0.5 rounded-full uppercase tracking-wider">స్పెషల్ సేల్</span>
+        <h2 class="text-base font-bold mt-1">హోల్‌సేల్ ధరలకే షాపింగ్!</h2>
+        <p class="text-[11px] text-purple-100">ఉచిత డెలివరీ & సులభమైన రిటర్న్స్</p>
+      </div>
+      <i class="fa-solid fa-tags text-3xl text-yellow-300 pr-2"></i>
+    </div>
+  </section>
+
+  <!-- 4. ప్రొడక్ట్స్ గ్రిడ్ -->
+  <main class="px-3">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider">పాపులర్ ఉత్పత్తులు</h3>
+      <button onclick="fetchLiveProducts()" class="text-[11px] text-[#9c27b0] font-bold flex items-center gap-1">
+        <i class="fa-solid fa-rotate-right"></i> రిఫ్రెష్
+      </button>
+    </div>
+    <div id="product-grid" class="grid grid-cols-2 gap-2.5">
+      <!-- ప్రొడక్ట్స్ ఇక్కడ లోడ్ అవుతాయి -->
+    </div>
+  </main>
+
+  <!-- 5. కార్ట్ మోడల్ -->
+  <div id="cart-modal" class="fixed inset-0 bg-black/60 z-50 flex justify-end hidden">
+    <div class="bg-white w-full max-w-sm h-full flex flex-col p-4 shadow-2xl">
+      <div class="flex justify-between items-center pb-3 border-b">
+        <h2 class="text-base font-bold text-gray-800">మీ కార్ట్ (<span id="cart-count">0</span>)</h2>
+        <button onclick="closeCart()" class="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+      </div>
+      <div id="cart-items" class="flex-1 overflow-y-auto py-3 space-y-3 no-scrollbar"></div>
+      <div class="border-t pt-3 space-y-2">
+        <div class="flex justify-between text-sm font-bold text-gray-800">
+          <span>మొత్తం బిల్లు:</span>
+          <span class="text-[#9c27b0]">₹<span id="cart-total">0</span></span>
+        </div>
+        <button onclick="checkoutOrder()" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-sm shadow hover:bg-green-700 flex items-center justify-center space-x-2 transition">
+          <i class="fa-brands fa-whatsapp text-lg"></i>
+          <span>ఆర్డర్ కన్ఫర్మ్ చేయండి</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. బాటమ్ నావిగేషన్ -->
+  <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-40 text-gray-600 text-[11px]">
+    <button onclick="selectCategory('all')" class="flex flex-col items-center text-[#9c27b0]">
+      <i class="fa-solid fa-house text-base"></i>
+      <span class="mt-0.5 font-semibold">హోమ్</span>
+    </button>
+    <button onclick="document.getElementById('search-box').focus()" class="flex flex-col items-center hover:text-[#9c27b0]">
+      <i class="fa-solid fa-magnifying-glass text-base"></i>
+      <span class="mt-0.5">సెర్చ్</span>
+    </button>
+    <a href="seller.html" class="flex flex-col items-center hover:text-[#9c27b0]">
+      <i class="fa-solid fa-store text-base"></i>
+      <span class="mt-0.5">సెల్లర్</span>
+    </a>
+    <button onclick="openCart()" class="flex flex-col items-center hover:text-[#9c27b0] relative">
+      <i class="fa-solid fa-cart-shopping text-base"></i>
+      <span class="mt-0.5">కార్ట్</span>
+    </button>
+  </nav>
+
+  <!-- స్క్రిప్ట్ -->
   <script>
     const API_URL = "https://meestore-uxnm.onrender.com/api/products";
     
-    // 1. స్థిరమైన క్యాటలాగ్ (సర్వర్ స్లీప్‌లో ఉన్నా ఇవి ఎప్పుడూ లైవ్‌లో కనిపిస్తాయి)
     const initialProducts = [
-      {
-        id: 1,
-        title: "కాటన్ ప్రింటెడ్ కుర్తీ",
-        category: "women",
-        price: 349,
-        mrp: 799,
-        image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400"
-      },
-      {
-        id: 2,
-        title: "ఆర్గానిక్ కొర్రలు / Foxtail Millets (1kg)",
-        category: "grocery",
-        price: 140,
-        mrp: 200,
-        image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400"
-      },
-      {
-        id: 3,
-        title: "మెన్స్ కాటన్ క్యాజువల్ షర్ట్",
-        category: "men",
-        price: 499,
-        mrp: 1199,
-        image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400"
-      },
-      {
-        id: 4,
-        title: "కిడ్స్ పార్టీ వేర్ సెట్",
-        category: "kids",
-        price: 399,
-        mrp: 899,
-        image: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=400"
-      },
-      {
-        id: 5,
-        title: "నాన్-స్టిక్ దోశ పాన్",
-        category: "home",
-        price: 549,
-        mrp: 1299,
-        image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=400"
-      },
-      {
-        id: 6,
-        title: "ప్యూర్ సిల్క్ చీర",
-        category: "women",
-        price: 899,
-        mrp: 2499,
-        image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400"
-      }
+      { id: 1, title: "కాటన్ ప్రింటెడ్ కుర్తీ", category: "women", price: 349, mrp: 799, image: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400" },
+      { id: 2, title: "ఆర్గానిక్ కొర్రలు / Millets (1kg)", category: "grocery", price: 140, mrp: 200, image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
+      { id: 3, title: "మెన్స్ కాటన్ క్యాజువల్ షర్ట్", category: "men", price: 499, mrp: 1199, image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400" },
+      { id: 4, title: "కిడ్స్ పార్టీ వేర్ సెట్", category: "kids", price: 399, mrp: 899, image: "https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?w=400" },
+      { id: 5, title: "నాన్-స్టిక్ దోశ పాన్", category: "home", price: 549, mrp: 1299, image: "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?w=400" },
+      { id: 6, title: "ప్యూర్ సిల్క్ చీర", category: "women", price: 899, mrp: 2499, image: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" }
     ];
 
     let allProducts = [...initialProducts];
     let cart = [];
 
-    // 2. సర్వర్ & లోకల్ ఉత్పత్తులను లోడ్ చేసే విధానం
-    async function fetchLiveProducts() {
-      // ముందుగా మన 6 ఉత్పత్తులతో పాటు లోకల్ సెల్లర్ డేటాను వెంటనే స్క్రీన్‌పై చూపిస్తుంది
-      const localSellerData = JSON.parse(localStorage.getItem('m_seller_products')) || [];
-      allProducts = [...localSellerData, ...initialProducts];
-      renderProducts(allProducts);
-
-      // సర్వర్ నుండి లైవ్ ప్రొడక్ట్స్ తెచ్చే ప్రయత్నం
-      try {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 6000); // 6 సెకన్ల టైమౌట్
-
-        const res = await fetch(API_URL, { signal: controller.signal });
-        clearTimeout(timeoutId);
-        
-        const serverProducts = await res.json();
-        if (serverProducts && serverProducts.length > 0) {
-          // సర్వర్ ఉత్పత్తులు + మన ఉత్పత్తులు కలిపి ప్రదర్శిస్తుంది
-          allProducts = [...serverProducts, ...initialProducts];
-          renderProducts(allProducts);
-        }
-      } catch (err) {
-        // సర్వర్ నిద్రపోతున్నా ఎర్రర్ రానీయకుండా క్యాటలాగ్ ప్రొడక్ట్స్ చూపిస్తూనే ఉంటుంది
-        console.log("Using instant fallback catalog:", err.message);
-      }
-    }
-
-    // 3. స్క్రీన్‌పై ఉత్పత్తులను రెండర్ చేయడం
     function renderProducts(items) {
       const grid = document.getElementById("product-grid");
       if(!items || items.length === 0) {
@@ -109,6 +184,29 @@
           </div>
         </div>
       `).join('');
+    }
+
+    async function fetchLiveProducts() {
+      // 1. పేజీ ఓపెన్ అవ్వగానే వెంటనే స్క్రీన్‌పై ఉత్పత్తులు వచ్చేస్తాయి
+      const localSellerData = JSON.parse(localStorage.getItem('m_seller_products')) || [];
+      allProducts = [...localSellerData, ...initialProducts];
+      renderProducts(allProducts);
+
+      // 2. బ్యాక్‌గ్రౌండ్‌లో సర్వర్ నుండి తాజా ఉత్పత్తులు తెస్తుంది
+      try {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 4000);
+        const res = await fetch(API_URL, { signal: controller.signal });
+        clearTimeout(timeoutId);
+        
+        const serverProducts = await res.json();
+        if (serverProducts && serverProducts.length > 0) {
+          allProducts = [...serverProducts, ...initialProducts];
+          renderProducts(allProducts);
+        }
+      } catch (err) {
+        console.log("Showing fallback items immediately.");
+      }
     }
 
     function selectCategory(cat) {
@@ -189,10 +287,11 @@
         total += Number(i.price);
       });
       summary += `%0Aమొత్తం బిల్లు: ₹${total}%0Aదయచేసి డెలివరీ వివరాలు పంపగలరు.`;
-      
       window.open(`https://wa.me/919999999999?text=${summary}`, '_blank');
     }
 
-    // పేజీ లోడ్ అవ్వగానే రన్ చేయడం
+    // వెంటనే లోడ్ చేయడం
     fetchLiveProducts();
   </script>
+</body>
+</html>
