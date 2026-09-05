@@ -102,7 +102,7 @@
         <!-- ఫోటో URL -->
         <div>
           <label class="block text-xs font-semibold text-gray-700 mb-1">ఉత్పత్తి ఫోటో లింక్ (Image URL)*</label>
-          <input type="url" id="image" required placeholder="https://example.com/product.jpg" class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none">
+          <input type="url" id="image" required placeholder="https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400" class="w-full text-xs border rounded-lg p-2.5 focus:ring-2 focus:ring-purple-400 outline-none">
         </div>
 
         <!-- వివరణ -->
@@ -112,7 +112,7 @@
         </div>
 
         <!-- సబ్‌మిట్ బటన్ -->
-        <button type="submit" class="w-full bg-[#9c27b0] text-white py-3 rounded-lg font-bold text-xs hover:bg-purple-800 shadow transition flex items-center justify-center gap-2">
+        <button type="submit" id="submit-btn" class="w-full bg-[#9c27b0] text-white py-3 rounded-lg font-bold text-xs hover:bg-purple-800 shadow transition flex items-center justify-center gap-2">
           <i class="fa-solid fa-plus-circle text-sm"></i> ప్రొడక్ట్ లైవ్ చేయండి
         </button>
       </form>
@@ -122,93 +122,104 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-4">
       <div class="flex items-center justify-between border-b pb-2 mb-3">
         <h3 class="text-xs font-bold text-gray-800">
-          అప్‌లోడ్ చేసిన ఉత్పత్తులు (<span id="count">0</span>)
+          క్లౌడ్ డేటాబేస్‌లోని ఉత్పత్తులు (<span id="count">0</span>)
         </h3>
-        <span class="text-[10px] text-green-600 font-semibold flex items-center gap-1">
-          <i class="fa-solid fa-circle text-[6px]"></i> షాప్ ఆన్‌లైన్
-        </span>
+        <button onclick="loadProducts()" class="text-[11px] text-[#9c27b0] font-bold">
+          <i class="fa-solid fa-rotate-right"></i> రిఫ్రెష్
+        </button>
       </div>
       <div id="product-list" class="space-y-2.5">
-        <!-- ఉత్పత్తులు ఇక్కడ లోడ్ అవుతాయి -->
+        <p class="text-xs text-gray-400 text-center py-4">లోడ్ అవుతోంది...</p>
       </div>
     </div>
 
   </main>
 
   <script>
-    let sellerProducts = JSON.parse(localStorage.getItem('m_seller_products')) || [];
+    const API_URL = "https://meestore-uxnm.onrender.com/api/products";
 
     function calculatePayout() {
       const price = parseFloat(document.getElementById('price').value) || 0;
-      const commission = Math.round(price * 0.10); // 10% కమిషన్
+      const commission = Math.round(price * 0.10);
       const payout = price - commission;
-
       document.getElementById('comm-fee').innerText = commission;
       document.getElementById('seller-payout').innerText = payout > 0 ? payout : 0;
     }
 
-    function saveProduct(e) {
+    async function loadProducts() {
+      const list = document.getElementById('product-list');
+      list.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">క్లౌడ్ నుండి లోడ్ అవుతోంది...</p>`;
+      
+      try {
+        const res = await fetch(API_URL);
+        const products = await res.json();
+        document.getElementById('count').innerText = products.length;
+
+        if (!products || products.length === 0) {
+          list.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">ఇంకా ఏ ఉత్పత్తులూ లేవు.</p>`;
+          return;
+        }
+
+        list.innerHTML = products.map(p => `
+          <div class="flex items-center gap-3 border rounded-lg p-2 bg-gray-50">
+            <img src="${p.image}" class="w-12 h-12 object-cover rounded border" onerror="this.src='https://placehold.co/100x100?text=No+Img'">
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-gray-800 truncate">${p.title}</h4>
+              <div class="text-[10px] text-gray-500 mt-0.5">
+                <span>ధర: <b>₹${p.price}</b></span> | <span>స్టాక్: <b>${p.stock}</b></span>
+              </div>
+              <span class="inline-block bg-purple-100 text-[#9c27b0] text-[9px] font-semibold px-2 py-0.5 rounded mt-1">
+                ${p.category}
+              </span>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        list.innerHTML = `<p class="text-xs text-red-500 text-center py-4">డేటాబేస్ కనెక్ట్ కాలేదు.</p>`;
+      }
+    }
+
+    async function saveProduct(e) {
       e.preventDefault();
+      const btn = document.getElementById('submit-btn');
+      btn.disabled = true;
+      btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> డేటాబేస్‌కు అప్‌లోడ్ అవుతోంది...`;
 
       const newProd = {
-        id: Date.now(),
         title: document.getElementById('title').value,
         category: document.getElementById('category').value,
-        mrp: document.getElementById('mrp').value,
-        price: document.getElementById('price').value,
-        stock: document.getElementById('stock').value,
-        weight: document.getElementById('weight').value,
+        mrp: parseFloat(document.getElementById('mrp').value),
+        price: parseFloat(document.getElementById('price').value),
+        stock: parseInt(document.getElementById('stock').value),
+        weight: parseInt(document.getElementById('weight').value),
         image: document.getElementById('image').value,
         desc: document.getElementById('desc').value
       };
 
-      sellerProducts.unshift(newProd);
-      localStorage.setItem('m_seller_products', JSON.stringify(sellerProducts));
-      renderSellerProducts();
-      document.getElementById('seller-form').reset();
-      calculatePayout();
-      alert("✅ ఉత్పత్తి విజయవంతంగా స్టోర్‌కు జోడించబడింది!");
-    }
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newProd)
+        });
 
-    function deleteProduct(idx) {
-      if(confirm("ఈ ఉత్పత్తిని తొలగించాలనుకుంటున్నారా?")) {
-        sellerProducts.splice(idx, 1);
-        localStorage.setItem('m_seller_products', JSON.stringify(sellerProducts));
-        renderSellerProducts();
+        if (res.ok) {
+          alert("✅ ఉత్పత్తి విజయవంతంగా Render క్లౌడ్ డేటాబేస్‌లో సేవ్ అయింది!");
+          document.getElementById('seller-form').reset();
+          calculatePayout();
+          loadProducts();
+        } else {
+          alert("సేవ్ చేయడంలో లోపం తలెత్తింది.");
+        }
+      } catch (err) {
+        alert("సర్వర్ కనెక్ట్ కాలేదు: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i class="fa-solid fa-plus-circle text-sm"></i> ప్రొడక్ట్ లైవ్ చేయండి`;
       }
     }
 
-    function renderSellerProducts() {
-      const list = document.getElementById('product-list');
-      document.getElementById('count').innerText = sellerProducts.length;
-
-      if (sellerProducts.length === 0) {
-        list.innerHTML = `<p class="text-xs text-gray-400 text-center py-4">ఇంకా ఏ ఉత్పత్తులూ జోడించలేదు.</p>`;
-        return;
-      }
-
-      list.innerHTML = sellerProducts.map((p, idx) => `
-        <div class="flex items-center gap-3 border rounded-lg p-2 bg-gray-50">
-          <img src="${p.image}" class="w-12 h-12 object-cover rounded border" onerror="this.src='https://placehold.co/100x100?text=No+Image'">
-          <div class="flex-1 min-w-0">
-            <h4 class="text-xs font-bold text-gray-800 truncate">${p.title}</h4>
-            <div class="text-[10px] text-gray-500 mt-0.5">
-              <span>అమ్మకపు ధర: <b>₹${p.price}</b></span> | 
-              <span>స్టాక్: <b>${p.stock}</b></span>
-            </div>
-            <span class="inline-block bg-purple-100 text-[#9c27b0] text-[9px] font-semibold px-2 py-0.5 rounded mt-1">
-              ${p.category}
-            </span>
-          </div>
-          <button onclick="deleteProduct(${idx})" class="text-red-500 hover:text-red-700 text-xs px-2">
-            <i class="fa-solid fa-trash-can"></i>
-          </button>
-        </div>
-      `).join('');
-    }
-
-    renderSellerProducts();
+    loadProducts();
   </script>
 </body>
-      </html>
-      
+</html>
