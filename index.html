@@ -2,84 +2,131 @@
 <html lang="te">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>MeeStore - ఆన్‌లైన్ షాపింగ్</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background-color: #f5f6f8; font-family: sans-serif; }
-    .navbar-brand { font-weight: 800; color: #9c27b0 !important; font-size: 1.4rem; }
-    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 10px 0; }
+    body { background-color: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-bottom: 70px; }
+    .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #f0f0f0; }
+    .user-avatar-btn { border: none; background: transparent; padding: 0; }
+    .avatar-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #9c27b0; }
+    
+    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 8px 12px; background: white; border-bottom: 1px solid #eee; }
     .cat-scroll::-webkit-scrollbar { display: none; }
-    .cat-btn { border-radius: 20px; font-size: 0.85rem; padding: 6px 14px; border: 1px solid #e0e0e0; background: white; }
-    .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
-    .product-card { border: none; border-radius: 10px; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.05); height: 100%; display: flex; flex-direction: column; }
-    .product-img { width: 100%; height: 180px; object-fit: cover; }
-    .btn-buy { background: #9c27b0; color: white; font-weight: 600; border: none; }
-    .btn-buy:hover { background: #7b1fa2; color: white; }
+    .cat-btn { border-radius: 18px; font-size: 0.8rem; padding: 5px 12px; border: 1px solid #ddd; background: white; color: #444; }
+    .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; font-weight: 600; }
+
+    /* Ad Banner Slot */
+    .ad-banner-slot { background: linear-gradient(90deg, #ff8f00, #ff6d00); color: white; border-radius: 8px; padding: 12px; margin: 12px; position: relative; overflow: hidden; }
+    .ad-badge { position: absolute; top: 6px; right: 8px; font-size: 0.65rem; background: rgba(0,0,0,0.25); padding: 2px 6px; border-radius: 4px; }
+
+    /* Meesho style cards */
+    .product-card { border: none; border-radius: 8px; background: white; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); height: 100%; display: flex; flex-direction: column; }
+    .product-img { width: 100%; height: 165px; object-fit: cover; }
+    .btn-buy-app { background: #9c27b0; color: white; border: none; font-size: 0.85rem; font-weight: 600; padding: 6px; border-radius: 6px; }
+
+    /* Meesho Bottom Bar */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: white; border-top: 1px solid #e5e5e5; display: flex; justify-content: space-around; align-items: center; z-index: 1050; }
+    .nav-item-btn { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #666; font-size: 0.72rem; border: none; background: transparent; }
+    .nav-item-btn i { font-size: 1.15rem; margin-bottom: 2px; }
+    .nav-item-btn.active { color: #9c27b0; font-weight: 700; }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar navbar-expand bg-white sticky-top border-bottom py-2">
-    <div class="container">
-      <a class="navbar-brand" href="index.html"><i class="fa-solid fa-bag-shopping me-1"></i>MeeStore</a>
+  <!-- Top App Bar with Buyer Profile Avatar -->
+  <div class="top-header">
+    <div class="d-flex justify-content-between align-items-center mb-2">
       <div class="d-flex align-items-center gap-2">
-        <!-- బయ్యర్ అకౌంట్ బటన్ -->
-        <button id="buyerAuthBtn" class="btn btn-sm btn-outline-secondary rounded-pill" onclick="openBuyerModal()">
-          <i class="fa-solid fa-user me-1"></i>లాగిన్
+        <button class="user-avatar-btn" onclick="handleProfileClick()">
+          <img id="userAvatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="avatar-img" alt="Profile">
         </button>
-        <a href="seller.html" class="btn btn-outline-primary btn-sm rounded-pill"><i class="fa-solid fa-store me-1"></i>సెల్లర్</a>
-        <button class="btn btn-light position-relative" data-bs-toggle="offcanvas" data-bs-target="#cartDrawer">
+        <span class="fw-bold text-dark fs-6" id="welcomeUserText">హలో, గెస్ట్!</span>
+      </div>
+      <div class="d-flex align-items-center gap-2">
+        <button class="btn btn-light position-relative p-2" data-bs-toggle="offcanvas" data-bs-target="#cartDrawer">
           <i class="fa-solid fa-cart-shopping fs-5"></i>
           <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">0</span>
         </button>
       </div>
     </div>
-  </nav>
 
-  <!-- Categories -->
-  <div class="container mt-2">
-    <div class="cat-scroll">
-      <button class="cat-btn active" onclick="filterCat('all', this)">అన్నీ (All)</button>
-      <button class="cat-btn" onclick="filterCat('కిరాణా & మినరల్స్', this)">🌾 కిరాణా & మినరల్స్</button>
-      <button class="cat-btn" onclick="filterCat('జనరల్ & పూజా స్టోర్', this)">🪔 జనరల్ & పూజా స్టోర్</button>
-      <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
-      <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
-      <button class="cat-btn" onclick="filterCat('ఫ్యాన్సీ & జ్యువెలరీ', this)">💍 ఫ్యాన్సీ & జ్యువెలరీ</button>
-      <button class="cat-btn" onclick="filterCat('ఫుట్‌వేర్', this)">👠 ఫుట్‌వేర్</button>
-      <button class="cat-btn" onclick="filterCat('Home & Kitchen', this)">🏠 Home & Kitchen</button>
-      <button class="cat-btn" onclick="filterCat('Beauty & Health', this)">💄 Beauty & Health</button>
-      <button class="cat-btn" onclick="filterCat('Kids & Toys', this)">👶 Kids & Toys</button>
-      <button class="cat-btn" onclick="filterCat('Electronics & Accessories', this)">📱 Electronics</button>
-      <button class="cat-btn" onclick="filterCat('Bags & Luggage', this)">👜 Bags & Luggage</button>
+    <!-- Search Box -->
+    <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border">
+      <span class="input-group-text bg-white border-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+      <input type="text" id="searchInput" class="form-control border-0" placeholder="వస్తువులను వెతకండి...">
     </div>
   </div>
 
-  <!-- Products Grid -->
-  <div class="container my-3">
-    <div id="productGrid" class="row row-cols-2 row-cols-md-4 g-3"></div>
+  <!-- Meesho Categories Horizontal Scroll -->
+  <div class="cat-scroll" id="catScroll">
+    <button class="cat-btn active" onclick="filterCat('all', this)">అన్నీ (All)</button>
+    <button class="cat-btn" onclick="filterCat('కిరాణా & మినరల్స్', this)">🌾 కిరాణా & మినరల్స్</button>
+    <button class="cat-btn" onclick="filterCat('జనరల్ & పూజా స్టోర్', this)">🪔 జనరల్ స్టోర్</button>
+    <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
+    <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
+    <button class="cat-btn" onclick="filterCat('ఫ్యాన్సీ & జ్యువెలరీ', this)">💍 ఫ్యాన్సీ & జ్యువెలరీ</button>
+    <button class="cat-btn" onclick="filterCat('ఫుట్‌వేర్', this)">👠 ఫుట్‌వేర్</button>
+    <button class="cat-btn" onclick="filterCat('Home & Kitchen', this)">🏠 Home & Kitchen</button>
+    <button class="cat-btn" onclick="filterCat('Beauty & Health', this)">💄 Beauty & Health</button>
+    <button class="cat-btn" onclick="filterCat('Kids & Toys', this)">👶 Kids & Toys</button>
+    <button class="cat-btn" onclick="filterCat('Electronics & Accessories', this)">📱 Electronics</button>
   </div>
 
-  <!-- బయ్యర్ లాగిన్ / మై ఆర్డర్స్ మోడల్ -->
+  <!-- Ad / Deal Banner Slot (మీషో లాంటి యాడ్ సెక్షన్) -->
+  <div class="ad-banner-slot d-flex justify-content-between align-items-center">
+    <span class="ad-badge">Ad</span>
+    <div>
+      <h6 class="fw-bold mb-0">🎉 గ్రాండ్ ఫెస్టివల్ సేల్ మొదలైంది!</h6>
+      <small style="font-size:0.75rem;">ఆర్గానిక్ & ఫ్యాషన్ ఉత్పత్తులపై ఉచిత డెలివరీ</small>
+    </div>
+    <span class="badge bg-light text-dark fw-bold px-2 py-1">20% OFF</span>
+  </div>
+
+  <!-- Products Section -->
+  <div class="container px-2">
+    <div id="productGrid" class="row row-cols-2 g-2"></div>
+  </div>
+
+  <!-- Meesho Bottom Navigation Bar (కింద బార్) -->
+  <div class="bottom-nav">
+    <button class="nav-item-btn active" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+      <i class="fa-solid fa-house"></i>
+      <span>హోమ్</span>
+    </button>
+    <button class="nav-item-btn" onclick="focusCategories()">
+      <i class="fa-solid fa-shapes"></i>
+      <span>కేటగిరీలు</span>
+    </button>
+    <a href="seller.html" class="nav-item-btn">
+      <i class="fa-solid fa-shop"></i>
+      <span>సెల్లర్ పేజ్</span>
+    </a>
+    <button class="nav-item-btn" onclick="handleProfileClick()">
+      <i class="fa-solid fa-box"></i>
+      <span>మై ఆర్డర్స్</span>
+    </button>
+  </div>
+
+  <!-- Buyer Login & Profile Modal -->
   <div class="modal fade" id="buyerModal" tabindex="-1">
     <div class="modal-dialog">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title fw-bold" id="buyerModalTitle">బయ్యర్ లాగిన్</h5>
+        <div class="modal-header border-bottom-0 pb-0">
+          <h5 class="modal-title fw-bold" id="buyerModalTitle">బయ్యర్ అకౌంట్</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <div id="buyerAuthForms">
-            <ul class="nav nav-tabs mb-3">
+            <ul class="nav nav-pills nav-justified mb-3">
               <li class="nav-item"><button class="nav-link active" onclick="toggleBAuth(true)">లాగిన్</button></li>
               <li class="nav-item"><button class="nav-link" onclick="toggleBAuth(false)">రిజిస్ట్రేషన్</button></li>
             </ul>
             <form id="bLoginForm">
               <div class="mb-2"><input type="tel" id="bLogPhone" class="form-control" placeholder="మొబైల్ నంబర్" required></div>
               <div class="mb-3"><input type="password" id="bLogPass" class="form-control" placeholder="పాస్‌వర్డ్" required></div>
-              <button type="submit" class="btn btn-primary w-100" style="background:#9c27b0; border:none;">లాగిన్</button>
+              <button type="submit" class="btn btn-primary w-100" style="background:#9c27b0; border:none;">లాగిన్ అవ్వండి</button>
             </form>
             <form id="bRegForm" class="d-none">
               <div class="mb-2"><input type="text" id="bRegName" class="form-control" placeholder="మీ పేరు" required></div>
@@ -90,13 +137,18 @@
             </form>
           </div>
 
-          <!-- లాగిన్ అయిన బయ్యర్ ఆర్డర్లు & రిటర్న్ సెక్షన్ -->
-          <div id="buyerOrdersSection" class="d-none">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h6 class="fw-bold mb-0">నా ఆర్డర్లు (My Orders)</h6>
-              <button class="btn btn-sm btn-outline-danger" onclick="logoutBuyer()">లాగౌట్</button>
+          <!-- My Orders / Profile View -->
+          <div id="buyerProfileSection" class="d-none">
+            <div class="d-flex align-items-center gap-3 p-3 bg-light rounded mb-3">
+              <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="avatar-img" style="width:50px; height:50px;">
+              <div>
+                <h6 class="fw-bold mb-0" id="buyerProfileName">పేరు</h6>
+                <small class="text-muted" id="buyerProfilePhone">నంబర్</small>
+              </div>
             </div>
-            <div id="buyerOrdersList"></div>
+            <h6 class="fw-bold border-bottom pb-2">నా ఆర్డర్లు (My Orders)</h6>
+            <div id="buyerOrdersList" class="my-2"></div>
+            <button class="btn btn-outline-danger btn-sm w-100 mt-3" onclick="logoutBuyer()">లాగౌట్</button>
           </div>
         </div>
       </div>
@@ -111,7 +163,7 @@
     </div>
     <div class="offcanvas-body">
       <div id="cartItemsList"></div>
-      <div id="checkoutFormArea" class="d-none mt-3">
+      <div id="checkoutArea" class="d-none mt-3">
         <div class="p-3 bg-light rounded text-center mb-3">
           <a id="btnDirectUpi" href="#" class="btn btn-success w-100 fw-bold mb-2">
             <i class="fa-solid fa-mobile-screen me-2"></i>Pay via UPI (GPay / PhonePe)
@@ -136,10 +188,12 @@
     let curBuyer = JSON.parse(localStorage.getItem('meestore_buyer'));
 
     async function loadProducts() {
-      const res = await fetch(`${API}/products`);
-      allProducts = await res.json();
-      renderProducts(allProducts);
-      updateBuyerNav();
+      try {
+        const res = await fetch(`${API}/products`);
+        allProducts = await res.json();
+        renderProducts(allProducts);
+      } catch(e) {}
+      syncBuyerUI();
     }
 
     function renderProducts(list) {
@@ -149,10 +203,10 @@
           <div class="product-card p-2">
             <img src="${p.image_url}" class="product-img rounded" onerror="this.src='https://via.placeholder.com/200'">
             <div class="p-2 d-flex flex-column flex-grow-1">
-              <span class="small text-muted">${p.category || 'General'}</span>
-              <div class="fw-bold text-truncate">${p.name}</div>
+              <span class="badge bg-light text-secondary mb-1 align-self-start" style="font-size:0.65rem;">${p.category || 'General'}</span>
+              <div class="fw-bold text-truncate" style="font-size:0.85rem;">${p.name}</div>
               <div class="fw-bold text-primary my-1">₹${p.price}</div>
-              <button class="btn btn-buy btn-sm rounded-pill mt-auto" onclick="addToCart(${p.id})">కొనండి</button>
+              <button class="btn btn-buy-app w-100 mt-auto" onclick="addToCart(${p.id})">కొనండి</button>
             </div>
           </div>
         </div>
@@ -165,6 +219,11 @@
       renderProducts(cat === 'all' ? allProducts : allProducts.filter(p => p.category === cat));
     }
 
+    function focusCategories() {
+      const el = document.getElementById('catScroll');
+      el.scrollIntoView({ behavior: 'smooth' });
+    }
+
     function addToCart(id) {
       cart.push(allProducts.find(p => p.id === id));
       updateCart();
@@ -174,11 +233,11 @@
     function updateCart() {
       document.getElementById('cartCount').innerText = cart.length;
       const list = document.getElementById('cartItemsList');
-      const area = document.getElementById('checkoutFormArea');
+      const area = document.getElementById('checkoutArea');
       if(cart.length === 0) { list.innerHTML = "కార్ట్ ఖాళీగా ఉంది"; area.classList.add('d-none'); return; }
       area.classList.remove('d-none');
       let total = 0;
-      list.innerHTML = cart.map((it, idx) => {
+      list.innerHTML = cart.map(it => {
         total += Number(it.price);
         return `<div class="d-flex justify-content-between py-1 border-bottom"><div>${it.name}</div><b>₹${it.price}</b></div>`;
       }).join('');
@@ -191,7 +250,7 @@
     }
 
     async function completeOrder() {
-      if(!curBuyer) { alert("ఆర్డర్ చేయడానికి ముందుగా లాగిన్ అవ్వండి!"); openBuyerModal(); return; }
+      if(!curBuyer) { alert("ఆర్డర్ చేయడానికి ముందుగా లాగిన్ అవ్వండి!"); handleProfileClick(); return; }
       const it = cart[0];
       const res = await fetch(`${API}/orders/place`, {
         method: 'POST',
@@ -215,15 +274,27 @@
       }
     }
 
-    // బయ్యర్ ఆథెంటికేషన్ లాజిక్
-    function openBuyerModal() {
+    // Profile & Orders Handler
+    function handleProfileClick() {
       new bootstrap.Modal(document.getElementById('buyerModal')).show();
-      if(curBuyer) loadBuyerOrders();
+      if(curBuyer) loadOrders();
     }
+
+    function syncBuyerUI() {
+      if(curBuyer) {
+        document.getElementById('welcomeUserText').innerText = curBuyer.name;
+        document.getElementById('buyerProfileName').innerText = curBuyer.name;
+        document.getElementById('buyerProfilePhone').innerText = curBuyer.phone;
+      } else {
+        document.getElementById('welcomeUserText').innerText = "హలో, లాగిన్ అవ్వండి";
+      }
+    }
+
     function toggleBAuth(isLog) {
       document.getElementById('bLoginForm').classList.toggle('d-none', !isLog);
       document.getElementById('bRegForm').classList.toggle('d-none', isLog);
     }
+
     document.getElementById('bRegForm').onsubmit = async (e) => {
       e.preventDefault();
       const res = await fetch(`${API}/buyer/register`, {
@@ -239,6 +310,7 @@
       const d = await res.json();
       if(res.ok) { alert("రిజిస్ట్రేషన్ పూర్తయింది! లాగిన్ అవ్వండి."); toggleBAuth(true); } else alert(d.error);
     };
+
     document.getElementById('bLoginForm').onsubmit = async (e) => {
       e.preventDefault();
       const res = await fetch(`${API}/buyer/login`, {
@@ -253,45 +325,41 @@
       if(res.ok) {
         localStorage.setItem('meestore_buyer', JSON.stringify(d));
         curBuyer = d;
-        updateBuyerNav();
-        loadBuyerOrders();
+        syncBuyerUI();
+        loadOrders();
       } else alert(d.error);
     };
 
-    function updateBuyerNav() {
-      const btn = document.getElementById('buyerAuthBtn');
-      if(curBuyer) { btn.innerHTML = `<i class="fa-solid fa-user-check me-1"></i>${curBuyer.name}`; }
-    }
-
-    async function loadBuyerOrders() {
+    async function loadOrders() {
       document.getElementById('buyerAuthForms').classList.add('d-none');
-      document.getElementById('buyerOrdersSection').classList.remove('d-none');
+      document.getElementById('buyerProfileSection').classList.remove('d-none');
       const res = await fetch(`${API}/buyer/orders/${curBuyer.id}`);
       const list = await res.json();
-      document.getElementById('buyerOrdersList').innerHTML = list.map(o => `
-        <div class="card p-2 mb-2 border-0 bg-light">
-          <div class="d-flex justify-content-between fw-bold"><span>${o.product_name}</span><span>₹${o.amount}</span></div>
-          <div class="small text-muted">స్టేటస్: <span class="badge bg-info text-dark">${o.status}</span></div>
-          ${o.status !== 'Return Requested' ? `<button class="btn btn-sm btn-outline-danger mt-2" onclick="requestReturn(${o.id}, ${o.seller_id}, ${o.amount})">రిటర్న్ & రీఫండ్ కోరండి</button>` : '<span class="text-danger small mt-1">రిటర్న్ రిక్వెస్ట్ పంపబడింది</span>'}
+      const cont = document.getElementById('buyerOrdersList');
+      if(list.length === 0) { cont.innerHTML = "<small class='text-muted'>ఇంకా ఆర్డర్లు ఏవీ లేవు</small>"; return; }
+      cont.innerHTML = list.map(o => `
+        <div class="card p-2 mb-2 bg-light border-0">
+          <div class="d-flex justify-content-between"><b>${o.product_name}</b><span>₹${o.amount}</span></div>
+          <small class="text-muted">స్టేటస్: <span class="badge bg-secondary">${o.status}</span></small>
+          ${o.status !== 'Return Requested' ? `<button class="btn btn-sm btn-outline-danger mt-1" onclick="requestReturn(${o.id}, ${o.seller_id}, ${o.amount})">రిటర్న్ & రీఫండ్</button>` : '<span class="text-danger small mt-1">రిటర్న్ ప్రాసెస్ అవుతోంది</span>'}
         </div>
       `).join('');
     }
 
     async function requestReturn(orderId, sellerId, amt) {
-      const reason = prompt("రిటర్న్ చేయడానికి గల కారణం తెలపండి (ఉదా: డ్యామేజ్ లేదా సైజ్ సరిపోలేదు):");
+      const reason = prompt("రిటర్న్ చేయడానికి గల కారణం:");
       if(!reason) return;
       await fetch(`${API}/orders/return`, {
         method: 'POST',
         headers: {'Content-Type':'application/json'},
         body: JSON.stringify({ order_id: orderId, seller_id: sellerId, buyer_id: curBuyer.id, reason: reason, refund_amount: amt })
       });
-      alert("రిటర్న్ రిక్వెస్ట్ సెల్లర్‌కు పంపబడింది!");
-      loadBuyerOrders();
+      alert("రిటర్న్ రిక్వెస్ట్ పంపబడింది!");
+      loadOrders();
     }
 
     function logoutBuyer() {
       localStorage.removeItem('meestore_buyer');
-      curBuyer = null;
       location.reload();
     }
 
