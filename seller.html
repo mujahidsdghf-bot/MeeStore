@@ -31,21 +31,24 @@
           <form id="sellerForm">
             <div class="mb-3">
               <label class="form-label fw-bold">ఉత్పత్తి పేరు (Product Name)</label>
-              <input type="text" class="form-control" id="name" placeholder="ఉదా: కాటన్ కుర్తీ లేదా రాగి పిండి" required>
+              <input type="text" class="form-control" id="name" placeholder="ఉదా: కొర్రలు, చీర, లేడీస్ చెప్పులు, ఫేస్ క్రీమ్" required>
             </div>
 
             <div class="mb-3">
               <label class="form-label fw-bold">కేటగిరీ ఎంచుకోండి (Category)</label>
               <select class="form-select" id="category" required>
                 <option value="">-- కేటగిరీని ఎంచుకోండి --</option>
-                <option value="Women Fashion">👗 Women Fashion (శారీలు, కుర్తీలు, వెస్ట్రన్)</option>
+                <option value="కిరాణా & మినరల్స్">🌾 కిరాణా & మినరల్స్ (కిరాణా, సిరిధాన్యాలు, ఆయిల్స్)</option>
+                <option value="జనరల్ & పూజా స్టోర్">🪔 జనరల్ & పూజా స్టోర్ (నిత్యావసరాలు, పూజా సామాగ్రి)</option>
+                <option value="Women Fashion">👗 Women Fashion (శారీలు, కుర్తీలు, డ్రెస్సెస్)</option>
                 <option value="Men Fashion">👕 Men Fashion (షర్టులు, జీన్స్, టీ-షర్టులు)</option>
+                <option value="ఫ్యాన్సీ & జ్యువెలరీ">💍 ఫ్యాన్సీ & జ్యువెలరీ (గాజులు, చైన్లు, ఇమిటేషన్ జ్యువెలరీ)</option>
+                <option value="ఫుట్‌వేర్">👠 ఫుట్‌వేర్ (లేడీస్ & జెంట్స్ చెప్పులు, షూస్)</option>
+                <option value="Home & Kitchen">🏠 Home & Kitchen (వంటగది పాత్రలు, బెడ్‌షీట్స్)</option>
+                <option value="Beauty & Health">💄 Beauty & Health (కాస్మెటిక్స్, ఆయుర్వేదిక్)</option>
                 <option value="Kids & Toys">👶 Kids & Toys (పిల్లల దుస్తులు, బొమ్మలు)</option>
-                <option value="Beauty & Health">💄 Beauty & Health (మేకప్, చర్మ సంరక్షణ)</option>
-                <option value="Home & Kitchen">🏠 Home & Kitchen (వంటగది, బెడ్ షీట్లు)</option>
-                <option value="Electronics & Accessories">📱 Electronics (మొబైల్ కవర్లు, హెడ్‌ఫోన్స్)</option>
-                <option value="Grocery & Millets">🌾 Grocery & Millets (సిరిధాన్యాలు, ఆర్గానిక్)</option>
-                <option value="Bags & Footwear">👜 Bags & Footwear (చెప్పులు, బ్యాగులు)</option>
+                <option value="Electronics & Accessories">📱 Electronics (మొబైల్ కవర్లు, హెడ్‌ఫోన్స్, వాచ్‌లు)</option>
+                <option value="Bags & Luggage">👜 Bags & Luggage (హ్యాండ్‌బ్యాగ్స్, ట్రావెల్ బ్యాగ్స్)</option>
               </select>
             </div>
 
@@ -63,11 +66,11 @@
             <!-- 2% ప్లాట్‌ఫామ్ ఫీజు కాలిక్యులేషన్ బాక్స్ (సెల్లర్ కు మాత్రమే కనిపిస్తుంది) -->
             <div id="payoutBox" class="payout-box mb-3 d-none">
               <div class="d-flex justify-content-between small text-muted mb-1">
-                <span>MeeStore ప్లాట్‌ఫామ్ ఫీజు (2%):</span>
+                <span>MeeStore సర్వీస్ ఫీజు (2%):</span>
                 <span>- ₹<span id="feeAmount">0</span></span>
               </div>
               <div class="d-flex justify-content-between fw-bold text-dark">
-                <span>మీకు చేరే నికర మొత్తం (Net Payout):</span>
+                <span>మీ బ్యాంక్ ఖాతాకు చేరే మొత్తం (Net Payout):</span>
                 <span class="text-success fs-6">₹<span id="netPayout">0</span></span>
               </div>
             </div>
@@ -100,12 +103,11 @@
   <script>
     const API_BASE = "https://meestore.onrender.com";
 
-    // 2% ఫీజు మరియు సెల్లర్ పేఅవుట్ కాలిక్యులేషన్
     function calculatePayout() {
       const priceVal = parseFloat(document.getElementById('price').value);
       const box = document.getElementById('payoutBox');
       if (priceVal && priceVal > 0) {
-        const fee = (priceVal * 0.02).toFixed(2); // 2% కమిషన్
+        const fee = (priceVal * 0.02).toFixed(2);
         const net = (priceVal - fee).toFixed(2);
         document.getElementById('feeAmount').innerText = fee;
         document.getElementById('netPayout').innerText = net;
