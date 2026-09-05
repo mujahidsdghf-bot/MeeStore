@@ -7,49 +7,59 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    body { background-color: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-bottom: 70px; margin: 0; }
+    * { box-sizing: border-box; }
+    body { background-color: #f7f8fa; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; padding-bottom: 75px; margin: 0; }
     
-    /* 100% ఆటో-ఫేడ్ అయ్యే స్ప్లాష్ స్క్రీన్ */
+    /* 100% ప్యూర్ CSS స్ప్లాష్ స్క్రీన్ - JS పని చేయకపోయినా 1.2 సెకన్లలో మాయమైపోతుంది */
     #splashScreen {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
       background: linear-gradient(135deg, #9c27b0, #6a1b9a);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 99999; color: white; transition: opacity 0.4s ease, visibility 0.4s ease;
+      z-index: 99999; color: white;
+      animation: autoFadeOut 0.4s ease-out 1.2s forwards;
+      pointer-events: none;
     }
-    .splash-logo { width: 90px; height: 90px; background: white; border-radius: 22px; display: flex; align-items: center; justify-content: center; font-size: 45px; color: #9c27b0; box-shadow: 0 10px 25px rgba(0,0,0,0.25); }
+    @keyframes autoFadeOut {
+      0% { opacity: 1; visibility: visible; }
+      100% { opacity: 0; visibility: hidden; display: none; }
+    }
+    .splash-logo { width: 85px; height: 85px; background: white; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 42px; color: #9c27b0; box-shadow: 0 8px 20px rgba(0,0,0,0.25); }
 
-    .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 1000; border-bottom: 1px solid #f0f0f0; }
-    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; }
-    .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #9c27b0; }
+    /* Top App Header */
+    .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #eee; }
+    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.3rem; }
+    .avatar-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #9c27b0; }
     
+    /* Categories Horizontal Bar */
     .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 8px 12px; background: white; border-bottom: 1px solid #eee; }
     .cat-scroll::-webkit-scrollbar { display: none; }
     .cat-btn { border-radius: 18px; font-size: 0.8rem; padding: 5px 12px; border: 1px solid #ddd; background: white; color: #444; }
     .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; font-weight: 600; }
 
+    /* Cards */
     .product-card { border: none; border-radius: 8px; background: white; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); height: 100%; display: flex; flex-direction: column; }
-    .product-img { width: 100%; height: 165px; object-fit: cover; }
+    .product-img { width: 100%; height: 160px; object-fit: cover; }
     .btn-buy-app { background: #9c27b0; color: white; border: none; font-size: 0.85rem; font-weight: 600; padding: 6px; border-radius: 6px; }
 
-    /* మీషో బాటమ్ నావిగేషన్ బార్ */
-    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: white; border-top: 1px solid #e5e5e5; display: flex; justify-content: space-around; align-items: center; z-index: 1050; }
+    /* Bottom Nav */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 56px; background: white; border-top: 1px solid #e5e5e5; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
     .nav-item-btn { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #666; font-size: 0.72rem; border: none; background: transparent; }
     .nav-item-btn i { font-size: 1.15rem; margin-bottom: 2px; }
     .nav-item-btn.active { color: #9c27b0; font-weight: 700; }
 
-    .cat-grid-box { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.05); cursor: pointer; }
+    .cat-grid-box { background: white; border-radius: 10px; padding: 15px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.05); cursor: pointer; border: 1px solid #f0f0f0; }
   </style>
 </head>
 <body>
 
-  <!-- MeeStore Splash Screen (స్క్రీన్ టచ్ చేసినా క్లోజ్ అవుతుంది) -->
-  <div id="splashScreen" onclick="dismissSplash()">
+  <!-- Pure CSS 1.2s Auto-Fade Splash Screen -->
+  <div id="splashScreen">
     <div class="splash-logo mb-3"><i class="fa-solid fa-bag-shopping"></i></div>
     <h2 class="fw-bold tracking-wide">MeeStore</h2>
-    <div class="spinner-border spinner-border-sm text-light mt-3" role="status"></div>
   </div>
 
-  <!-- Top Header -->
+  <!-- Top Header with Profile and Brand -->
   <div class="top-header">
     <div class="d-flex justify-content-between align-items-center mb-2">
       <div class="d-flex align-items-center gap-2">
@@ -68,7 +78,7 @@
       </button>
     </div>
 
-    <!-- Search Box -->
+    <!-- Search Input -->
     <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border">
       <span class="input-group-text bg-white border-0"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
       <input type="text" id="searchInput" class="form-control border-0" placeholder="వస్తువులను వెతకండి...">
@@ -90,11 +100,16 @@
   <!-- Products Main Area -->
   <div id="homeArea">
     <div class="container px-2 my-2">
-      <div id="productGrid" class="row row-cols-2 g-2"></div>
+      <div id="productGrid" class="row row-cols-2 g-2">
+        <!-- Fallback if server takes time to load -->
+        <div class="col-12 text-center py-5 text-muted" id="loadingProductsMsg">
+          <div class="spinner-border spinner-border-sm text-primary me-2"></div>ఉత్పత్తులు లోడ్ అవుతున్నాయి...
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Categories Dedicated View -->
+  <!-- Dedicated Categories View (కేటగిరీలు బటన్ నొక్కినప్పుడు ఓపెన్ అవుతుంది) -->
   <div id="categoriesView" class="container px-3 my-3 d-none">
     <h5 class="fw-bold mb-3 text-secondary"><i class="fa-solid fa-shapes me-2"></i>అన్ని కేటగిరీలు</h5>
     <div class="row row-cols-2 g-3">
@@ -220,16 +235,6 @@
     let allProducts = [], cart = [];
     let curBuyer = JSON.parse(localStorage.getItem('meestore_buyer'));
 
-    // ఏ పరిస్థితిలోనైనా 1 సెకనులో స్ప్లాష్ స్క్రీన్‌ను పూర్తిగా తీసివేయడం
-    function dismissSplash() {
-      const sp = document.getElementById('splashScreen');
-      if (sp) {
-        sp.style.opacity = '0';
-        setTimeout(() => { sp.style.display = 'none'; }, 300);
-      }
-    }
-    setTimeout(dismissSplash, 1000);
-
     // Profile Photo Upload
     function uploadBuyerProfilePic(input) {
       if (input.files && input.files[0]) {
@@ -248,11 +253,12 @@
       const saved = localStorage.getItem('meestore_avatar');
       if(saved) {
         document.getElementById('userAvatarImg').src = saved;
-        document.getElementById('buyerModalAvatar').src = saved;
+        const bModal = document.getElementById('buyerModalAvatar');
+        if(bModal) bModal.src = saved;
       }
     }
 
-    // Nav Switch
+    // Switch between Home & Categories Views
     function switchNav(view) {
       const homeArea = document.getElementById('homeArea');
       const catView = document.getElementById('categoriesView');
@@ -277,15 +283,18 @@
       renderProducts(allProducts.filter(p => p.category === catName));
     }
 
+    // Load Products
     async function loadProducts() {
       try {
         const res = await fetch(`${API}/products`);
         if (res.ok) {
           allProducts = await res.json();
           renderProducts(allProducts);
+        } else {
+          document.getElementById('productGrid').innerHTML = '<div class="col-12 text-center py-4 text-muted">ఉత్పత్తులు లోడ్ కాలేదు. రీఫ్రెష్ చేయండి.</div>';
         }
       } catch(e) {
-        console.log("Loading offline/cached state");
+        document.getElementById('productGrid').innerHTML = '<div class="col-12 text-center py-4 text-muted">సర్వర్ కనెక్ట్ కాలేకపోయింది.</div>';
       }
       syncBuyerUI();
       checkSavedProfilePic();
@@ -393,60 +402,4 @@
 
     document.getElementById('bRegForm').onsubmit = async (e) => {
       e.preventDefault();
-      const res = await fetch(`${API}/buyer/register`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          name: document.getElementById('bRegName').value,
-          phone: document.getElementById('bRegPhone').value,
-          address: document.getElementById('bRegAddr').value,
-          password: document.getElementById('bRegPass').value
-        })
-      });
-      const d = await res.json();
-      if(res.ok) { alert("రిజిస్ట్రేషన్ పూర్తయింది! లాగిన్ అవ్వండి."); toggleBAuth(true); } else alert(d.error);
-    };
-
-    document.getElementById('bLoginForm').onsubmit = async (e) => {
-      e.preventDefault();
-      const res = await fetch(`${API}/buyer/login`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({
-          phone: document.getElementById('bLogPhone').value,
-          password: document.getElementById('bLogPass').value
-        })
-      });
-      const d = await res.json();
-      if(res.ok) {
-        localStorage.setItem('meestore_buyer', JSON.stringify(d));
-        curBuyer = d;
-        syncBuyerUI();
-        loadOrders();
-      } else alert(d.error);
-    };
-
-    async function loadOrders() {
-      document.getElementById('buyerAuthForms').classList.add('d-none');
-      document.getElementById('buyerProfileSection').classList.remove('d-none');
-      const res = await fetch(`${API}/buyer/orders/${curBuyer.id}`);
-      const list = await res.json();
-      const cont = document.getElementById('buyerOrdersList');
-      if(!list || list.length === 0) { cont.innerHTML = "<small class='text-muted'>ఇంకా ఆర్డర్లు ఏవీ లేవు</small>"; return; }
-      cont.innerHTML = list.map(o => `
-        <div class="card p-2 mb-2 bg-light border-0">
-          <div class="d-flex justify-content-between"><b>${o.product_name}</b><span>₹${o.amount}</span></div>
-          <small class="text-muted">స్టేటస్: <span class="badge bg-secondary">${o.status}</span></small>
-        </div>
-      `).join('');
-    }
-
-    function logoutBuyer() {
-      localStorage.removeItem('meestore_buyer');
-      location.reload();
-    }
-
-    loadProducts();
-  </script>
-</body>
-</html>
+      const res = await fetch(`${API}/buyer/register
