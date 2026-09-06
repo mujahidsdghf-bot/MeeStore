@@ -10,27 +10,8 @@
     body {
       background: #f8f9fa;
       padding-top: 60px;
-      padding-bottom: 70px;
+      padding-bottom: 75px;
       min-height: 100vh;
-    }
-
-    /* Splash Screen with Guaranteed SVG Logo */
-    #splashScreen {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: linear-gradient(135deg, #f8bbd0, #fce4ec, #e1bee7);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 9999999;
-      animation: autoFadeOut 0.4s ease-out 1.5s forwards;
-      pointer-events: none;
-    }
-    @keyframes autoFadeOut {
-      to { opacity: 0; visibility: hidden; display: none; }
-    }
-    .splash-box {
-      width: 110px; height: 110px; background: white; border-radius: 28px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 10px 25px rgba(244, 143, 177, 0.6);
-      margin-bottom: 14px;
     }
 
     /* Top Header */
@@ -44,21 +25,45 @@
     .avatar-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #9c27b0; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; background: #f3e5f5; }
     .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* Bottom Navigation Bar */
+    /* కింద ఎప్పుడూ కనిపించే బాటమ్ నావిగేషన్ బార్ (100% Guaranteed Bottom Bar) */
     .bottom-nav-bar {
-      position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
-      width: 100% !important; height: 60px !important;
-      background: #ffffff !important; border-top: 1px solid #e0e0e0 !important;
-      display: flex !important; justify-content: space-around !important; align-items: center !important;
-      z-index: 999999 !important; box-shadow: 0 -2px 10px rgba(0,0,0,0.06) !important;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 62px;
+      background: #ffffff;
+      border-top: 2px solid #f8bbd0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999999;
+      box-shadow: 0 -3px 12px rgba(0,0,0,0.1);
     }
     .nav-btn {
-      flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;
-      background: transparent; border: none; cursor: pointer; color: #666; font-size: 0.72rem; font-weight: 600; text-decoration: none; gap: 3px;
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-decoration: none;
+      gap: 2px;
     }
-    .nav-btn.active { color: #9c27b0 !important; font-weight: 700; }
-    .nav-btn svg { width: 22px; height: 22px; fill: #666; }
-    .nav-btn.active svg { fill: #9c27b0; }
+    .nav-btn.active {
+      color: #9c27b0;
+    }
+    .nav-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: #9c27b0;
+    }
 
     /* Search & Categories */
     .search-box { padding: 10px 14px; background: white; border-bottom: 1px solid #eee; }
@@ -92,15 +97,6 @@
 </head>
 <body>
 
-  <!-- Splash Screen with SVG Logo -->
-  <div id="splashScreen">
-    <div class="splash-box">
-      <svg width="60" height="60" viewBox="0 0 24 24" fill="#9c27b0"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
-    </div>
-    <h1 style="font-weight: 800; font-size: 1.8rem; color: #4a148c;">MeeStore</h1>
-    <p style="font-size: 0.9rem; color: #880e4f; font-weight: 600; margin-top: 4px;">Smart Shopping for Everyone 🌸</p>
-  </div>
-
   <!-- Top Header -->
   <header class="top-header">
     <div style="display: flex; align-items: center; gap: 10px;" onclick="openScreen('profileScreen')">
@@ -108,10 +104,7 @@
         <img id="buyerAvatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
       </div>
       <div>
-        <div class="brand-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#9c27b0" style="vertical-align: middle;"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
-          MeeStore
-        </div>
+        <div class="brand-title">MeeStore</div>
         <div style="font-size: 0.72rem; color: #666; font-weight: bold;" id="welcomeUserText">Hello, Sign In &gt;</div>
       </div>
     </div>
@@ -293,4 +286,26 @@
       </div>
       <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:16px; border-radius:10px; text-align:center; margin-bottom:20px;">
         <p style="font-size:0.9rem; color:#166534; margin-bottom:10px; font-weight:bold;">Pay via UPI (GPay / PhonePe / Paytm)</p>
-        <a id="btnUpiDirectLink" href="#" style="display:block; background:#16a34a; color:white; text-decoration:none; padding:12px; border-radius:8px; font-
+        <a id="btnUpiDirectLink" href="#" style="display:block; background:#16a34a; color:white; text-decoration:none; padding:12px; border-radius:8px; font-weight:bold; margin-bottom:10px;">Pay via UPI App</a>
+        <p style="font-size:0.8rem; color:#666; margin-bottom:6px;">Or scan QR code:</p>
+        <img id="upiQrCodeImg" src="" style="max-width:130px; border:1px solid #ddd; padding:4px; background:white; border-radius:6px;" alt="QR">
+      </div>
+      <button onclick="placeWhatsAppOrder()" class="btn-action" style="background:#9c27b0; color:white;">Confirm Order (Instant Alert)</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: BUYER PROFILE -->
+  <div id="profileScreen" class="app-screen">
+    <div class="screen-header">
+      <span style="cursor:pointer; font-weight:bold; color:#9c27b0;" onclick="closeAllScreens()">← Back</span>
+      <span class="screen-title">My Account & Settings</span>
+    </div>
+    <div style="padding: 16px;">
+      <div id="buyerLoggedInBox" style="display:none;">
+        <div style="display:flex; align-items:center; gap:15px; background:white; padding:16px; border-radius:10px; margin-bottom:15px; border:1px solid #ddd;">
+          <img id="profImgBig" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width:65px; height:65px; border-radius:50%; object-fit:cover; border:2px solid #9c27b0;" alt="Buyer">
+          <div><h3 id="profNameBig" style="font-size:1.15rem; color:#333;">Customer Name</h3><p id="profPhoneBig" style="font-size:0.85rem; color:#666;">Phone</p></div>
+        </div>
+        <div style="background:white; border-radius:10px; overflow:hidden; border:1px solid #ddd; margin-bottom:15px;">
+          <div class="list-item-box" onclick="alert('Order tracking active')" style="border:none; border-bottom:1px solid #eee; border-radius:0;">
+      
