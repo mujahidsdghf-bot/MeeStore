@@ -6,63 +6,64 @@
   <title>MeeStore</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: #fff5f8; padding-top: 60px; padding-bottom: 75px; min-height: 100vh; }
-
-    /* 1. Splash Screen */
-    #splashScreen {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: linear-gradient(135deg, #f8bbd0, #fce4ec, #e1bee7);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 9999999;
-      animation: autoFadeOut 0.4s ease-out 1.2s forwards;
-      pointer-events: none;
-    }
-    @keyframes autoFadeOut {
-      to { opacity: 0; visibility: hidden; display: none; }
-    }
-    .splash-box {
-      width: 100px; height: 100px; background: white; border-radius: 24px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 50px; color: #9c27b0;
-      box-shadow: 0 10px 25px rgba(244, 143, 177, 0.6);
-      margin-bottom: 12px;
+    
+    body {
+      background: #fff5f8;
+      padding-top: 60px;
+      padding-bottom: 80px; /* కింద మెనూ కింద కంటెంట్ దాక్కుండా ఉండేందుకు స్పేస్ */
+      min-height: 100vh;
     }
 
-    /* పక్కాగా కనిపించే SVG ఐకాన్ స్టైల్స్ */
-    .app-icon {
-      width: 24px !important;
-      height: 24px !important;
-      fill: currentColor !important;
-      display: inline-block;
-      vertical-align: middle;
-      flex-shrink: 0;
-    }
-
-    /* 2. Top Header */
+    /* Top Header */
     .top-header {
       position: fixed; top: 0; left: 0; right: 0; height: 60px;
       background: white; padding: 0 14px; border-bottom: 1px solid #f8bbd0;
       display: flex; justify-content: space-between; align-items: center;
-      z-index: 99999; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      z-index: 9999; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
     .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; display: flex; align-items: center; gap: 6px; cursor: pointer; }
     .avatar-wrapper { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #ba68c8; overflow: hidden; cursor: pointer; }
     .avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* 3. Fixed Bottom Navigation Bar (100% Guaranteed Visible Icons) */
+    /* కింద ఎల్లప్పుడూ కనిపించే బాటమ్ నావిగేషన్ బార్ */
     .bottom-nav-bar {
-      position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
-      width: 100vw !important; height: 64px !important;
-      background: #ffffff !important; border-top: 2px solid #f8bbd0 !important;
-      display: flex !important; justify-content: space-around !important; align-items: center !important;
-      z-index: 999999 !important; box-shadow: 0 -3px 15px rgba(0,0,0,0.1) !important;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 65px;
+      background: #ffffff;
+      border-top: 2px solid #f8bbd0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 999999;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
     }
     .nav-tab-btn {
-      flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;
-      background: transparent; border: none; cursor: pointer; color: #777; font-size: 0.75rem; font-weight: 700; gap: 3px;
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 0.75rem;
+      font-weight: 700;
+      gap: 3px;
     }
-    .nav-tab-btn.active { color: #9c27b0 !important; }
-    .nav-tab-btn.active .app-icon { fill: #9c27b0 !important; }
+    .nav-tab-btn span {
+      color: #7b1fa2;
+      font-weight: 800;
+    }
+    .nav-tab-btn svg {
+      width: 24px;
+      height: 24px;
+      fill: #9c27b0;
+    }
 
     /* Search & Categories */
     .search-box { padding: 10px 14px; background: white; }
@@ -88,7 +89,6 @@
       background: #fff5f8; z-index: 100005; overflow-y: auto; display: none; padding-bottom: 85px;
     }
     .overlay-header { background: white; padding: 14px 16px; border-bottom: 1px solid #f8bbd0; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 10; }
-    .overlay-header .app-icon { color: #9c27b0; cursor: pointer; }
     .overlay-title { font-size: 1.15rem; font-weight: 700; color: #333; }
     .spec-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #fce4ec; font-size: 0.9rem; }
     .btn-action { width: 100%; padding: 13px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; }
@@ -97,34 +97,21 @@
 </head>
 <body>
 
-  <!-- 1. Splash Screen -->
-  <div id="splashScreen">
-    <div class="splash-box">
-      <svg width="50" height="50" viewBox="0 0 24 24" fill="#9c27b0"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
-    </div>
-    <h1 style="font-weight: 800; font-size: 1.7rem; color: #4a148c;">MeeStore</h1>
-    <p style="font-size: 0.88rem; color: #880e4f; font-weight: 600; margin-top: 4px;">Smart Shopping for Everyone 🌸</p>
-  </div>
-
-  <!-- 2. Fixed Top Header -->
+  <!-- Top Header -->
   <header class="top-header">
     <div style="display: flex; align-items: center; gap: 10px;" onclick="openOverlay('profileOverlay')">
       <div class="avatar-wrapper">
         <img id="buyerAvatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
       </div>
       <div>
-        <div class="brand-title">
-          <svg class="app-icon" style="width:20px;height:20px;" viewBox="0 0 24 24"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
-          MeeStore
-        </div>
+        <div class="brand-title">MeeStore</div>
         <div style="font-size: 0.72rem; color: #ad1457; font-weight: bold;" id="welcomeUserText">Hello, Sign In &gt;</div>
       </div>
     </div>
     <div style="display: flex; gap: 8px; align-items: center;">
       <a href="admin.html" style="background: #fce4ec; padding: 6px 12px; border-radius: 16px; font-size: 0.75rem; text-decoration: none; color: #ad1457; font-weight: bold; border: 1px solid #f48fb1;">Admin</a>
-      <button onclick="openOverlay('cartOverlay')" style="background: white; border: 1px solid #f48fb1; border-radius: 16px; padding: 6px 12px; font-size: 0.9rem; cursor: pointer; color: #9c27b0; display: flex; align-items: center; gap: 4px;">
-        <svg class="app-icon" style="width:18px;height:18px;" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.08-.14.12-.31.12-.48 0-.55-.45-1-1-1H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
-        <span id="cartCount" style="color: #d81b60; font-weight: bold;">0</span>
+      <button onclick="openOverlay('cartOverlay')" style="background: white; border: 1px solid #f48fb1; border-radius: 16px; padding: 6px 12px; font-size: 0.9rem; cursor: pointer; color: #9c27b0;">
+        🛒 Cart (<span id="cartCount" style="color: #d81b60; font-weight: bold;">0</span>)
       </button>
     </div>
   </header>
@@ -192,7 +179,7 @@
   <!-- OVERLAY 1: PRODUCT DETAILS -->
   <div id="productDetailOverlay" class="full-overlay">
     <div class="overlay-header">
-      <svg class="app-icon" onclick="closeAllOverlays()" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      <span style="cursor:pointer; font-size:1.2rem; color:#9c27b0;" onclick="closeAllOverlays()">← Back</span>
       <span class="overlay-title" id="pDetailHeaderTitle">Product Specifications</span>
     </div>
     <img id="pDetailImg" src="" style="width: 100%; height: 280px; object-fit: contain; background: white; border-bottom: 1px solid #f8bbd0;">
@@ -223,7 +210,7 @@
   <!-- OVERLAY 2: CATEGORIES -->
   <div id="categoriesOverlay" class="full-overlay">
     <div class="overlay-header">
-      <svg class="app-icon" onclick="closeAllOverlays()" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      <span style="cursor:pointer; font-size:1.2rem; color:#9c27b0;" onclick="closeAllOverlays()">← Back</span>
       <span class="overlay-title">All Categories</span>
     </div>
     <div style="padding: 14px;">
@@ -257,7 +244,7 @@
   <!-- OVERLAY 3: CART -->
   <div id="cartOverlay" class="full-overlay">
     <div class="overlay-header">
-      <svg class="app-icon" onclick="closeAllOverlays()" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      <span style="cursor:pointer; font-size:1.2rem; color:#9c27b0;" onclick="closeAllOverlays()">← Back</span>
       <span class="overlay-title">Shopping Cart</span>
     </div>
     <div style="padding: 14px;" id="cartItemsContainer"></div>
@@ -273,7 +260,7 @@
   <!-- OVERLAY 4: CHECKOUT -->
   <div id="checkoutOverlay" class="full-overlay">
     <div class="overlay-header">
-      <svg class="app-icon" onclick="openOverlay('cartOverlay')" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      <span style="cursor:pointer; font-size:1.2rem; color:#9c27b0;" onclick="openOverlay('cartOverlay')">← Back</span>
       <span class="overlay-title">Order Checkout</span>
     </div>
     <div style="padding: 16px;">
@@ -292,4 +279,33 @@
       <div style="background:white; padding:14px; border-radius:10px; margin-bottom:15px; border:1px solid #f8bbd0;">
         <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>Item Total:</span><span>₹<span id="billSubVal">0</span></span></div>
         <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:green;"><span>Coupon Discount:</span><span>-₹<span id="billDiscVal">0</span></span></div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#0288d1;"><span>Shipping:</span><span>FREE</span></div>
+        <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.15rem; border-top:1px solid #eee; padding-top:10px;">
+          <span>Grand Total:</span><span style="color:#9c27b0;">₹<span id="billFinalVal">0</span></span>
+        </div>
+      </div>
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:16px; border-radius:10px; text-align:center; margin-bottom:20px;">
+        <p style="font-size:0.9rem; color:#166534; margin-bottom:10px; font-weight:bold;">Pay via UPI (GPay / PhonePe / Paytm)</p>
+        <a id="btnUpiDirectLink" href="#" style="display:block; background:#16a34a; color:white; text-decoration:none; padding:12px; border-radius:8px; font-weight:bold; margin-bottom:10px;">Pay via UPI App</a>
+        <p style="font-size:0.8rem; color:#666; margin-bottom:6px;">Or scan QR code:</p>
+        <img id="upiQrCodeImg" src="" style="max-width:130px; border:1px solid #ddd; padding:4px; background:white; border-radius:6px;" alt="QR">
+      </div>
+      <button onclick="placeWhatsAppOrder()" class="btn-action" style="background:#9c27b0; color:white; box-shadow:0 4px 12px rgba(156,39,176,0.3);">Confirm Order (Instant Alert)</button>
+    </div>
+  </div>
+
+  <!-- OVERLAY 5: BUYER PROFILE -->
+  <div id="profileOverlay" class="full-overlay">
+    <div class="overlay-header">
+      <span style="cursor:pointer; font-size:1.2rem; color:#9c27b0;" onclick="closeAllOverlays()">← Back</span>
+      <span class="overlay-title">My Account & Settings</span>
+    </div>
+    <div style="padding: 16px;">
+      <div id="buyerLoggedInBox" style="display:none;">
+        <div style="display:flex; align-items:center; gap:15px; background:white; padding:16px; border-radius:12px; margin-bottom:15px; border:1px solid #f8bbd0;">
+          <img id="profImgBig" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width:65px; height:65px; border-radius:50%; object-fit:cover; border:2px solid #9c27b0;" alt="Buyer">
+          <div><h3 id="profNameBig" style="font-size:1.15rem; color:#333;">Customer Name</h3><p id="profPhoneBig" style="font-size:0.85rem; color:#666;">Phone</p></div>
+        </div>
+        <div style="background:white; border-radius:12px; overflow:hidden; border:1px solid #f8bbd0; margin-bottom:15px;">
+          <div class="cat-box" onclick="alert('Order tracking active')" style="border:none; border-bottom:1px solid #fce4ec; border-radius:0;">
+            <span>My O
