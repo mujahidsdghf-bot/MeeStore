@@ -58,7 +58,7 @@
   <!-- Top Bar -->
   <div class="top-header">
     <div style="display: flex; align-items: center; gap: 8px;">
-      <label for="buyerPicInput" class="avatar-wrapper" title="ప్రొఫైల్ ఫోటో">
+      <label for="buyerPicInput" class="avatar-wrapper" title="ప్రొఫైల్ ఫోటో మార్చండి">
         <img id="buyerAvatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="avatar-img">
         <div class="camera-badge"><i class="fa-solid fa-camera"></i></div>
       </label>
@@ -95,9 +95,21 @@
     <button class="cat-btn" onclick="filterCat('Home & Kitchen', this)">🏠 Home & Kitchen</button>
   </div>
 
-  <!-- Home Main Content -->
+  <!-- Home Products View (నేరుగా లోడ్ అయ్యేలా సెట్ చేయబడింది) -->
   <div id="homeArea">
-    <div class="product-grid" id="productGrid"></div>
+    <div class="product-grid" id="productGrid">
+      <!-- Direct Default Loaded Product -->
+      <div class="product-card" onclick="showProductDetail(1)">
+        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" class="product-img">
+        <div class="card-body">
+          <span class="badge">కిరాణా & సిరిధాన్యాలు</span>
+          <div class="product-title">Little millets (కొర్రలు)</div>
+          <div class="product-meta">బరువు: <b>500g</b></div>
+          <div class="product-price">₹20</div>
+          <button class="btn-buy" onclick="event.stopPropagation(); showProductDetail(1)">వివరాలు & కొనండి</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Categories Dedicated View -->
@@ -106,7 +118,7 @@
     <div id="catItemsContainer"></div>
   </div>
 
-  <!-- Bottom Navigation -->
+  <!-- Bottom Navigation Bar -->
   <div class="bottom-nav">
     <button class="nav-btn active" id="btnNavHome" onclick="switchNav('home')">
       <i class="fa-solid fa-house"></i><span>హోమ్</span>
@@ -163,7 +175,7 @@
         <textarea id="orderAddress" class="form-control" rows="2" placeholder="ఇంటి నంబర్, వీధి, ఊరు, పిన్‌కోడ్" required></textarea>
       </div>
 
-      <!-- కూపన్ కోడ్ సెక్షన్ -->
+      <!-- కూపన్ కోడ్ -->
       <div style="margin-bottom: 15px;">
         <label style="font-size: 0.8rem; font-weight: bold;">డిస్కౌంట్ కూపన్ (Coupon Code)</label>
         <div style="display: flex; gap: 6px;">
@@ -208,7 +220,7 @@
           <button id="tabRegBtn" onclick="toggleAuthMode('reg')" style="flex: 1; padding: 8px; background: #f0f0f0; color: #333; border: none; border-radius: 4px; cursor: pointer;">రిజిస్టర్</button>
         </div>
 
-        <!-- ఓటీపీ లాగిన్ ఫామ్ -->
+        <!-- ఓటీపీ లాగిన్ -->
         <div id="otpLoginForm">
           <input type="tel" id="otpPhone" class="form-control" placeholder="మొబైల్ నంబర్" required>
           <button id="btnSendOtp" onclick="sendOtpSimulate()" class="btn-submit" style="margin-bottom: 10px; background: #0288d1;">OTP పంపండి</button>
@@ -226,7 +238,7 @@
           <button type="submit" class="btn-submit">లాగిన్</button>
         </form>
 
-        <!-- రిజిస్ట్రేషన్ ఫామ్ -->
+        <!-- బయ్యర్ రిజిస్ట్రేషన్ ఫామ్ -->
         <form id="regForm" style="display: none;" onsubmit="handleBuyerRegister(event)">
           <input type="text" id="bRegName" class="form-control" placeholder="మీ పూర్తి పేరు" required>
           <input type="tel" id="bRegPhone" class="form-control" placeholder="మొబైల్ నంబర్" required>
@@ -246,7 +258,7 @@
           </div>
         </div>
 
-        <!-- సెట్టింగ్స్ లింకులు -->
+        <!-- సెట్టింగ్స్ -->
         <div style="margin-bottom: 15px;">
           <div onclick="editAddressPrompt()" style="padding: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; cursor: pointer;">
             <span><i class="fa-solid fa-location-dot me-2 text-primary"></i>చిరునామా మార్చండి (Edit Address)</span>
@@ -270,13 +282,13 @@
 
   <script>
     const API = "https://meestore.onrender.com/api";
-    let allProducts = [], cart = [];
     let curBuyer = JSON.parse(localStorage.getItem('meestore_buyer'));
     let activeProduct = null;
     let generatedOtp = null;
     let currentDiscount = 0;
+    let cart = [];
 
-    // డీఫాల్ట్ ప్రొడక్ట్ (సర్వర్ స్లీప్‌లో ఉన్నా ఖాళీగా ఉండకుండా)
+    // పేజీ తెరవగానే కనిపించే లైవ్ ప్రొడక్ట్
     const fallbackProducts = [
       {
         id: 1, name: "Little millets (కొర్రలు)", category: "కిరాణా & సిరిధాన్యాలు", price: 20, weight: "500g",
@@ -286,8 +298,9 @@
         seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
       }
     ];
+    let allProducts = fallbackProducts;
 
-    // Navigation Switcher
+    // View Switching
     function switchNav(view) {
       const home = document.getElementById('homeArea');
       const cats = document.getElementById('categoriesView');
@@ -319,4 +332,242 @@
         { name: "Men Fashion", icon: "👕", desc: "షర్టులు, టీ-షర్టులు, ప్యాంట్స్" },
         { name: "ఫ్యాన్సీ & జ్యువెలరీ", icon: "💍", desc: "గాజులు, నెక్లెస్‌లు" },
         { name: "ఫుట్‌వేర్", icon: "👠", desc: "చెప్పులు & షూస్" },
-        { name: "
+        { name: "Home & Kitchen", icon: "🏠", desc: "వంటగది సామాగ్రి, బెడ్‌షీట్స్" }
+      ];
+      document.getElementById('catItemsContainer').innerHTML = list.map(c => `
+        <div onclick="selectCatDirect('${c.name}')" style="background:white; border-radius:8px; padding:12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; box-shadow:0 1px 3px rgba(0,0,0,0.05); cursor:pointer;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.6rem;">${c.icon}</span>
+            <div><b>${c.name}</b><div style="font-size:0.75rem; color:#777;">${c.desc}</div></div>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="color:#bbb;"></i>
+        </div>
+      `).join('');
+    }
+
+    function selectCatDirect(catName) {
+      switchNav('home');
+      renderProducts(allProducts.filter(p => p.category && p.category.includes(catName)));
+    }
+
+    // Modal Functions
+    function openBuyerModal() { document.getElementById('buyerModal').style.display = 'flex'; syncBuyerUI(); }
+    function closeBuyerModal() { document.getElementById('buyerModal').style.display = 'none'; }
+    function closeProductDetail() { document.getElementById('productDetailModal').style.display = 'none'; }
+    function openCartModal() { openCheckoutForItems(cart); }
+    function closeCheckoutModal() { document.getElementById('checkoutModal').style.display = 'none'; }
+
+    // వస్తువు వివరాల పేజ్
+    function showProductDetail(id) {
+      activeProduct = allProducts.find(p => p.id === id) || fallbackProducts[0];
+      document.getElementById('detailTitle').innerText = activeProduct.name;
+      document.getElementById('detailName').innerText = activeProduct.name;
+      document.getElementById('detailPrice').innerText = "₹" + activeProduct.price;
+      document.getElementById('detailImg').src = activeProduct.image_url;
+      document.getElementById('detailCat').innerText = activeProduct.category || 'General';
+      document.getElementById('detailWeight').innerText = activeProduct.weight || 'N/A';
+      document.getElementById('detailDim').innerText = activeProduct.dimensions || 'Standard';
+      document.getElementById('detailMat').innerText = activeProduct.material || 'Standard';
+      document.getElementById('detailColor').innerText = activeProduct.color || 'Standard';
+      document.getElementById('detailFssai').innerText = activeProduct.fssai || 'వర్తించదు (N/A)';
+      document.getElementById('detailExpiry').innerText = activeProduct.expiry || 'వర్తించదు (N/A)';
+      document.getElementById('productDetailModal').style.display = 'flex';
+    }
+
+    function addCurrentToCart() {
+      if(activeProduct) { cart.push(activeProduct); updateCartCount(); alert("కార్ట్‌కి జోడించబడింది!"); closeProductDetail(); }
+    }
+
+    function buyNowCurrent() {
+      if(activeProduct) { closeProductDetail(); openCheckoutForItems([activeProduct]); }
+    }
+
+    // చెక్‌అవుట్, కూపన్, పేమెంట్
+    function openCheckoutForItems(items) {
+      if(!items || items.length === 0) { alert("కార్ట్ ఖాళీగా ఉంది!"); return; }
+      if(!curBuyer) { alert("ఆర్డర్ చేయడానికి ముందుగా లాగిన్ అవ్వండి!"); openBuyerModal(); return; }
+      
+      let sub = items.reduce((sum, it) => sum + Number(it.price), 0);
+      document.getElementById('subTotalVal').innerText = sub;
+      document.getElementById('discountVal').innerText = "0";
+      currentDiscount = 0;
+      updateFinalPay(sub, 0);
+
+      document.getElementById('orderAddress').value = curBuyer.address || '';
+      document.getElementById('checkoutModal').style.display = 'flex';
+    }
+
+    function applyCoupon() {
+      const code = document.getElementById('couponCode').value.trim().toUpperCase();
+      const sub = Number(document.getElementById('subTotalVal').innerText);
+      if(code === "MEE50" || code === "WELCOME") {
+        currentDiscount = Math.min(50, Math.round(sub * 0.2));
+        document.getElementById('discountVal').innerText = currentDiscount;
+        document.getElementById('couponMsg').innerText = "🎉 కూపన్ వర్తించింది! ₹" + currentDiscount + " తగ్గింపు వచ్చింది.";
+        updateFinalPay(sub, currentDiscount);
+      } else {
+        alert("చెల్లని కూపన్ కోడ్. 'MEE50' ఉపయోగించండి.");
+      }
+    }
+
+    function updateFinalPay(sub, disc) {
+      const finalAmt = Math.max(1, sub - disc);
+      document.getElementById('finalPayVal').innerText = finalAmt;
+      const upi = (activeProduct && activeProduct.seller_upi) ? activeProduct.seller_upi : 'mujahidsdghf9@ybl';
+      const link = `upi://pay?pa=${upi}&pn=MeeStore&am=${finalAmt}&cu=INR`;
+      document.getElementById('btnDirectUpi').href = link;
+      document.getElementById('qrImage').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(link)}`;
+    }
+
+    async function confirmFinalOrder() {
+      const addr = document.getElementById('orderAddress').value.trim();
+      if(!addr) { alert("దయచేసి డెలివరీ అడ్రస్ నమోదు చేయండి!"); return; }
+      
+      const item = activeProduct || cart[0] || fallbackProducts[0];
+      const amt = document.getElementById('finalPayVal').innerText;
+
+      const payload = {
+        buyer_id: curBuyer.id,
+        seller_id: item.seller_id || 1,
+        product_name: item.name,
+        amount: amt,
+        buyer_name: curBuyer.name,
+        buyer_phone: curBuyer.phone,
+        buyer_address: addr,
+        payment_mode: "UPI Prepaid"
+      };
+
+      try {
+        await fetch(`${API}/orders/place`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
+      } catch(e) {}
+
+      const msg = `🛒 *MeeStore Order!*\nవస్తువు: ${item.name}\nమొత్తం: ₹${amt}\nబరువు: ${item.weight || 'Standard'}\nకస్టమర్: ${curBuyer.name} (${curBuyer.phone})\nడెలివరీ అడ్రస్: ${addr}`;
+      window.open(`https://wa.me/91${item.seller_phone || '9177411712'}?text=${encodeURIComponent(msg)}`);
+      cart = [];
+      updateCartCount();
+      closeCheckoutModal();
+    }
+
+    // ఆథెంటికేషన్ & ఓటీపీ
+    function toggleAuthMode(mode) {
+      document.getElementById('otpLoginForm').style.display = mode === 'otp' ? 'block' : 'none';
+      document.getElementById('passLoginForm').style.display = mode === 'pass' ? 'block' : 'none';
+      document.getElementById('regForm').style.display = mode === 'reg' ? 'block' : 'none';
+    }
+
+    function sendOtpSimulate() {
+      const ph = document.getElementById('otpPhone').value.trim();
+      if(!ph || ph.length < 10) { alert("దయచేసి 10 అంకెల మొబైల్ నంబర్ ఇవ్వండి!"); return; }
+      generatedOtp = Math.floor(1000 + Math.random() * 9000);
+      alert(`మీ MeeStore లాగిన్ OTP: ${generatedOtp}`);
+      document.getElementById('otpInputGroup').style.display = 'block';
+    }
+
+    function verifyOtpSimulate() {
+      const entered = document.getElementById('otpEntered').value.trim();
+      if(entered == generatedOtp) {
+        const ph = document.getElementById('otpPhone').value.trim();
+        curBuyer = { id: 99, name: "Customer (" + ph.slice(-4) + ")", phone: ph, address: "హైదరాబాద్" };
+        localStorage.setItem('meestore_buyer', JSON.stringify(curBuyer));
+        syncBuyerUI();
+        alert("OTP ధృవీకరించబడింది! లాగిన్ విజయవంతమైంది.");
+      } else {
+        alert("తప్పు OTP! మళ్లీ నమోదు చేయండి.");
+      }
+    }
+
+    function editAddressPrompt() {
+      const newAddr = prompt("కొత్త డెలివరీ అడ్రస్ ఇవ్వండి:", curBuyer.address || "");
+      if(newAddr) { curBuyer.address = newAddr; localStorage.setItem('meestore_buyer', JSON.stringify(curBuyer)); alert("అడ్రస్ అప్‌డేట్ అయింది!"); }
+    }
+
+    function uploadBuyerPic(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const b64 = e.target.result;
+          document.getElementById('buyerAvatarImg').src = b64;
+          document.getElementById('modalAvatar').src = b64;
+          localStorage.setItem('meestore_avatar', b64);
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function syncBuyerUI() {
+      const savedPic = localStorage.getItem('meestore_avatar');
+      if (savedPic) {
+        document.getElementById('buyerAvatarImg').src = savedPic;
+        document.getElementById('modalAvatar').src = savedPic;
+      }
+      if (curBuyer) {
+        document.getElementById('welcomeUserText').innerText = curBuyer.name;
+        document.getElementById('buyerAuthForms').style.display = 'none';
+        document.getElementById('buyerProfileView').style.display = 'block';
+        document.getElementById('profName').innerText = curBuyer.name;
+        document.getElementById('profPhone').innerText = curBuyer.phone;
+      } else {
+        document.getElementById('welcomeUserText').innerText = "హలో, లాగిన్ అవ్వండి";
+        document.getElementById('buyerAuthForms').style.display = 'block';
+        document.getElementById('buyerProfileView').style.display = 'none';
+      }
+    }
+
+    function logoutBuyer() {
+      localStorage.removeItem('meestore_buyer');
+      curBuyer = null;
+      syncBuyerUI();
+      closeBuyerModal();
+    }
+
+    function updateCartCount() { document.getElementById('cartCount').innerText = cart.length; }
+
+    async function loadProducts() {
+      try {
+        const res = await fetch(`${API}/products`);
+        if(res.ok) {
+          const list = await res.json();
+          if(list && list.length > 0) {
+            allProducts = list;
+            renderProducts(allProducts);
+          }
+        }
+      } catch(e) {}
+      syncBuyerUI();
+    }
+
+    function renderProducts(list) {
+      const grid = document.getElementById('productGrid');
+      if (!list || list.length === 0) return;
+      grid.innerHTML = list.map(p => `
+        <div class="product-card" onclick="showProductDetail(${p.id})">
+          <img src="${p.image_url}" class="product-img" onerror="this.src='https://via.placeholder.com/200'">
+          <div class="card-body">
+            <span class="badge">${p.category || 'General'}</span>
+            <div class="product-title">${p.name}</div>
+            <div class="product-meta">బరువు: <b>${p.weight || 'N/A'}</b></div>
+            <div class="product-price">₹${p.price}</div>
+            <button class="btn-buy" onclick="event.stopPropagation(); showProductDetail(${p.id})">వివరాలు & కొనండి</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterCat(cat, btn) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProducts(cat === 'all' ? allProducts : allProducts.filter(p => p.category && p.category.includes(cat)));
+    }
+
+    // సెర్చ్ బార్ ఫంక్షనాలిటీ
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q))));
+    });
+
+    // మొదట్లోనే లోడ్ అయ్యేలా కాల్ చేయడం
+    renderProducts(allProducts);
+    loadProducts();
+  </script>
+</body>
+</html>
