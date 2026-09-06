@@ -1,182 +1,202 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MeeStore - సెల్లర్ హబ్</title>
+  <title>MeeStore - Seller Hub</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f8f9fa; padding-bottom: 50px; }
-    .header { background: #9c27b0; color: white; padding: 14px; display: flex; justify-content: space-between; align-items: center; }
-    .card { background: white; border-radius: 10px; padding: 18px; margin: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-    .form-group { margin-bottom: 12px; }
-    .form-label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #333; }
-    .form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
-    .row { display: flex; gap: 10px; }
+    body { background-color: #fff5f8; padding-bottom: 60px; }
+    
+    /* Header Bar */
+    .header { background: #9c27b0; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(156, 39, 176, 0.2); }
+    .header-title { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+    .btn-back-store { color: white; text-decoration: none; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 18px; font-weight: 600; background: rgba(255,255,255,0.1); }
+    
+    /* Card Containers */
+    .card { background: white; border-radius: 12px; padding: 20px; margin: 16px; box-shadow: 0 2px 10px rgba(244, 143, 177, 0.25); border: 1px solid #f8bbd0; }
+    .form-group { margin-bottom: 14px; }
+    .form-label { display: block; font-weight: 700; font-size: 0.88rem; margin-bottom: 6px; color: #4a148c; }
+    .form-input, .form-select { width: 100%; padding: 11px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.95rem; outline: none; background: #fffcfd; }
+    .form-input:focus, .form-select:focus { border-color: #9c27b0; }
+    .row { display: flex; gap: 12px; }
     .col { flex: 1; }
-    .preview-box { width: 100%; height: 160px; border: 2px dashed #9c27b0; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #fafafa; overflow: hidden; margin-bottom: 8px; }
+    
+    /* Image Preview */
+    .preview-box { width: 100%; height: 180px; border: 2px dashed #ba68c8; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #fafafa; overflow: hidden; margin-bottom: 8px; }
     .preview-box img { width: 100%; height: 100%; object-fit: contain; }
-    .btn { background: #9c27b0; color: white; border: none; padding: 12px; width: 100%; border-radius: 6px; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
-    .auth-tab { display: flex; gap: 8px; margin-bottom: 15px; }
-    .auth-tab button { flex: 1; padding: 8px; border: 1px solid #9c27b0; background: white; border-radius: 6px; cursor: pointer; }
-    .auth-tab button.active { background: #9c27b0; color: white; font-weight: bold; }
+    
+    /* Buttons */
+    .btn-primary-action { background: #9c27b0; color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3); }
+    .auth-tabs { display: flex; gap: 10px; margin-bottom: 18px; }
+    .auth-tab-btn { flex: 1; padding: 10px; border: 1px solid #f48fb1; background: white; border-radius: 8px; cursor: pointer; font-weight: 700; color: #666; font-size: 0.9rem; }
+    .auth-tab-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
   </style>
 </head>
 <body>
 
-  <!-- Top Bar -->
+  <!-- Header -->
   <div class="header">
-    <div style="font-weight: 700; font-size: 1.1rem;"><i class="fa-solid fa-store me-1"></i>MeeStore Seller Hub</div>
-    <a href="index.html" style="color: white; text-decoration: none; font-size: 0.85rem; border: 1px solid white; padding: 4px 10px; border-radius: 15px;">స్టోర్‌కి వెళ్లండి</a>
+    <div class="header-title"><i class="fa-solid fa-store"></i> MeeStore Seller Hub</div>
+    <a href="index.html" class="btn-back-store"><i class="fa-solid fa-arrow-left me-1"></i> Back to Store</a>
   </div>
 
-  <!-- Login & Register Section -->
-  <div id="authBox" class="card" style="max-width: 420px; margin: 20px auto;">
-    <div class="auth-tab">
-      <button id="sLogBtn" class="active" onclick="toggleSellerAuth(true)">లాగిన్</button>
-      <button id="sRegBtn" onclick="toggleSellerAuth(false)">కొత్త సెల్లర్ (KYC)</button>
+  <!-- Seller Auth Section (Login / KYC Register) -->
+  <div id="sellerAuthCard" class="card" style="max-width: 440px; margin: 24px auto;">
+    <div class="auth-tabs">
+      <button id="tabSellerLoginBtn" class="auth-tab-btn active" onclick="switchSellerAuth(true)">Sign In</button>
+      <button id="tabSellerRegBtn" class="auth-tab-btn" onclick="switchSellerAuth(false)">New Seller (KYC)</button>
     </div>
 
-    <!-- Seller Login Form -->
-    <form id="sLoginForm" onsubmit="handleSellerLogin(event)">
+    <!-- Sign In Form -->
+    <form id="sellerLoginForm" onsubmit="onSellerLoginSubmit(event)">
       <div class="form-group">
-        <label class="form-label">మొబైల్ నంబర్</label>
-        <input type="tel" id="sLogPhone" class="form-input" placeholder="నమోదు చేసిన మొబైల్" required>
+        <label class="form-label">Registered Mobile Number</label>
+        <input type="tel" id="sellerLogPhone" class="form-input" placeholder="10-digit mobile number" required>
       </div>
       <div class="form-group">
-        <label class="form-label">పాస్‌వర్డ్</label>
-        <input type="password" id="sLogPass" class="form-input" placeholder="పాస్‌వర్డ్" required>
+        <label class="form-label">Password</label>
+        <input type="password" id="sellerLogPass" class="form-input" placeholder="Enter password" required>
       </div>
-      <button type="submit" class="btn">లాగిన్ అవ్వండి</button>
+      <button type="submit" class="btn-primary-action">Sign In to Dashboard</button>
     </form>
 
-    <!-- Seller Registration with Aadhar & UPI -->
-    <form id="sRegForm" style="display: none;" onsubmit="handleSellerRegister(event)">
+    <!-- Registration with KYC Form -->
+    <form id="sellerRegForm" style="display: none;" onsubmit="onSellerRegisterSubmit(event)">
       <div class="form-group">
-        <label class="form-label">దుకాణం / బ్రాండ్ పేరు</label>
-        <input type="text" id="sRegShop" class="form-input" placeholder="ఉదా: మీ స్టోర్ నేమ్" required>
+        <label class="form-label">Shop / Brand Name</label>
+        <input type="text" id="sellerRegShop" class="form-input" placeholder="e.g. Royal Fashion Store" required>
       </div>
       <div class="form-group">
-        <label class="form-label">మొబైల్ నంబర్</label>
-        <input type="tel" id="sRegPhone" class="form-input" placeholder="10 అంకెల మొబైల్ నంబర్" required>
-      </div>
-
-      <!-- ఆధార్ కార్డు నంబర్ (KYC కోసం) -->
-      <div class="form-group">
-        <label class="form-label">ఆధార్ కార్డు నంబర్ (KYC ధృవీకరణ కోసం)</label>
-        <input type="text" id="sRegAadhar" class="form-input" placeholder="12 అంకెల ఆధార్ నంబర్" maxlength="12" pattern="\d{12}" title="ఖచ్చితంగా 12 అంకెలు ఉండాలి" required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">మీ UPI ID (డైరెక్ట్ పేమెంట్స్ & విక్రయాల కోసం)</label>
-        <input type="text" id="sRegUpi" class="form-input" placeholder="ఉదా: name@upi లేదా 9876543210@ybl" required>
+        <label class="form-label">Mobile Number</label>
+        <input type="tel" id="sellerRegPhone" class="form-input" placeholder="10-digit mobile number" required>
       </div>
       <div class="form-group">
-        <label class="form-label">పాస్‌వర్డ్</label>
-        <input type="password" id="sRegPass" class="form-input" placeholder="రహస్య పాస్‌వర్డ్" required>
+        <label class="form-label">Aadhaar Card Number (KYC Verification)</label>
+        <input type="text" id="sellerRegAadhar" class="form-input" placeholder="12-digit Aadhaar number" maxlength="12" pattern="\d{12}" title="Must be 12 digits" required>
       </div>
-      <button type="submit" class="btn" style="background: #2e7d32;">
-        <i class="fa-solid fa-id-card me-1"></i>KYC తో ఖాతా సృష్టించండి
+      <div class="form-group">
+        <label class="form-label">Seller UPI ID (For Direct Payments)</label>
+        <input type="text" id="sellerRegUpi" class="form-input" placeholder="e.g. yourname@upi or mobile@ybl" required>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Create Password</label>
+        <input type="password" id="sellerRegPass" class="form-input" placeholder="Choose secure password" required>
+      </div>
+      <button type="submit" class="btn-primary-action" style="background: #2e7d32;">
+        <i class="fa-solid fa-id-card me-1"></i> Complete KYC Registration
       </button>
     </form>
   </div>
 
-  <!-- Seller Dashboard (సరుకు వివరాలు & కెమెరా అప్‌లోడ్) -->
-  <div id="dashBox" style="display: none;">
+  <!-- Seller Dashboard (Add Products & Inventory) -->
+  <div id="sellerDashboardCard" style="display: none; max-width: 700px; margin: 16px auto;">
     <div class="card">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
-        <h3 id="welcomeShop" style="font-size: 1.1rem; color: #9c27b0;">హలో సెల్లర్!</h3>
-        <button onclick="logoutSeller()" style="background: #e53935; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">లాగౌట్</button>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #f8bbd0; padding-bottom: 10px;">
+        <div>
+          <h3 id="shopWelcomeTitle" style="font-size: 1.2rem; color: #4a148c; font-weight: 800;">Welcome, Seller!</h3>
+          <p style="font-size: 0.8rem; color: #666;">Add products with complete specifications for express delivery</p>
+        </div>
+        <button onclick="sellerLogout()" style="background: #e53935; color: white; border: none; padding: 6px 14px; border-radius: 6px; cursor: pointer; font-weight: 700; font-size: 0.85rem;">Sign Out</button>
       </div>
 
-      <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #444;"><i class="fa-solid fa-boxes-stacked me-1"></i>కొత్త సరుకు పూర్తి వివరాలు జోడించండి</h4>
-      <form onsubmit="handleAddProduct(event)">
-        
+      <form onsubmit="onAddProductSubmit(event)">
         <div class="form-group">
-          <label class="form-label">ఉత్పత్తి పేరు (Product Name)</label>
-          <input type="text" id="pName" class="form-input" placeholder="ఉదా: రాగి పిండి, కొర్రలు, కాటన్ చీర" required>
+          <label class="form-label">Product Name</label>
+          <input type="text" id="pName" class="form-input" placeholder="e.g. Kanchipuram Silk Saree / Organic Foxtail Millet" required>
         </div>
 
         <div class="form-group">
-          <label class="form-label">కేటగిరీ</label>
-          <select id="pCategory" class="form-select" onchange="checkFoodCategory(this.value)" required>
-            <option value="కిరాణా & సిరిధాన్యాలు">🌾 కిరాణా & సిరిధాన్యాలు (ఆహార పదార్థాలు)</option>
-            <option value="జనరల్ & పూజా స్టోర్">🪔 జనరల్ & పూజా స్టోర్</option>
+          <label class="form-label">Category</label>
+          <select id="pCategory" class="form-select" onchange="toggleFoodFields(this.value)" required>
             <option value="Women Fashion">👗 Women Fashion</option>
+            <option value="Grocery & Millets">🌾 Grocery & Millets (Food Items)</option>
+            <option value="Jewelry & Fancy">💍 Jewelry & Fancy</option>
+            <option value="General & Pooja">🪔 General & Pooja Items</option>
             <option value="Men Fashion">👕 Men Fashion</option>
-            <option value="ఫ్యాన్సీ & జ్యువెలరీ">💍 ఫ్యాన్సీ & జ్యువెలరీ</option>
-            <option value="ఫుట్‌వేర్">👠 ఫుట్‌వేర్</option>
-            <option value="Home & Kitchen">🏠 Home & Kitchen</option>
+            <option value="Footwear">👠 Footwear</option>
           </select>
         </div>
 
-        <!-- Direct Camera / Gallery Selection -->
+        <!-- Camera & Gallery Direct Image Selector -->
         <div class="form-group">
-          <label class="form-label">సరుకు ఫోటో (కెమెరా లేదా గ్యాలరీ నుండి ఎంచుకోండి)</label>
-          <div class="preview-box" id="previewContainer">
-            <span style="color: #999; text-align: center;"><i class="fa-solid fa-camera fa-2x"></i><br>ఫోటో ఇంకా ఎంచుకోలేదు</span>
+          <label class="form-label">Product Image (Take Photo or Choose from Gallery)</label>
+          <div class="preview-box" id="imagePreviewBox">
+            <span style="color: #999; text-align: center;"><i class="fa-solid fa-camera fa-2x mb-1"></i><br>No image chosen yet</span>
           </div>
-          <input type="file" id="pImgInput" accept="image/*" class="form-input" onchange="previewImage(this)" required>
+          <input type="file" id="pImgInput" accept="image/*" class="form-input" onchange="handleImageSelection(this)" required>
         </div>
 
         <div class="row">
           <div class="col form-group">
-            <label class="form-label">ధర (₹)</label>
-            <input type="number" id="pPrice" class="form-input" placeholder="అమ్మకపు ధర" required>
+            <label class="form-label">Selling Price (₹)</label>
+            <input type="number" id="pPrice" class="form-input" placeholder="Price" required>
           </div>
           <div class="col form-group">
-            <label class="form-label">స్టాక్ (సంఖ్య)</label>
+            <label class="form-label">Available Stock</label>
             <input type="number" id="pStock" class="form-input" value="10" required>
           </div>
         </div>
 
+        <!-- Logistics: Weight & Dimensions -->
         <div class="row">
           <div class="col form-group">
-            <label class="form-label">బరువు (Weight)</label>
-            <input type="text" id="pWeight" class="form-input" placeholder="ఉదా: 500g / 1kg" required>
+            <label class="form-label">Net Weight (e.g. 500g / 1kg)</label>
+            <input type="text" id="pWeight" class="form-input" placeholder="e.g. 500g" required>
           </div>
           <div class="col form-group">
-            <label class="form-label">కొలతలు (L x W x H)</label>
-            <input type="text" id="pDim" class="form-input" placeholder="ఉదా: 15x10x5 cm">
+            <label class="form-label">Dimensions (L x W x H)</label>
+            <input type="text" id="pDimensions" class="form-input" placeholder="e.g. 15x10x5 cm" required>
           </div>
         </div>
 
         <div class="row">
           <div class="col form-group">
-            <label class="form-label">మెటీరియల్ రకం</label>
-            <input type="text" id="pMat" class="form-input" placeholder="ఆర్గానిక్ / కాటన్ / గ్లాస్">
+            <label class="form-label">Material / Fabric</label>
+            <input type="text" id="pMaterial" class="form-input" placeholder="e.g. Pure Cotton / Silk / Steel">
           </div>
           <div class="col form-group">
-            <label class="form-label">రంగు (Color)</label>
-            <input type="text" id="pColor" class="form-input" placeholder="ఉదా: రెడ్, బ్రౌన్">
+            <label class="form-label">Color</label>
+            <input type="text" id="pColor" class="form-input" placeholder="e.g. Maroon / Pink / Gold">
           </div>
         </div>
 
+        <!-- మెటీరియల్ స్వభావం (Hazardous or Non-Hazardous) -->
         <div class="form-group">
-          <label class="form-label">మెటీరియల్ స్వభావం (హానికరమా కాదా?)</label>
+          <label class="form-label">Material Nature / Hazard</label>
           <select id="pHazard" class="form-select">
-            <option value="Non-Hazardous">సాధారణమైనది (సురక్షితమైన వస్తువు)</option>
-            <option value="Fragile">పగిలిపోయే స్వభావం (గాజు/మట్టి)</option>
-            <option value="Liquid">ద్రవ పదార్థం (Liquid/నూనెలు)</option>
-            <option value="Hazardous">ప్రమాదకరమైనది / మండే స్వభావం</option>
+            <option value="Non-Hazardous">Safe / Non-Hazardous (సాధారణమైనది)</option>
+            <option value="Fragile">Fragile (గాజు / సున్నితమైన వస్తువు)</option>
+            <option value="Liquid">Liquid / Oil (ద్రవ పదార్థాలు)</option>
+            <option value="Hazardous">Flammable / Hazardous (మండే స్వభావం)</option>
           </select>
         </div>
 
-        <!-- ఆహార పదార్థాల కోసం FSSAI & ఎక్స్‌పైరీ డేట్ -->
-        <div id="foodSection">
+        <!-- ప్యాకింగ్ వివరాలు (Packaging Type) -->
+        <div class="form-group">
+          <label class="form-label">Packaging Type (ప్యాకింగ్ వివరాలు)</label>
+          <select id="pPackaging" class="form-select">
+            <option value="Corrugated Box">Corrugated Box (బాక్స్ ప్యాకింగ్ - రక్షణ)</option>
+            <option value="Poly Bag / Flyer">Poly Bag / Flyer (ఫ్లైయర్ బ్యాగ్ - బట్టలకు)</option>
+            <option value="Bubble Wrap">Bubble Wrap (బబుల్ ర్యాప్ - పగిలే వస్తువులకు)</option>
+          </select>
+        </div>
+
+        <!-- Food items verification: FSSAI License & Expiry -->
+        <div id="foodComplianceGroup" style="display: none; background: #fdfaf6; padding: 12px; border-radius: 8px; margin-bottom: 14px; border: 1px solid #ffe0b2;">
           <div class="form-group">
-            <label class="form-label" style="color: #2e7d32;"><i class="fa-solid fa-certificate me-1"></i>FSSAI ఫుడ్ లైసెన్స్ నంబర్</label>
-            <input type="text" id="pFssai" class="form-input" placeholder="14 అంకెల FSSAI నంబర్">
+            <label class="form-label" style="color: #2e7d32;"><i class="fa-solid fa-certificate me-1"></i> FSSAI Food License Number</label>
+            <input type="text" id="pFssai" class="form-input" placeholder="14-digit FSSAI License Number">
           </div>
-          <div class="form-group">
-            <label class="form-label"><i class="fa-regular fa-calendar me-1"></i>వ్యాలిడిటీ / ఎక్స్‌పైరీ తేదీ (Expiry Date)</label>
+          <div class="form-group" style="margin-bottom: 0;">
+            <label class="form-label"><i class="fa-regular fa-calendar me-1"></i> Expiry / Best Before Date</label>
             <input type="date" id="pExpiry" class="form-input">
           </div>
         </div>
 
-        <button type="submit" id="btnLive" class="btn">
-          <i class="fa-solid fa-cloud-arrow-up me-1"></i>ప్రొడక్ట్ పూర్తి వివరాలతో లైవ్ చేయండి
+        <button type="submit" id="btnPublishProduct" class="btn-primary-action">
+          <i class="fa-solid fa-cloud-arrow-up me-1"></i> Publish Product Live
         </button>
       </form>
     </div>
@@ -184,110 +204,121 @@
 
   <script>
     const API = "https://meestore.onrender.com/api";
-    let curSeller = JSON.parse(localStorage.getItem('meestore_seller'));
-    let imgBase64 = "";
+    let activeSeller = JSON.parse(localStorage.getItem('meestore_seller'));
+    let base64ImageData = "";
 
-    function toggleSellerAuth(isLog) {
-      document.getElementById('sLoginForm').style.display = isLog ? 'block' : 'none';
-      document.getElementById('sRegForm').style.display = isLog ? 'none' : 'block';
-      document.getElementById('sLogBtn').classList.toggle('active', isLog);
-      document.getElementById('sRegBtn').classList.toggle('active', !isLog);
+    function switchSellerAuth(isLogin) {
+      document.getElementById('sellerLoginForm').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('sellerRegForm').style.display = isLogin ? 'none' : 'block';
+      document.getElementById('tabSellerLoginBtn').classList.toggle('active', isLogin);
+      document.getElementById('tabSellerRegBtn').classList.toggle('active', !isLogin);
     }
 
-    // Camera & Gallery Image Preview
-    function previewImage(input) {
+    function handleImageSelection(input) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
         reader.onload = function(e) {
-          imgBase64 = e.target.result;
-          document.getElementById('previewContainer').innerHTML = `<img src="${imgBase64}">`;
+          base64ImageData = e.target.result;
+          document.getElementById('imagePreviewBox').innerHTML = `<img src="${base64ImageData}">`;
         };
         reader.readAsDataURL(input.files[0]);
       }
     }
 
-    function checkFoodCategory(val) {
-      const isFood = val.includes('కిరాణా');
-      document.getElementById('foodSection').style.display = isFood ? 'block' : 'none';
+    function toggleFoodFields(category) {
+      const isFood = category.includes('Grocery') || category.includes('Millets');
+      document.getElementById('foodComplianceGroup').style.display = isFood ? 'block' : 'none';
     }
 
-    async function handleSellerLogin(e) {
+    async function onSellerLoginSubmit(e) {
       e.preventDefault();
       try {
         const res = await fetch(`${API}/seller/login`, {
           method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            phone: document.getElementById('sLogPhone').value,
-            password: document.getElementById('sLogPass').value
+            phone: document.getElementById('sellerLogPhone').value,
+            password: document.getElementById('sellerLogPass').value
           })
         });
         const d = await res.json();
         if (res.ok) {
           localStorage.setItem('meestore_seller', JSON.stringify(d));
-          curSeller = d;
-          showDashboard();
-        } else alert(d.error || "లాగిన్ విఫలమైంది");
-      } catch(err) { alert("సర్వర్‌తో కనెక్ట్ కాలేకపోయాం"); }
+          activeSeller = d;
+          displayDashboard();
+        } else {
+          alert(d.error || "Login failed! Please check credentials.");
+        }
+      } catch (err) {
+        alert("Unable to connect to server. Please try again.");
+      }
     }
 
-    async function handleSellerRegister(e) {
+    async function onSellerRegisterSubmit(e) {
       e.preventDefault();
       try {
         const res = await fetch(`${API}/seller/register`, {
           method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({
-            shop_name: document.getElementById('sRegShop').value,
-            phone: document.getElementById('sRegPhone').value,
-            aadhar: document.getElementById('sRegAadhar').value,
-            upi_id: document.getElementById('sRegUpi').value,
-            password: document.getElementById('sRegPass').value
+            shop_name: document.getElementById('sellerRegShop').value,
+            phone: document.getElementById('sellerRegPhone').value,
+            aadhar: document.getElementById('sellerRegAadhar').value,
+            upi_id: document.getElementById('sellerRegUpi').value,
+            password: document.getElementById('sellerRegPass').value
           })
         });
         const d = await res.json();
         if (res.ok) {
-          alert("🎉 ఆధార్ KYC తో సెల్లర్ రిజిస్ట్రేషన్ పూర్తయింది! ఇప్పుడు లాగిన్ అవ్వండి.");
-          toggleSellerAuth(true);
-        } else alert(d.error || "రిజిస్ట్రేషన్ విఫలమైంది");
-      } catch(err) { alert("రిజిస్ట్రేషన్ ప్రాసెస్ కాలేదు"); }
+          alert("🎉 Seller registered successfully with Aadhaar KYC! Please sign in.");
+          switchSellerAuth(true);
+        } else {
+          alert(d.error || "Registration failed!");
+        }
+      } catch (err) {
+        alert("Registration request could not be processed.");
+      }
     }
 
-    function showDashboard() {
-      if (!curSeller) return;
-      document.getElementById('authBox').style.display = 'none';
-      document.getElementById('dashBox').style.display = 'block';
-      document.getElementById('welcomeShop').innerText = `హలో, ${curSeller.shop_name}!`;
+    function displayDashboard() {
+      if (!activeSeller) return;
+      document.getElementById('sellerAuthCard').style.display = 'none';
+      document.getElementById('sellerDashboardCard').style.display = 'block';
+      document.getElementById('shopWelcomeTitle').innerText = `Welcome, ${activeSeller.shop_name}!`;
     }
 
-    function logoutSeller() {
+    function sellerLogout() {
       localStorage.removeItem('meestore_seller');
       location.reload();
     }
 
-    async function handleAddProduct(e) {
+    async function onAddProductSubmit(e) {
       e.preventDefault();
-      if (!imgBase64) { alert("దయచేసి కెమెరా లేదా గ్యాలరీ నుండి ప్రొడక్ట్ ఫోటో ఎంచుకోండి!"); return; }
+      if (!base64ImageData) {
+        alert("Please select a product photo from camera or gallery!");
+        return;
+      }
 
-      const btn = document.getElementById('btnLive');
+      const btn = document.getElementById('btnPublishProduct');
       btn.disabled = true;
-      btn.innerText = "అప్‌లోడ్ అవుతోంది...";
+      btn.innerText = "Publishing Product...";
 
       const payload = {
-        seller_id: curSeller.id,
+        seller_id: activeSeller.id,
         name: document.getElementById('pName').value,
         category: document.getElementById('pCategory').value,
         price: document.getElementById('pPrice').value,
         mrp: document.getElementById('pPrice').value,
         stock: document.getElementById('pStock').value,
-        image_url: imgBase64,
-        seller_phone: curSeller.phone,
-        seller_upi: curSeller.upi_id,
+        image_url: base64ImageData,
+        seller_phone: activeSeller.phone,
+        seller_upi: activeSeller.upi_id,
         weight: document.getElementById('pWeight').value,
-        dimensions: document.getElementById('pDim').value,
-        material: document.getElementById('pMat').value,
+        dimensions: document.getElementById('pDimensions').value,
+        material: document.getElementById('pMaterial').value,
         color: document.getElementById('pColor').value,
         hazard_type: document.getElementById('pHazard').value,
+        packaging: document.getElementById('pPackaging').value,
         fssai: document.getElementById('pFssai').value,
         expiry: document.getElementById('pExpiry').value
       };
@@ -295,19 +326,26 @@
       try {
         const res = await fetch(`${API}/products`, {
           method: 'POST',
-          headers: {'Content-Type':'application/json'},
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(payload)
         });
         if (res.ok) {
-          alert("🎉 ప్రొడక్ట్ పూర్తి స్పెసిఫికేషన్లతో లైవ్ అయ్యింది!");
-          location.href = "index.html";
+          alert("🎉 Product published live with full packaging and logistics details!");
+          window.location.href = "index.html";
+        } else {
+          alert("Failed to save product on server.");
         }
-      } catch(err) { alert("సేవ్ చేయడం కుదరలేదు"); }
+      } catch (err) {
+        alert("Error connecting to server. Please try again.");
+      }
+
       btn.disabled = false;
-      btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-1"></i>ప్రొడక్ట్ పూర్తి వివరాలతో లైవ్ చేయండి`;
+      btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-1"></i> Publish Product Live`;
     }
 
-    if (curSeller) showDashboard();
+    if (activeSeller) {
+      displayDashboard();
+    }
   </script>
 </body>
 </html>
