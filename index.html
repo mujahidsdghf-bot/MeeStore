@@ -1,20 +1,20 @@
 <!DOCTYPE html>
-<html lang="te">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MeeStore</title>
+  <title>MeeStore - Online Shopping</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: #fff5f8; padding-bottom: 75px; }
 
-    /* 1. యాప్ ఓపెన్ అయ్యేటప్పుడు 1 సెకను వచ్చి పోయే లైట్ పింక్ & పర్పుల్ లోగో స్క్రీన్ */
+    /* 1. Big Splash Logo Screen (1.2 Seconds Auto Fade) */
     #appSplashScreen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: linear-gradient(135deg, #f8bbd0, #fce4ec, #e1bee7);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 999999; color: #4a148c;
+      z-index: 999999;
       animation: hideSplashNow 0.5s ease 1.2s forwards;
       pointer-events: none;
     }
@@ -22,28 +22,28 @@
       to { opacity: 0; visibility: hidden; display: none; }
     }
     .splash-logo-box {
-      width: 90px; height: 90px; background: white; border-radius: 22px;
+      width: 110px; height: 110px; background: white; border-radius: 28px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 44px; color: #9c27b0;
-      box-shadow: 0 8px 25px rgba(244, 143, 177, 0.5);
-      margin-bottom: 12px;
+      font-size: 56px; color: #9c27b0;
+      box-shadow: 0 12px 30px rgba(244, 143, 177, 0.6);
+      margin-bottom: 16px;
     }
 
-    /* Top Bar - పెద్దగా కనిపించే ఐకాన్లు */
-    .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #f8bbd0; display: flex; justify-content: space-between; align-items: center; }
-    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; }
-    .avatar-wrapper { position: relative; width: 42px; height: 42px; cursor: pointer; display: flex; align-items: center; }
-    .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ba68c8; }
-    .camera-badge { position: absolute; bottom: -2px; right: -2px; background: #9c27b0; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 8px; display: flex; align-items: center; justify-content: center; }
+    /* Top Bar */
+    .top-header { background: white; padding: 12px 16px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #f8bbd0; display: flex; justify-content: space-between; align-items: center; }
+    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.45rem; display: flex; align-items: center; gap: 8px; }
+    .avatar-wrapper { position: relative; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; }
+    .avatar-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #ba68c8; }
+    .camera-badge { position: absolute; bottom: -2px; right: -2px; background: #9c27b0; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 9px; display: flex; align-items: center; justify-content: center; }
 
     /* Search Bar */
-    .search-box { padding: 8px 12px; background: white; }
-    .search-input { width: 100%; padding: 10px 16px; border: 1px solid #f48fb1; border-radius: 20px; outline: none; font-size: 0.95rem; background: #fffcfd; }
+    .search-box { padding: 10px 14px; background: white; }
+    .search-input { width: 100%; padding: 11px 18px; border: 1px solid #f48fb1; border-radius: 24px; outline: none; font-size: 0.95rem; background: #fffcfd; }
 
-    /* Categories Horizontal Bar */
-    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 10px; padding: 10px 12px; background: white; border-bottom: 1px solid #f8bbd0; }
+    /* Horizontal Category Bar */
+    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 10px; padding: 10px 14px; background: white; border-bottom: 1px solid #f8bbd0; }
     .cat-scroll::-webkit-scrollbar { display: none; }
-    .cat-btn { border-radius: 20px; font-size: 0.85rem; padding: 6px 14px; border: 1px solid #f48fb1; background: white; color: #4a148c; cursor: pointer; font-weight: 600; }
+    .cat-btn { border-radius: 20px; font-size: 0.85rem; padding: 7px 16px; border: 1px solid #f48fb1; background: white; color: #4a148c; cursor: pointer; font-weight: 600; }
     .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
 
     /* Product Grid */
@@ -53,9 +53,9 @@
     .card-body { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; }
     .badge { display: inline-block; font-size: 0.7rem; background: #fce4ec; color: #ad1457; padding: 3px 8px; border-radius: 6px; margin-bottom: 6px; align-self: flex-start; font-weight: 600; }
     .product-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #333; }
-    .product-price { font-size: 1.1rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
+    .product-price { font-size: 1.15rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
 
-    /* Meesho Tabs */
+    /* Full App Pages (Tabs) */
     .app-page { display: none; }
     .app-page.active-page { display: block; }
 
@@ -76,11 +76,11 @@
 </head>
 <body>
 
-  <!-- 1. యాప్ ఓపెన్ అయ్యేటప్పుడు కనిపించే లోగో స్క్రీన్ -->
+  <!-- 1. Big Splash Logo Screen -->
   <div id="appSplashScreen">
     <div class="splash-logo-box"><i class="fa-solid fa-bag-shopping"></i></div>
-    <h2 style="font-weight: 800; letter-spacing: 0.5px; color: #4a148c;">MeeStore</h2>
-    <p style="font-size: 0.85rem; color: #880e4f; font-weight: 600; margin-top: 4px;">మహిళలకు నమ్మకమైన షాపింగ్ స్టోర్ 🌸</p>
+    <h1 style="font-weight: 800; font-size: 1.8rem; color: #4a148c; letter-spacing: 0.5px;">MeeStore</h1>
+    <p style="font-size: 0.9rem; color: #880e4f; font-weight: 600; margin-top: 4px;">Smart Shopping for Everyone 🌸</p>
   </div>
 
   <!-- Top App Bar -->
@@ -93,63 +93,75 @@
       <input type="file" id="buyerPicInput" accept="image/*" style="display: none;" onchange="uploadBuyerPic(this)">
       <div style="cursor: pointer;">
         <div class="brand-title"><i class="fa-solid fa-bag-shopping"></i> MeeStore</div>
-        <div style="font-size: 0.75rem; color: #ad1457; font-weight: bold;" id="welcomeUserText">హలో, లాగిన్ అవ్వండి &gt;</div>
+        <div style="font-size: 0.75rem; color: #ad1457; font-weight: bold;" id="welcomeUserText">Hello, Sign In &gt;</div>
       </div>
     </div>
     <div style="display: flex; gap: 10px; align-items: center;">
-      <a href="admin.html" style="background: #fce4ec; padding: 6px 12px; border-radius: 15px; font-size: 0.75rem; text-decoration: none; color: #ad1457; font-weight: bold; border: 1px solid #f48fb1;">అడ్మిన్</a>
+      <a href="admin.html" style="background: #fce4ec; padding: 6px 12px; border-radius: 15px; font-size: 0.75rem; text-decoration: none; color: #ad1457; font-weight: bold; border: 1px solid #f48fb1;">Admin</a>
       <button onclick="navigateTo('cartPage')" style="background: white; border: 1px solid #f48fb1; border-radius: 18px; padding: 6px 12px; font-size: 0.95rem; cursor: pointer; color: #9c27b0;">
         <i class="fa-solid fa-cart-shopping"></i> <span id="cartCount" style="color: #d81b60; font-weight: bold;">0</span>
       </button>
     </div>
   </div>
 
-  <!-- 1. హోమ్ పేజీ -->
+  <!-- 1. Home Page -->
   <div id="homePage" class="app-page active-page">
     <div class="search-box">
-      <input type="text" id="searchInput" class="search-input" placeholder="చీరలు, కిరాణా, జ్యువెలరీ వస్తువులను వెతకండి...">
+      <input type="text" id="searchInput" class="search-input" placeholder="Search Sarees, Groceries, Jewelry, Kurtis...">
     </div>
 
     <div class="cat-scroll" id="catScroll">
-      <button class="cat-btn active" onclick="filterCat('all', this)">అన్నీ (All)</button>
+      <button class="cat-btn active" onclick="filterCat('all', this)">All</button>
       <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
-      <button class="cat-btn" onclick="filterCat('కిరాణా & సిరిధాన్యాలు', this)">🌾 కిరాణా & ఫుడ్</button>
-      <button class="cat-btn" onclick="filterCat('ఫ్యాన్సీ & జ్యువెలరీ', this)">💍 జ్యువెలరీ</button>
-      <button class="cat-btn" onclick="filterCat('జనరల్ & పూజా స్టోర్', this)">🪔 జనరల్</button>
+      <button class="cat-btn" onclick="filterCat('Grocery & Millets', this)">🌾 Grocery & Millets</button>
+      <button class="cat-btn" onclick="filterCat('Jewelry & Fancy', this)">💍 Jewelry & Fancy</button>
+      <button class="cat-btn" onclick="filterCat('General & Pooja', this)">🪔 General & Pooja</button>
       <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
-      <button class="cat-btn" onclick="filterCat('ఫుట్‌వేర్', this)">👠 ఫుట్‌వేర్</button>
+      <button class="cat-btn" onclick="filterCat('Footwear', this)">👠 Footwear</button>
     </div>
 
-    <div class="product-grid" id="productGrid"></div>
+    <!-- Direct Rendered Product Grid -->
+    <div class="product-grid" id="productGrid">
+      <div class="product-card" onclick="showFullProductDetails(1)">
+        <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" class="product-img">
+        <div class="card-body">
+          <span class="badge">Grocery & Millets</span>
+          <div class="product-title">Little millets (Organic 500g)</div>
+          <div style="font-size:0.75rem; color:#666;">Weight: <b>500g</b></div>
+          <div class="product-price">₹20</div>
+          <button style="background:#9c27b0; color:white; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="event.stopPropagation(); showFullProductDetails(1)">View & Buy</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <!-- 2. ప్రొడక్ట్ వివరాల పేజీ -->
+  <!-- 2. Full Product Details Page (Meesho Style) -->
   <div id="productDetailPage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
-      <span class="page-title" id="pDetailHeader">ఉత్పత్తి పూర్తి వివరాలు</span>
+      <span class="page-title" id="pDetailHeader">Product Specifications</span>
     </div>
 
     <img id="pDetailImg" src="" style="width: 100%; height: 290px; object-fit: contain; background: #fff; border-bottom: 1px solid #f8bbd0;">
     
     <div style="padding: 16px; background: white; margin-bottom: 12px; border-bottom: 1px solid #fce4ec;">
-      <h2 id="pDetailName" style="font-size: 1.25rem; margin-bottom: 6px; color: #222;">పేరు</h2>
+      <h2 id="pDetailName" style="font-size: 1.25rem; margin-bottom: 6px; color: #222;">Product Title</h2>
       <div id="pDetailPrice" style="font-size: 1.5rem; font-weight: 800; color: #9c27b0; margin-bottom: 6px;">₹0</div>
       <span class="badge" id="pDetailCat">Category</span>
     </div>
 
     <div style="padding: 16px; background: white; margin-bottom: 85px; border-radius: 12px; margin-left: 12px; margin-right: 12px; border: 1px solid #f8bbd0;">
-      <h3 style="font-size: 1rem; margin-bottom: 14px; border-bottom: 2px solid #9c27b0; display: inline-block; padding-bottom: 4px; color: #4a148c;">సరుకు పూర్తి స్పెసిఫికేషన్లు (Specifications)</h3>
-      <div class="spec-row"><span>బరువు (Weight):</span><b id="pDetailWeight">-</b></div>
-      <div class="spec-row"><span>కొలతలు (L x W x H):</span><b id="pDetailDim">-</b></div>
-      <div class="spec-row"><span>ప్యాకింగ్ రకం:</span><b id="pDetailPackaging" style="color: #6a1b9a;">-</b></div>
-      <div class="spec-row"><span>మెటీరియల్ రకం:</span><b id="pDetailMat">-</b></div>
-      <div class="spec-row"><span>రంగు (Color):</span><b id="pDetailColor">-</b></div>
-      <div class="spec-row"><span>సరుకు స్వభావం:</span><b id="pDetailHazard">-</b></div>
-      <div class="spec-row"><span>FSSAI ఫుడ్ లైసెన్స్:</span><b id="pDetailFssai" style="color: green;">-</b></div>
-      <div class="spec-row"><span>ఎక్స్‌పైరీ డేట్:</span><b id="pDetailExpiry">-</b></div>
-      <div class="spec-row"><span>కొరియర్ డెలివరీ:</span><b style="color: #0288d1;">Delhivery / Shiprocket ఇంటికే డెలివరీ</b></div>
-      <div class="spec-row"><span>రిటర్న్ పాలసీ:</span><b style="color: #2e7d32;">7 రోజుల సులభ రిటర్న్స్ & రీఫండ్స్</b></div>
+      <h3 style="font-size: 1rem; margin-bottom: 14px; border-bottom: 2px solid #9c27b0; display: inline-block; padding-bottom: 4px; color: #4a148c;">Logistics & Product Details</h3>
+      <div class="spec-row"><span>Net Weight:</span><b id="pDetailWeight">-</b></div>
+      <div class="spec-row"><span>Dimensions (L x W x H):</span><b id="pDetailDim">-</b></div>
+      <div class="spec-row"><span>Packaging Type:</span><b id="pDetailPackaging" style="color: #6a1b9a;">-</b></div>
+      <div class="spec-row"><span>Material / Fabric:</span><b id="pDetailMat">-</b></div>
+      <div class="spec-row"><span>Color:</span><b id="pDetailColor">-</b></div>
+      <div class="spec-row"><span>Hazard / Flammability:</span><b id="pDetailHazard">-</b></div>
+      <div class="spec-row"><span>FSSAI License:</span><b id="pDetailFssai" style="color: green;">-</b></div>
+      <div class="spec-row"><span>Expiry Date:</span><b id="pDetailExpiry">-</b></div>
+      <div class="spec-row"><span>Courier Shipping:</span><b style="color: #0288d1;">Delhivery / Shiprocket Express</b></div>
+      <div class="spec-row"><span>Return Policy:</span><b style="color: #2e7d32;">7 Days Easy Return & Refund</b></div>
     </div>
 
     <div class="action-btn-bar">
@@ -162,82 +174,82 @@
     </div>
   </div>
 
-  <!-- 3. కేటగిరీల పేజీ -->
+  <!-- 3. Categories Page -->
   <div id="categoriesPage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
-      <span class="page-title">అన్ని కేటగిరీలు (Categories)</span>
+      <span class="page-title">All Categories</span>
     </div>
     <div style="padding: 14px;" id="catListContainer"></div>
   </div>
 
-  <!-- 4. కార్ట్ పేజీ -->
+  <!-- 4. Cart Page -->
   <div id="cartPage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
-      <span class="page-title">మీ కార్ట్</span>
+      <span class="page-title">Shopping Cart</span>
     </div>
     <div style="padding: 14px;" id="cartListContainer"></div>
     <div class="action-btn-bar" id="cartBarFooter" style="display: none;">
       <div style="flex: 1;">
-        <span style="font-size: 0.75rem; color: #666;">మొత్తం ధర:</span><br>
+        <span style="font-size: 0.75rem; color: #666;">Total Amount:</span><br>
         <b style="font-size: 1.25rem; color: #9c27b0;">₹<span id="cartTotalSum">0</span></b>
       </div>
-      <button onclick="startCheckoutCart()" style="flex: 1; padding: 13px; background: #9c27b0; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">ఆర్డర్ చేయండి &gt;</button>
+      <button onclick="startCheckoutCart()" style="flex: 1; padding: 13px; background: #9c27b0; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Checkout &gt;</button>
     </div>
   </div>
 
-  <!-- 5. చెక్‌అవుట్ పేజీ -->
+  <!-- 5. Checkout & Shipping Page -->
   <div id="checkoutPage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
-      <span class="page-title">ఆర్డర్ చెక్‌అవుట్</span>
+      <span class="page-title">Order Checkout</span>
     </div>
 
     <div style="padding: 15px; padding-bottom: 40px;">
       <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #f8bbd0;">
-        <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-location-dot text-danger me-1"></i>డెలివరీ చిరునామా (కొరియర్ డెలివరీ కోసం)</h4>
-        <textarea id="checkAddress" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem;" rows="2" placeholder="ఇంటి నంబర్, వీధి, ఊరు, జిల్లా, పిన్‌కోడ్"></textarea>
+        <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-location-dot text-danger me-1"></i>Delivery Address</h4>
+        <textarea id="checkAddress" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem;" rows="2" placeholder="House No, Street, Landmark, City, Pincode"></textarea>
       </div>
 
       <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #f8bbd0;">
-        <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-ticket text-warning me-1"></i>డిస్కౌంట్ కూపన్</h4>
+        <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-ticket text-warning me-1"></i>Apply Coupon</h4>
         <div style="display: flex; gap: 8px;">
-          <input type="text" id="couponInput" placeholder="MEE50 ఎంటర్ చేయండి" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; text-transform: uppercase;">
+          <input type="text" id="couponInput" placeholder="Enter MEE50" style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; text-transform: uppercase;">
           <button onclick="applyDiscountCoupon()" style="padding: 10px 18px; background: #4a148c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Apply</button>
         </div>
         <small id="couponFeedback" style="color: green; display: block; margin-top: 5px; font-weight: bold;"></small>
       </div>
 
       <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #f8bbd0;">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>సరుకు మొత్తం:</span><span>₹<span id="billSub">0</span></span></div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: green;"><span>కూపన్ డిస్కౌంట్:</span><span>-₹<span id="billDisc">0</span></span></div>
-        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #0288d1;"><span>కొరియర్ షిప్పింగ్:</span><span>ఉచితం (FREE)</span></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Item Total:</span><span>₹<span id="billSub">0</span></span></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: green;"><span>Coupon Discount:</span><span>-₹<span id="billDisc">0</span></span></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #0288d1;"><span>Shipping Fee:</span><span>FREE</span></div>
         <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.15rem; border-top: 1px solid #eee; padding-top: 10px;">
-          <span>మొత్తం చెల్లించాల్సింది:</span><span style="color: #9c27b0;">₹<span id="billFinal">0</span></span>
+          <span>To Pay:</span><span style="color: #9c27b0;">₹<span id="billFinal">0</span></span>
         </div>
       </div>
 
       <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 16px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
-        <p style="font-size: 0.9rem; color: #166534; margin-bottom: 10px; font-weight: bold;">GPay / PhonePe / Paytm ద్వారా చెల్లించండి</p>
+        <p style="font-size: 0.9rem; color: #166534; margin-bottom: 10px; font-weight: bold;">Pay via UPI (GPay / PhonePe / Paytm)</p>
         <a id="btnDirectUpiLink" href="#" style="display: block; background: #16a34a; color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-bottom: 10px;">
           <i class="fa-solid fa-mobile-screen me-2"></i>Pay via UPI App
         </a>
-        <p style="font-size: 0.8rem; color: #666; margin-bottom: 6px;">లేదా వేరే మొబైల్ తో QR స్కాన్ చేయండి:</p>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 6px;">Or scan QR with another phone:</p>
         <img id="upiQrImg" src="" style="max-width: 130px; border: 1px solid #ddd; padding: 4px; background: white; border-radius: 6px;">
       </div>
 
       <button onclick="placeWhatsAppOrder()" style="width: 100%; padding: 14px; background: #9c27b0; color: white; border: none; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer; box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);">
-        <i class="fa-brands fa-whatsapp me-2"></i>ఆర్డర్ కన్ఫర్మ్ చేయండి (కొరియర్ అలర్ట్)
+        <i class="fa-brands fa-whatsapp me-2"></i>Confirm Order (Instant Alert)
       </button>
     </div>
   </div>
 
-  <!-- 6. బయ్యర్ ప్రొఫైల్ పేజీ -->
+  <!-- 6. Buyer Profile Page -->
   <div id="profilePage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
-      <span class="page-title">కస్టమర్ ప్రొఫైల్ & సెట్టింగ్స్</span>
+      <span class="page-title">My Profile & Settings</span>
     </div>
 
     <div style="padding: 15px;">
@@ -245,46 +257,43 @@
         <div style="display: flex; align-items: center; gap: 15px; background: white; padding: 16px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #f8bbd0;">
           <img id="profImgBig" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #9c27b0;">
           <div>
-            <h3 id="profNameBig" style="font-size: 1.15rem; color: #333;">పేరు</h3>
-            <p id="profPhoneBig" style="font-size: 0.85rem; color: #666;">ఫోన్</p>
+            <h3 id="profNameBig" style="font-size: 1.15rem; color: #333;">Name</h3>
+            <p id="profPhoneBig" style="font-size: 0.85rem; color: #666;">Phone</p>
           </div>
         </div>
 
         <div style="background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f8bbd0; margin-bottom: 15px;">
           <div class="cat-box" onclick="toggleOrdersBox()">
-            <span><i class="fa-solid fa-box text-primary me-2"></i>నా ఆర్డర్లు &amp; కొరియర్ ట్రాకింగ్</span>
+            <span><i class="fa-solid fa-box text-primary me-2"></i>My Orders & Tracking</span>
             <i class="fa-solid fa-chevron-right text-muted"></i>
           </div>
-          <div class="cat-box" onclick="alert('రిటర్న్ అభ్యర్థన నమోదు చేయబడింది! కొరియర్ బాయ్ వచ్చి సరుకు తీసుకుంటారు.')">
-            <span><i class="fa-solid fa-rotate-left text-warning me-2"></i>రిటర్న్స్ &amp; రీఫండ్స్ (Returns)</span>
+          <div class="cat-box" onclick="alert('Return request placed! Courier partner will pick up soon.')">
+            <span><i class="fa-solid fa-rotate-left text-warning me-2"></i>Returns & Refunds</span>
             <i class="fa-solid fa-chevron-right text-muted"></i>
           </div>
           <div class="cat-box" onclick="editBankDetailsPrompt()">
-            <span><i class="fa-solid fa-building-columns text-success me-2"></i>బ్యాంక్ &amp; UPI వివరాలు (రీఫండ్స్ కొరకు)</span>
+            <span><i class="fa-solid fa-building-columns text-success me-2"></i>Bank & UPI Details (For Refunds)</span>
             <i class="fa-solid fa-chevron-right text-muted"></i>
           </div>
           <div class="cat-box" onclick="editDeliveryAddressPrompt()">
-            <span><i class="fa-solid fa-location-dot text-danger me-2"></i>డెలివరీ చిరునామా మార్చండి</span>
+            <span><i class="fa-solid fa-location-dot text-danger me-2"></i>Edit Delivery Address</span>
             <i class="fa-solid fa-chevron-right text-muted"></i>
           </div>
-          <div class="cat-box" onclick="alert('సెక్యూరిటీ: SHA-256 పాస్‌వర్డ్ ఎన్‌క్రిప్షన్ & SSL సురక్షితంగా ఉన్నాయి.')">
-            <span><i class="fa-solid fa-shield-halved text-info me-2"></i>ఖాతా భద్రత &amp; సైబర్ సెక్యూరిటీ</span>
+          <div class="cat-box" onclick="alert('Security: SHA-256 password protection & SSL are active.')">
+            <span><i class="fa-solid fa-shield-halved text-info me-2"></i>Account Security</span>
             <i class="fa-solid fa-chevron-right text-muted"></i>
           </div>
         </div>
 
         <div id="myOrdersListBox" style="display: none; background: white; padding: 14px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #f8bbd0;">
-          <h4 style="font-size: 0.95rem; margin-bottom: 8px; color: #4a148c;">ఆర్డర్ల వివరాలు:</h4>
-          <div id="ordersListItems">ఆర్డర్లు ఏవీ లేవు</div>
+          <h4 style="font-size: 0.95rem; margin-bottom: 8px; color: #4a148c;">Order Details:</h4>
+          <div id="ordersListItems">No orders yet</div>
         </div>
 
         <button onclick="buyerLogout()" style="width: 100%; padding: 13px; background: #e53935; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">
-          <i class="fa-solid fa-right-from-bracket me-2"></i>లాగౌట్
+          <i class="fa-solid fa-right-from-bracket me-2"></i>Sign Out
         </button>
       </div>
 
       <div id="guestLoginBox" style="background: white; padding: 18px; border-radius: 12px; border: 1px solid #f8bbd0;">
-        <h3 style="font-size: 1.15rem; color: #9c27b0; margin-bottom: 12px;">బయ్యర్ లాగిన్ / రిజిస్ట్రేషన్</h3>
-        <input type="tel" id="regPhone" placeholder="10 అంకెల మొబైల్ నంబర్" style="width: 100%; padding: 11px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px;">
-        <input type="text" id="regName" placeholder="మీ పూర్తి పేరు" style="width: 100%; padding: 11px; margin-bottom: 14px; border: 1px solid #ddd; border-radius: 8px;">
-        <button onclick="buyerQuickRegister()" style="width: 100%; padding: 13px; background: #9c27b0; color: white; border: none;
+        <h3 style="font-size: 1.15rem; color: #9c27b0; marg
