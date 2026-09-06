@@ -3,357 +3,620 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MeeStore - Seller Hub & Inventory</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <title>MeeStore - Online Shopping</title>
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #fff5f8; padding-bottom: 60px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     
-    .header { background: #9c27b0; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(156, 39, 176, 0.2); }
-    .header-title { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
-    .btn-back-store { color: white; text-decoration: none; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 18px; font-weight: 600; background: rgba(255,255,255,0.1); }
-    
-    .card { background: white; border-radius: 12px; padding: 18px; margin: 14px; box-shadow: 0 2px 10px rgba(244, 143, 177, 0.25); border: 1px solid #f8bbd0; }
-    .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-    .stat-box { background: white; border-radius: 10px; padding: 14px; border: 1px solid #fce4ec; border-left: 4px solid #9c27b0; box-shadow: 0 1px 4px rgba(0,0,0,0.03); }
-    .stat-title { font-size: 0.75rem; color: #666; font-weight: bold; }
-    .stat-val { font-size: 1.35rem; font-weight: 800; color: #333; margin-top: 4px; }
-    
-    .form-group { margin-bottom: 14px; }
-    .form-label { display: block; font-weight: 700; font-size: 0.85rem; margin-bottom: 6px; color: #4a148c; }
-    .form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.92rem; outline: none; background: #fffcfd; }
-    .row { display: flex; gap: 10px; }
-    .col { flex: 1; }
-    
-    .preview-box { width: 100%; height: 160px; border: 2px dashed #ba68c8; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #fafafa; overflow: hidden; margin-bottom: 8px; }
-    .preview-box img { width: 100%; height: 100%; object-fit: contain; }
-    
-    .btn-action { background: #9c27b0; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 0.95rem; }
-    .auth-tabs { display: flex; gap: 10px; margin-bottom: 16px; }
-    .auth-tab-btn { flex: 1; padding: 10px; border: 1px solid #f48fb1; background: white; border-radius: 8px; cursor: pointer; font-weight: 700; color: #666; font-size: 0.88rem; }
-    .auth-tab-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
+    body {
+      background: #f8f9fa;
+      padding-top: 60px;
+      padding-bottom: 70px;
+      min-height: 100vh;
+    }
+
+    /* Splash Screen with Guaranteed SVG Logo */
+    #splashScreen {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(135deg, #f8bbd0, #fce4ec, #e1bee7);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 9999999;
+      animation: autoFadeOut 0.4s ease-out 1.2s forwards;
+      pointer-events: none;
+    }
+    @keyframes autoFadeOut {
+      to { opacity: 0; visibility: hidden; display: none; }
+    }
+    .splash-box {
+      width: 110px; height: 110px; background: white; border-radius: 28px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 10px 25px rgba(244, 143, 177, 0.6);
+      margin-bottom: 14px;
+    }
+
+    /* Top Header */
+    .top-header {
+      position: fixed; top: 0; left: 0; right: 0; height: 60px;
+      background: #ffffff; padding: 0 14px; border-bottom: 1px solid #e0e0e0;
+      display: flex; justify-content: space-between; align-items: center;
+      z-index: 10000; box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+    }
+    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.3rem; display: flex; align-items: center; gap: 6px; cursor: pointer; }
+    .avatar-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #9c27b0; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; background: #f3e5f5; }
+    .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+    /* కింద ఎప్పుడూ కనిపించే బాటమ్ నావిగేషన్ బార్ */
+    .bottom-nav-bar {
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      height: 60px !important;
+      background: #ffffff !important;
+      border-top: 1px solid #e0e0e0 !important;
+      display: flex !important;
+      justify-content: space-around !important;
+      align-items: center !important;
+      z-index: 999999 !important;
+      box-shadow: 0 -2px 10px rgba(0,0,0,0.06) !important;
+    }
+    .nav-btn {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      color: #666;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-decoration: none;
+      gap: 3px;
+    }
+    .nav-btn.active {
+      color: #9c27b0 !important;
+      font-weight: 700;
+    }
+    .nav-btn svg {
+      width: 22px;
+      height: 22px;
+      fill: #666;
+    }
+    .nav-btn.active svg {
+      fill: #9c27b0;
+    }
+
+    /* Search & Categories */
+    .search-box { padding: 10px 14px; background: white; border-bottom: 1px solid #eee; }
+    .search-input { width: 100%; padding: 10px 16px; border: 1px solid #ccc; border-radius: 20px; outline: none; font-size: 0.92rem; background: #fdfdfd; }
+    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 10px 14px; background: white; border-bottom: 1px solid #eee; }
+    .cat-scroll::-webkit-scrollbar { display: none; }
+    .cat-btn { border-radius: 16px; font-size: 0.82rem; padding: 6px 14px; border: 1px solid #ddd; background: white; color: #333; font-weight: 600; cursor: pointer; }
+    .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
+
+    /* Product Grid */
+    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 10px; }
+    .product-card { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.08); display: flex; flex-direction: column; cursor: pointer; border: 1px solid #eee; }
+    .product-img { width: 100%; height: 160px; object-fit: cover; }
+    .card-body { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; }
+    .badge { display: inline-block; font-size: 0.65rem; background: #f3e5f5; color: #7b1fa2; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; align-self: flex-start; font-weight: 700; }
+    .product-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #333; }
+    .product-price { font-size: 1.1rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
+    .btn-buy-card { background: #9c27b0; color: white; border: none; padding: 8px; border-radius: 6px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.85rem; }
+
+    /* Full Screens (Overlays) */
+    .app-screen {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #f8f9fa; z-index: 20000; overflow-y: auto; display: none; padding-bottom: 80px;
+    }
+    .screen-header { background: white; padding: 14px 16px; border-bottom: 1px solid #e0e0e0; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 10; }
+    .screen-title { font-size: 1.15rem; font-weight: 700; color: #333; }
+    .spec-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; font-size: 0.9rem; }
+    .btn-action { width: 100%; padding: 13px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; }
+    .list-item-box { background: white; border-radius: 8px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #e0e0e0; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <!-- Header -->
-  <div class="header">
-    <div class="header-title"><i class="fa-solid fa-boxes-stacked"></i> Seller Hub</div>
-    <a href="index.html" class="btn-back-store"><i class="fa-solid fa-arrow-left me-1"></i> Store</a>
+  <!-- Splash Screen -->
+  <div id="splashScreen">
+    <div class="splash-box">
+      <svg width="60" height="60" viewBox="0 0 24 24" fill="#9c27b0"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
+    </div>
+    <h1 style="font-weight: 800; font-size: 1.8rem; color: #4a148c;">MeeStore</h1>
+    <p style="font-size: 0.9rem; color: #880e4f; font-weight: 600; margin-top: 4px;">Smart Shopping for Everyone 🌸</p>
   </div>
 
-  <!-- 1. Seller Login / Register Card -->
-  <div id="sellerAuthCard" class="card" style="max-width: 440px; margin: 24px auto;">
-    <div class="auth-tabs">
-      <button id="tabSellerLoginBtn" class="auth-tab-btn active" onclick="switchSellerAuth(true)">Sign In</button>
-      <button id="tabSellerRegBtn" class="auth-tab-btn" onclick="switchSellerAuth(false)">New Seller (KYC)</button>
+  <!-- Top Header -->
+  <header class="top-header">
+    <div style="display: flex; align-items: center; gap: 10px;" onclick="openScreen('profileScreen')">
+      <div class="avatar-btn">
+        <img id="buyerAvatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
+      </div>
+      <div>
+        <div class="brand-title">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#9c27b0" style="vertical-align: middle;"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
+          MeeStore
+        </div>
+        <div style="font-size: 0.72rem; color: #666; font-weight: bold;" id="welcomeUserText">Hello, Sign In &gt;</div>
+      </div>
     </div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+      <a href="admin.html" style="background: #f3e5f5; padding: 6px 12px; border-radius: 14px; font-size: 0.75rem; text-decoration: none; color: #7b1fa2; font-weight: bold; border: 1px solid #e1bee7;">Admin</a>
+      <button onclick="openScreen('cartScreen')" style="background: white; border: 1px solid #ccc; border-radius: 16px; padding: 6px 12px; font-size: 0.85rem; cursor: pointer; color: #333; font-weight: 600;">
+        🛒 Cart (<span id="cartCount" style="color: #9c27b0; font-weight: bold;">0</span>)
+      </button>
+    </div>
+  </header>
 
-    <form id="sellerLoginForm" onsubmit="onSellerLoginSubmit(event)">
-      <div class="form-group">
-        <label class="form-label">Registered Mobile Number</label>
-        <input type="tel" id="sellerLogPhone" class="form-input" placeholder="10-digit mobile" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input type="password" id="sellerLogPass" class="form-input" placeholder="Password" required>
-      </div>
-      <button type="submit" class="btn-action">Sign In to Inventory</button>
-    </form>
-
-    <form id="sellerRegForm" style="display: none;" onsubmit="onSellerRegisterSubmit(event)">
-      <div class="form-group">
-        <label class="form-label">Shop / Brand Name</label>
-        <input type="text" id="sellerRegShop" class="form-input" placeholder="e.g. Organic Millet Store" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Mobile Number</label>
-        <input type="tel" id="sellerRegPhone" class="form-input" placeholder="10-digit mobile" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Aadhaar Card Number (KYC)</label>
-        <input type="text" id="sellerRegAadhar" class="form-input" placeholder="12-digit Aadhaar" maxlength="12" pattern="\d{12}" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Seller UPI ID</label>
-        <input type="text" id="sellerRegUpi" class="form-input" placeholder="name@upi" required>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Create Password</label>
-        <input type="password" id="sellerRegPass" class="form-input" placeholder="Password" required>
-      </div>
-      <button type="submit" class="btn-action" style="background: #2e7d32;">Complete KYC Register</button>
-    </form>
+  <!-- Search Box -->
+  <div class="search-box">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search Sarees, Groceries, Kurtis, Jewelry...">
   </div>
 
-  <!-- 2. Seller Inventory & Stock Dashboard -->
-  <div id="sellerDashboardCard" style="display: none; max-width: 700px; margin: 14px auto;">
-    
-    <!-- Seller Info Banner -->
-    <div class="card" style="margin-bottom: 10px;">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <h3 id="shopWelcomeTitle" style="font-size: 1.15rem; color: #4a148c; font-weight: 800;">Welcome, Seller!</h3>
-          <small style="color: #666;">Store ID: #SLR-9177 | Active Verified</small>
-        </div>
-        <button onclick="sellerLogout()" style="background: #e53935; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 700;">Sign Out</button>
-      </div>
+  <!-- Category Filter Bar -->
+  <div class="cat-scroll">
+    <button class="cat-btn active" onclick="filterCat('all', this)">All</button>
+    <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
+    <button class="cat-btn" onclick="filterCat('Grocery & Millets', this)">🌾 Grocery & Millets</button>
+    <button class="cat-btn" onclick="filterCat('Jewelry & Fancy', this)">💍 Jewelry & Fancy</button>
+    <button class="cat-btn" onclick="filterCat('General & Pooja', this)">🪔 General & Pooja</button>
+    <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
+    <button class="cat-btn" onclick="filterCat('Footwear', this)">👠 Footwear</button>
+  </div>
+
+  <!-- Product Grid -->
+  <div class="product-grid" id="productGrid"></div>
+
+  <!-- SCREEN 1: PRODUCT DETAILS -->
+  <div id="productDetailScreen" class="app-screen">
+    <div class="screen-header">
+      <span style="cursor:pointer; font-weight:bold; color:#9c27b0;" onclick="closeAllScreens()">← Back</span>
+      <span class="screen-title" id="pDetailHeaderTitle">Product Specifications</span>
     </div>
-
-    <!-- సెల్లర్ స్టాక్, అమ్మకాలు & రిటర్న్స్ రిపోర్ట్ -->
-    <div class="stat-grid" style="padding: 0 14px;">
-      <div class="stat-box" style="border-left-color: #2e7d32;">
-        <div class="stat-title">అందుబాటులో ఉన్న స్టాక్ (In Stock)</div>
-        <div class="stat-val" id="sellerStockCount" style="color: #2e7d32;">48 Units</div>
-      </div>
-      <div class="stat-box" style="border-left-color: #0288d1;">
-        <div class="stat-title">అమ్ముడైన సరుకులు (Dispatched)</div>
-        <div class="stat-val" style="color: #0288d1;">12 Orders</div>
-      </div>
-      <div class="stat-box" style="border-left-color: #d32f2f;">
-        <div class="stat-title">కస్టమర్ రిటర్న్స్ (Returns)</div>
-        <div class="stat-val" style="color: #d32f2f;">0 Returned</div>
-      </div>
-      <div class="stat-box" style="border-left-color: #f57c00;">
-        <div class="stat-title">మొత్తం ఆదాయం (UPI Received)</div>
-        <div class="stat-val" style="color: #f57c00;">₹ 3,420</div>
-      </div>
+    <img id="pDetailImg" src="" style="width: 100%; height: 280px; object-fit: contain; background: white; border-bottom: 1px solid #ddd;">
+    <div style="padding: 16px; background: white; margin-bottom: 10px; border-bottom: 1px solid #eee;">
+      <h2 id="pDetailName" style="font-size: 1.25rem; margin-bottom: 6px; color: #222;">Item Name</h2>
+      <div id="pDetailPrice" style="font-size: 1.5rem; font-weight: 800; color: #9c27b0; margin-bottom: 6px;">₹0</div>
+      <span class="badge" id="pDetailCat">Category</span>
     </div>
-
-    <!-- కొత్త సరుకు యాడ్ చేసే ఫామ్ -->
-    <div class="card">
-      <h4 style="font-size: 1rem; color: #4a148c; margin-bottom: 14px; border-bottom: 2px solid #f8bbd0; padding-bottom: 6px;">
-        <i class="fa-solid fa-plus-circle me-1"></i> Add New Stock Item
-      </h4>
-
-      <form onsubmit="onAddProductSubmit(event)">
-        <div class="form-group">
-          <label class="form-label">Product Name</label>
-          <input type="text" id="pName" class="form-input" placeholder="e.g. Organic Foxtail Millets / Kanchi Silk Saree" required>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Category</label>
-          <select id="pCategory" class="form-select" onchange="toggleFoodFields(this.value)" required>
-            <option value="Women Fashion">👗 Women Fashion</option>
-            <option value="Grocery & Millets">🌾 Grocery & Millets (Food Items)</option>
-            <option value="Jewelry & Fancy">💍 Jewelry & Fancy</option>
-            <option value="General & Pooja">🪔 General & Pooja Items</option>
-            <option value="Men Fashion">👕 Men Fashion</option>
-            <option value="Footwear">👠 Footwear</option>
-          </select>
-        </div>
-
-        <!-- Camera Image Compression -->
-        <div class="form-group">
-          <label class="form-label">Product Photo (Camera or Gallery)</label>
-          <div class="preview-box" id="imagePreviewBox">
-            <span style="color: #999; text-align: center;"><i class="fa-solid fa-camera fa-2x mb-1"></i><br>No image selected</span>
-          </div>
-          <input type="file" id="pImgInput" accept="image/*" class="form-input" onchange="compressAndPreview(this)" required>
-          <small id="imgStatusMsg" style="color: #2e7d32; font-weight: bold;"></small>
-        </div>
-
-        <div class="row">
-          <div class="col form-group">
-            <label class="form-label">Price (₹)</label>
-            <input type="number" id="pPrice" class="form-input" placeholder="Selling Price" required>
-          </div>
-          <div class="col form-group">
-            <label class="form-label">Stock Quantity (లభ్యత సంఖ్య)</label>
-            <input type="number" id="pStock" class="form-input" value="20" placeholder="Available Quantity" required>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col form-group">
-            <label class="form-label">Net Weight (బరువు)</label>
-            <input type="text" id="pWeight" class="form-input" placeholder="e.g. 500g / 1kg" required>
-          </div>
-          <div class="col form-group">
-            <label class="form-label">Dimensions (L x W x H)</label>
-            <input type="text" id="pDimensions" class="form-input" placeholder="e.g. 15x10x5 cm" required>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col form-group">
-            <label class="form-label">Material / Fabric</label>
-            <input type="text" id="pMaterial" class="form-input" placeholder="e.g. Organic Grain / Cotton">
-          </div>
-          <div class="col form-group">
-            <label class="form-label">Color</label>
-            <input type="text" id="pColor" class="form-input" placeholder="e.g. Natural Brown / Pink">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Material Nature / Hazard (హానికరమా కాదా?)</label>
-          <select id="pHazard" class="form-select">
-            <option value="Non-Hazardous / Safe">Safe / Non-Hazardous (Regular Item)</option>
-            <option value="Fragile">Fragile (Glass / Clay / Breakable)</option>
-            <option value="Liquid">Liquid / Oil (Bottled)</option>
-            <option value="Hazardous">Flammable / Dangerous</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Packaging Type (ప్యాకింగ్ రకం)</label>
-          <select id="pPackaging" class="form-select">
-            <option value="Corrugated Box">Corrugated Box (Hard Cardboard Box - High Safety)</option>
-            <option value="Poly Bag / Flyer">Poly Bag / Flyer (Plastic Courier Bag)</option>
-            <option value="Bubble Wrap">Bubble Wrap (Shock Absorption)</option>
-          </select>
-        </div>
-
-        <div id="foodComplianceGroup" style="display: none; background: #fdfaf6; padding: 12px; border-radius: 8px; margin-bottom: 14px; border: 1px solid #ffe0b2;">
-          <div class="form-group">
-            <label class="form-label" style="color: #2e7d32;"><i class="fa-solid fa-certificate me-1"></i> FSSAI Food License Number</label>
-            <input type="text" id="pFssai" class="form-input" placeholder="14-digit FSSAI License">
-          </div>
-          <div class="form-group" style="margin-bottom: 0;">
-            <label class="form-label"><i class="fa-regular fa-calendar me-1"></i> Expiry Date</label>
-            <input type="date" id="pExpiry" class="form-input">
-          </div>
-        </div>
-
-        <button type="submit" id="btnPublishProduct" class="btn-action">
-          <i class="fa-solid fa-cloud-arrow-up me-1"></i> Add to Live Store Inventory
-        </button>
-      </form>
+    <div style="padding: 16px; background: white; margin: 12px; border-radius: 10px; border: 1px solid #ddd;">
+      <h3 style="font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #9c27b0; display: inline-block; padding-bottom: 4px; color: #4a148c;">Logistics & Specifications</h3>
+      <div class="spec-row"><span>Net Weight:</span><b id="pDetailWeight">-</b></div>
+      <div class="spec-row"><span>Dimensions (L x W x H):</span><b id="pDetailDim">-</b></div>
+      <div class="spec-row"><span>Packaging Type:</span><b id="pDetailPackaging" style="color: #6a1b9a;">-</b></div>
+      <div class="spec-row"><span>Material / Fabric:</span><b id="pDetailMat">-</b></div>
+      <div class="spec-row"><span>Color:</span><b id="pDetailColor">-</b></div>
+      <div class="spec-row"><span>Hazard / Safety:</span><b id="pDetailHazard">-</b></div>
+      <div class="spec-row"><span>FSSAI License:</span><b id="pDetailFssai" style="color: green;">-</b></div>
+      <div class="spec-row"><span>Expiry Date:</span><b id="pDetailExpiry">-</b></div>
+      <div class="spec-row"><span>Courier Shipping:</span><b style="color: #0288d1;">Delhivery / Shiprocket Express</b></div>
+      <div class="spec-row"><span>Return Policy:</span><b style="color: #2e7d32;">7 Days Easy Return & Refund</b></div>
+    </div>
+    <div style="padding: 0 14px; display: flex; gap: 10px;">
+      <button class="btn-action" onclick="addToCartCurrent()" style="background: #f3e5f5; color: #9c27b0; border: 1px solid #9c27b0;">Add to Cart</button>
+      <button class="btn-action" onclick="startCheckoutSingle()" style="background: #9c27b0; color: white;">Buy Now</button>
     </div>
   </div>
+
+  <!-- SCREEN 2: CATEGORIES -->
+  <div id="categoriesScreen" class="app-screen">
+    <div class="screen-header">
+      <span style="cursor:pointer; font-weight:bold; color:#9c27b0;" onclick="closeAllScreens()">← Back</span>
+      <span class="screen-title">All Categories</span>
+    </div>
+    <div style="padding: 14px;">
+      <div class="list-item-box" onclick="filterByCategoryDirect('Women Fashion')">
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-size:1.8rem;">👗</span><div><b style="color:#4a148c;">Women Fashion</b><div style="font-size:0.75rem; color:#777;">Sarees, Kurtis, Ethnic Wear</div></div></div>
+        <span>&gt;</span>
+      </div>
+      <div class="list-item-box" onclick="filterByCategoryDirect('Grocery & Millets')">
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-size:1.8rem;">🌾</span><div><b style="color:#4a148c;">Grocery & Millets</b><div style="font-size:0.75rem; color:#777;">Organic Millets, Oils, Spices</div></div></div>
+        <span>&gt;</span>
+      </div>
+      <div class="list-item-box" onclick="filterByCategoryDirect('Jewelry & Fancy')">
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-size:1.8rem;">💍</span><div><b style="color:#4a148c;">Jewelry & Fancy</b><div style="font-size:0.75rem; color:#777;">Bangles, Necklaces, Earrings</div></div></div>
+        <span>&gt;</span>
+      </div>
+      <div class="list-item-box" onclick="filterByCategoryDirect('General & Pooja')">
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-size:1.8rem;">🪔</span><div><b style="color:#4a148c;">General & Pooja</b><div style="font-size:0.75rem; color:#777;">Diyas, Incense, Daily Essentials</div></div></div>
+        <span>&gt;</span>
+      </div>
+      <div class="list-item-box" onclick="filterByCategoryDirect('Men Fashion')">
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-size:1.8rem;">👕</span><div><b style="color:#4a148c;">Men Fashion</b><div style="font-size:0.75rem; color:#777;">Shirts, T-Shirts, Trousers</div></div></div>
+        <span>&gt;</span>
+      </div>
+      <div class="list-item-box" onclick="filterByCategoryDirect('Footwear')">
+        <div style="display:flex; align-items:center; gap:14px;"><span style="font-size:1.8rem;">👠</span><div><b style="color:#4a148c;">Footwear</b><div style="font-size:0.75rem; color:#777;">Heels, Sandals, Daily Footwear</div></div></div>
+        <span>&gt;</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SCREEN 3: CART -->
+  <div id="cartScreen" class="app-screen">
+    <div class="screen-header">
+      <span style="cursor:pointer; font-weight:bold; color:#9c27b0;" onclick="closeAllScreens()">← Back</span>
+      <span class="screen-title">Shopping Cart</span>
+    </div>
+    <div style="padding: 14px;" id="cartItemsContainer"></div>
+    <div id="cartFooterBox" style="display:none; padding:14px; background:white; border-top:1px solid #ddd; margin-top:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:0.9rem; color:#666;">Total:</span>
+        <b style="font-size:1.3rem; color:#9c27b0;">₹<span id="cartSumDisplay">0</span></b>
+      </div>
+      <button class="btn-action" onclick="startCheckoutCart()" style="background:#9c27b0; color:white;">Proceed to Checkout &gt;</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 4: CHECKOUT -->
+  <div id="checkoutScreen" class="app-screen">
+    <div class="screen-header">
+      <span style="cursor:pointer; font-weight:bold; color:#9c27b0;" onclick="openScreen('cartScreen')">← Back</span>
+      <span class="screen-title">Order Checkout</span>
+    </div>
+    <div style="padding: 16px;">
+      <div style="background:white; padding:14px; border-radius:10px; margin-bottom:12px; border:1px solid #ddd;">
+        <h4 style="font-size:0.95rem; margin-bottom:6px; color:#4a148c;">Delivery Address</h4>
+        <textarea id="checkAddressInput" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; font-size:0.9rem;" rows="2" placeholder="House No, Street, City, Pincode"></textarea>
+      </div>
+      <div style="background:white; padding:14px; border-radius:10px; margin-bottom:12px; border:1px solid #ddd;">
+        <h4 style="font-size:0.95rem; margin-bottom:6px; color:#4a148c;">Coupon Code</h4>
+        <div style="display:flex; gap:8px;">
+          <input type="text" id="couponCodeInput" placeholder="Enter MEE50" style="flex:1; padding:10px; border:1px solid #ccc; border-radius:8px; text-transform:uppercase;">
+          <button onclick="applyDiscountCoupon()" style="padding:10px 18px; background:#4a148c; color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Apply</button>
+        </div>
+        <small id="couponFeedbackMsg" style="color:green; display:block; margin-top:5px; font-weight:bold;"></small>
+      </div>
+      <div style="background:white; padding:14px; border-radius:10px; margin-bottom:15px; border:1px solid #ddd;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>Item Total:</span><span>₹<span id="billSubVal">0</span></span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:green;"><span>Coupon Discount:</span><span>-₹<span id="billDiscVal">0</span></span></div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:6px; color:#0288d1;"><span>Shipping:</span><span>FREE</span></div>
+        <div style="display:flex; justify-content:space-between; font-weight:bold; font-size:1.15rem; border-top:1px solid #eee; padding-top:10px;">
+          <span>Grand Total:</span><span style="color:#9c27b0;">₹<span id="billFinalVal">0</span></span>
+        </div>
+      </div>
+      <div style="background:#f0fdf4; border:1px solid #bbf7d0; padding:16px; border-radius:10px; text-align:center; margin-bottom:20px;">
+        <p style="font-size:0.9rem; color:#166534; margin-bottom:10px; font-weight:bold;">Pay via UPI (GPay / PhonePe / Paytm)</p>
+        <a id="btnUpiDirectLink" href="#" style="display:block; background:#16a34a; color:white; text-decoration:none; padding:12px; border-radius:8px; font-weight:bold; margin-bottom:10px;">Pay via UPI App</a>
+        <p style="font-size:0.8rem; color:#666; margin-bottom:6px;">Or scan QR code:</p>
+        <img id="upiQrCodeImg" src="" style="max-width:130px; border:1px solid #ddd; padding:4px; background:white; border-radius:6px;" alt="QR">
+      </div>
+      <button onclick="placeWhatsAppOrder()" class="btn-action" style="background:#9c27b0; color:white;">Confirm Order (Instant Alert)</button>
+    </div>
+  </div>
+
+  <!-- SCREEN 5: BUYER PROFILE -->
+  <div id="profileScreen" class="app-screen">
+    <div class="screen-header">
+      <span style="cursor:pointer; font-weight:bold; color:#9c27b0;" onclick="closeAllScreens()">← Back</span>
+      <span class="screen-title">My Account & Settings</span>
+    </div>
+    <div style="padding: 16px;">
+      <div id="buyerLoggedInBox" style="display:none;">
+        <div style="display:flex; align-items:center; gap:15px; background:white; padding:16px; border-radius:10px; margin-bottom:15px; border:1px solid #ddd;">
+          <img id="profImgBig" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width:65px; height:65px; border-radius:50%; object-fit:cover; border:2px solid #9c27b0;" alt="Buyer">
+          <div><h3 id="profNameBig" style="font-size:1.15rem; color:#333;">Customer Name</h3><p id="profPhoneBig" style="font-size:0.85rem; color:#666;">Phone</p></div>
+        </div>
+        <div style="background:white; border-radius:10px; overflow:hidden; border:1px solid #ddd; margin-bottom:15px;">
+          <div class="list-item-box" onclick="alert('Order tracking active')" style="border:none; border-bottom:1px solid #eee; border-radius:0;">
+            <span>My Orders & Tracking</span><span>&gt;</span>
+          </div>
+          <div class="list-item-box" onclick="alert('Return registered')" style="border:none; border-bottom:1px solid #eee; border-radius:0;">
+            <span>Returns & Refunds</span><span>&gt;</span>
+          </div>
+          <div class="list-item-box" onclick="editBankDetailsPrompt()" style="border:none; border-bottom:1px solid #eee; border-radius:0;">
+            <span>Bank & UPI Details (For Refunds)</span><span>&gt;</span>
+          </div>
+          <div class="list-item-box" onclick="editDeliveryAddressPrompt()" style="border:none; border-radius:0;">
+            <span>Edit Delivery Address</span><span>&gt;</span>
+          </div>
+        </div>
+        <button onclick="buyerLogout()" class="btn-action" style="background:#e53935; color:white;">Sign Out</button>
+      </div>
+
+      <div id="buyerGuestBox" style="background:white; padding:18px; border-radius:10px; border:1px solid #ddd;">
+        <h3 style="font-size:1.15rem; color:#9c27b0; margin-bottom:14px;">Customer Sign In / Register</h3>
+        <input type="tel" id="guestPhone" placeholder="10-digit Mobile Number" style="width:100%; padding:11px; margin-bottom:12px; border:1px solid #ccc; border-radius:8px;">
+        <input type="text" id="guestName" placeholder="Full Name" style="width:100%; padding:11px; margin-bottom:14px; border:1px solid #ccc; border-radius:8px;">
+        <button onclick="buyerQuickRegister()" class="btn-action" style="background:#9c27b0; color:white;">Sign In / Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 100% BULLETPROOF BOTTOM NAVIGATION BAR WITH INLINE SVG ICONS -->
+  <nav class="bottom-nav-bar">
+    <button class="nav-btn active" id="btnTabHome" onclick="closeAllScreens()">
+      <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+      <span>Home</span>
+    </button>
+    <button class="nav-btn" id="btnTabCat" onclick="openScreen('categoriesScreen')">
+      <svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z M3.5 13.5h7v7h-7z M13.5 13.5h7v7h-7z"/></svg>
+      <span>Categories</span>
+    </button>
+    <a href="seller.html" class="nav-btn" style="text-decoration:none;">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>
+      <span>Seller Hub</span>
+    </a>
+    <button class="nav-btn" id="btnTabProf" onclick="openScreen('profileScreen')">
+      <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+      <span>Account</span>
+    </button>
+  </nav>
 
   <script>
-    const API = "https://meestore.onrender.com/api";
-    let activeSeller = null;
+    window.onerror = function() { return true; };
+
+    let curBuyer = null;
     try {
-      const s = localStorage.getItem('meestore_seller');
-      if (s) activeSeller = JSON.parse(s);
+      const saved = localStorage.getItem('meestore_buyer');
+      if (saved) curBuyer = JSON.parse(saved);
+    } catch(e) { curBuyer = null; }
+
+    let activeProduct = null;
+    let currentDiscount = 0;
+    let cart = [];
+
+    const catalog = [
+      {
+        id: 1, name: "Little millets (Organic 500g)", category: "Grocery & Millets", price: 20, weight: "500g",
+        dimensions: "15x10x5 cm", packaging: "Corrugated Box", material: "Organic Millet Grain", color: "Natural Brown",
+        hazard: "Non-Hazardous / Safe", fssai: "13624014000123", expiry: "2027-12-31",
+        image_url: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
+        seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
+      },
+      {
+        id: 2, name: "Banarasi Soft Silk Saree", category: "Women Fashion", price: 499, weight: "650g",
+        dimensions: "30x25x4 cm", packaging: "Poly Bag / Flyer", material: "Soft Silk", color: "Royal Magenta Pink",
+        hazard: "Non-Hazardous / Safe", fssai: "N/A", expiry: "N/A",
+        image_url: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400",
+        seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
+      },
+      {
+        id: 3, name: "Gold Plated Temple Necklace", category: "Jewelry & Fancy", price: 249, weight: "150g",
+        dimensions: "12x10x3 cm", packaging: "Bubble Wrap & Box", material: "Brass / Micro Gold", color: "Gold",
+        hazard: "Fragile (Non-Hazardous)", fssai: "N/A", expiry: "N/A",
+        image_url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400",
+        seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
+      },
+      {
+        id: 4, name: "Brass Pooja Diya / Deepam", category: "General & Pooja", price: 120, weight: "250g",
+        dimensions: "10x10x8 cm", packaging: "Corrugated Box", material: "Pure Brass", color: "Golden Yellow",
+        hazard: "Non-Hazardous / Safe", fssai: "N/A", expiry: "N/A",
+        image_url: "https://images.unsplash.com/photo-1605371924599-2d0365da1ae0?w=400",
+        seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
+      }
+    ];
+
+    let allProducts = [...catalog];
+    try {
+      const customItems = localStorage.getItem('meestore_custom_products');
+      if (customItems) {
+        const parsed = JSON.parse(customItems);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          allProducts = [...parsed, ...catalog];
+        }
+      }
     } catch(e) {}
 
-    let compressedBase64Image = "";
-
-    function switchSellerAuth(isLogin) {
-      document.getElementById('sellerLoginForm').style.display = isLogin ? 'block' : 'none';
-      document.getElementById('sellerRegForm').style.display = isLogin ? 'none' : 'block';
-      document.getElementById('tabSellerLoginBtn').classList.toggle('active', isLogin);
-      document.getElementById('tabSellerRegBtn').classList.toggle('active', !isLogin);
+    // 100% పక్కాగా ప్రొడక్ట్ గ్రిడ్ రెండర్ చేసే ఫంక్షన్
+    function renderProductGrid(list) {
+      const grid = document.getElementById('productGrid');
+      if (!grid) return;
+      if (!list || list.length === 0) list = allProducts;
+      grid.innerHTML = list.map(p => `
+        <div class="product-card" onclick="showProductDetails('${p.id}')">
+          <img src="${p.image_url}" class="product-img" alt="${p.name}">
+          <div class="card-body">
+            <span class="badge">${p.category || 'General'}</span>
+            <div class="product-title">${p.name}</div>
+            <div style="font-size:0.75rem; color:#666;">Weight: <b>${p.weight || 'N/A'}</b></div>
+            <div class="product-price">₹${p.price}</div>
+            <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails('${p.id}')">View &amp; Buy</button>
+          </div>
+        </div>
+      `).join('');
     }
 
-    function compressAndPreview(input) {
-      if (input.files && input.files[0]) {
-        const file = input.files[0];
-        const reader = new FileReader();
-        const status = document.getElementById('imgStatusMsg');
-        status.innerText = "Compressing photo...";
+    function openScreen(screenId) {
+      document.querySelectorAll('.app-screen').forEach(s => s.style.display = 'none');
+      const target = document.getElementById(screenId);
+      if (target) target.style.display = 'block';
 
-        reader.onload = function(e) {
-          const img = new Image();
-          img.onload = function() {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            let width = img.width, height = img.height;
-            const maxDim = 500;
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      if (screenId === 'categoriesScreen') document.getElementById('btnTabCat').classList.add('active');
+      if (screenId === 'profileScreen') { document.getElementById('btnTabProf').classList.add('active'); syncBuyerUI(); }
+      if (screenId === 'cartScreen') renderCartPage();
 
-            if (width > height && width > maxDim) {
-              height *= maxDim / width;
-              width = maxDim;
-            } else if (height > maxDim) {
-              width *= maxDim / height;
-              height = maxDim;
-            }
-
-            canvas.width = width;
-            canvas.height = height;
-            ctx.drawImage(img, 0, 0, width, height);
-            compressedBase64Image = canvas.toDataURL('image/jpeg', 0.70);
-            document.getElementById('imagePreviewBox').innerHTML = `<img src="${compressedBase64Image}">`;
-            status.innerText = "✓ Ready to upload!";
-          };
-          img.src = e.target.result;
-        };
-        reader.readAsDataURL(file);
-      }
+      window.scrollTo(0, 0);
     }
 
-    function toggleFoodFields(category) {
-      const isFood = category.includes('Grocery') || category.includes('Millets');
-      document.getElementById('foodComplianceGroup').style.display = isFood ? 'block' : 'none';
+    function closeAllScreens() {
+      document.querySelectorAll('.app-screen').forEach(s => s.style.display = 'none');
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btnTabHome').classList.add('active');
     }
 
-    function onSellerLoginSubmit(e) {
-      e.preventDefault();
-      const ph = document.getElementById('sellerLogPhone').value.trim();
-      activeSeller = { id: 1, shop_name: "My Seller Store", phone: ph, upi_id: "mujahidsdghf9@ybl" };
-      localStorage.setItem('meestore_seller', JSON.stringify(activeSeller));
-      displayDashboard();
+    function showProductDetails(id) {
+      activeProduct = allProducts.find(p => p.id == id) || allProducts[0];
+      if (!activeProduct) return;
+      
+      document.getElementById('pDetailHeaderTitle').innerText = activeProduct.name;
+      document.getElementById('pDetailName').innerText = activeProduct.name;
+      document.getElementById('pDetailPrice').innerText = "₹" + activeProduct.price;
+      document.getElementById('pDetailCat').innerText = activeProduct.category || "General";
+      document.getElementById('pDetailImg').src = activeProduct.image_url;
+      document.getElementById('pDetailWeight').innerText = activeProduct.weight || "N/A";
+      document.getElementById('pDetailDim').innerText = activeProduct.dimensions || "Standard";
+      document.getElementById('pDetailPackaging').innerText = activeProduct.packaging || "Box";
+      document.getElementById('pDetailMat').innerText = activeProduct.material || "Standard";
+      document.getElementById('pDetailColor').innerText = activeProduct.color || "Standard";
+      document.getElementById('pDetailHazard').innerText = activeProduct.hazard || "Non-Hazardous / Safe";
+      document.getElementById('pDetailFssai').innerText = activeProduct.fssai || "N/A";
+      document.getElementById('pDetailExpiry').innerText = activeProduct.expiry || "N/A";
+
+      openScreen('productDetailScreen');
     }
 
-    function onSellerRegisterSubmit(e) {
-      e.preventDefault();
-      const sName = document.getElementById('sellerRegShop').value.trim();
-      const ph = document.getElementById('sellerRegPhone').value.trim();
-      const upi = document.getElementById('sellerRegUpi').value.trim();
-      activeSeller = { id: 1, shop_name: sName, phone: ph, upi_id: upi };
-      localStorage.setItem('meestore_seller', JSON.stringify(activeSeller));
-      alert("🎉 Registered successfully with Aadhaar KYC!");
-      displayDashboard();
-    }
-
-    function displayDashboard() {
-      if (!activeSeller) return;
-      document.getElementById('sellerAuthCard').style.display = 'none';
-      document.getElementById('sellerDashboardCard').style.display = 'block';
-      document.getElementById('shopWelcomeTitle').innerText = `Welcome, ${activeSeller.shop_name}!`;
-    }
-
-    function sellerLogout() {
-      localStorage.removeItem('meestore_seller');
-      location.reload();
-    }
-
-    function onAddProductSubmit(e) {
-      e.preventDefault();
-      if (!compressedBase64Image) {
-        alert("Please select a product photo!");
+    // షాపింగ్ కార్ట్‌కి సరుకులు యాడ్ చేసే పక్కా ఫంక్షన్
+    function addToCartCurrent() {
+      if (!activeProduct) {
+        alert("Please select a product first!");
         return;
       }
-
-      const stockQty = Number(document.getElementById('pStock').value);
-      const newProduct = {
-        id: Date.now(),
-        seller_id: activeSeller.id || 1,
-        name: document.getElementById('pName').value.trim(),
-        category: document.getElementById('pCategory').value,
-        price: Number(document.getElementById('pPrice').value),
-        stock: stockQty,
-        image_url: compressedBase64Image,
-        seller_phone: activeSeller.phone || "9177411712",
-        seller_upi: activeSeller.upi_id || "mujahidsdghf9@ybl",
-        weight: document.getElementById('pWeight').value.trim(),
-        dimensions: document.getElementById('pDimensions').value.trim(),
-        material: document.getElementById('pMaterial').value.trim() || "Standard",
-        color: document.getElementById('pColor').value.trim() || "Standard",
-        hazard: document.getElementById('pHazard').value,
-        packaging: document.getElementById('pPackaging').value,
-        fssai: document.getElementById('pFssai').value.trim() || "N/A",
-        expiry: document.getElementById('pExpiry').value || "N/A"
-      };
-
-      try {
-        let existing = [];
-        const raw = localStorage.getItem('meestore_custom_products');
-        if (raw) existing = JSON.parse(raw);
-        existing.unshift(newProduct);
-        localStorage.setItem('meestore_custom_products', JSON.stringify(existing));
-      } catch(err) {}
-
-      alert("🎉 Product successfully added to Store Inventory with " + stockQty + " stock units!");
-      window.location.href = "index.html";
+      cart.push(activeProduct);
+      document.getElementById('cartCount').innerText = cart.length;
+      alert("🎉 " + activeProduct.name + " added to your cart!");
     }
 
-    if (activeSeller) displayDashboard();
+    function renderCartPage() {
+      const cont = document.getElementById('cartItemsContainer');
+      const footer = document.getElementById('cartFooterBox');
+      
+      if (!cart || cart.length === 0) {
+        cont.innerHTML = `<div style="text-align:center; padding: 60px 20px; color:#888;"><h4 style="color:#666;">Your Cart is Empty</h4></div>`;
+        if (footer) footer.style.display = 'none';
+      } else {
+        let sum = 0;
+        cont.innerHTML = cart.map((it, idx) => {
+          sum += Number(it.price || 0);
+          return `
+            <div style="background:white; border:1px solid #ddd; padding:14px; border-radius:8px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+              <div><b style="color:#333;">${it.name}</b><br><span style="color:#9c27b0; font-weight:bold; font-size:1.1rem;">₹${it.price}</span></div>
+              <button onclick="removeCartItem(${idx})" style="background:#ffebee; border:1px solid #ffcdd2; color:#c62828; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Remove</button>
+            </div>
+          `;
+        }).join('');
+        document.getElementById('cartSumDisplay').innerText = sum;
+        if (footer) footer.style.display = 'block';
+      }
+    }
+
+    function removeCartItem(idx) {
+      cart.splice(idx, 1);
+      document.getElementById('cartCount').innerText = cart.length;
+      renderCartPage();
+    }
+
+    function startCheckoutCart() {
+      if (!curBuyer) { alert("Please sign in to place an order!"); openScreen('profileScreen'); return; }
+      activeProduct = cart[0];
+      setupCheckout(Number(document.getElementById('cartSumDisplay').innerText));
+    }
+
+    function startCheckoutSingle() {
+      if (!curBuyer) { alert("Please sign in to place an order!"); openScreen('profileScreen'); return; }
+      setupCheckout(Number(activeProduct.price));
+    }
+
+    function setupCheckout(subTotal) {
+      document.getElementById('billSubVal').innerText = subTotal;
+      document.getElementById('billDiscVal').innerText = "0";
+      currentDiscount = 0;
+      updateCheckoutTotal(subTotal, 0);
+      document.getElementById('checkAddressInput').value = curBuyer.address || '';
+      openScreen('checkoutScreen');
+    }
+
+    function applyDiscountCoupon() {
+      const c = document.getElementById('couponCodeInput').value.trim().toUpperCase();
+      const sub = Number(document.getElementById('billSubVal').innerText);
+      if (c === "MEE50" || c === "WELCOME") {
+        currentDiscount = Math.min(50, Math.round(sub * 0.2));
+        document.getElementById('billDiscVal').innerText = currentDiscount;
+        document.getElementById('couponFeedbackMsg').innerText = "🎉 Coupon applied! ₹" + currentDiscount + " Discount.";
+        updateCheckoutTotal(sub, currentDiscount);
+      } else {
+        alert("Invalid coupon code. Try 'MEE50'.");
+      }
+    }
+
+    function updateCheckoutTotal(sub, disc) {
+      const finalAmt = Math.max(1, sub - disc);
+      document.getElementById('billFinalVal').innerText = finalAmt;
+      const upi = (activeProduct && activeProduct.seller_upi) ? activeProduct.seller_upi : 'mujahidsdghf9@ybl';
+      const link = `upi://pay?pa=${upi}&pn=MeeStore&am=${finalAmt}&cu=INR`;
+      document.getElementById('btnUpiDirectLink').href = link;
+      document.getElementById('upiQrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(link)}`;
+    }
+
+    async function placeWhatsAppOrder() {
+      const addr = document.getElementById('checkAddressInput').value.trim();
+      if (!addr) { alert("Please enter delivery address!"); return; }
+
+      const amt = document.getElementById('billFinalVal').innerText;
+      const msg = `🛒 *MeeStore Order Placed!*\nItem: ${activeProduct.name}\nAmount: ₹${amt}\nCustomer: ${curBuyer.name} (${curBuyer.phone})\nDelivery Address: ${addr}`;
+      window.open(`https://wa.me/91${activeProduct.seller_phone || '9177411712'}?text=${encodeURIComponent(msg)}`);
+      cart = [];
+      document.getElementById('cartCount').innerText = "0";
+      closeAllScreens();
+    }
+
+    function filterByCategoryDirect(catName) {
+      closeAllScreens();
+      renderProductGrid(allProducts.filter(p => p.category && p.category.includes(catName)));
+    }
+
+    function buyerQuickRegister() {
+      const ph = document.getElementById('guestPhone').value.trim();
+      const nm = document.getElementById('guestName').value.trim() || "Customer";
+      if (!ph || ph.length < 10) { alert("Please enter a valid 10-digit mobile number!"); return; }
+      curBuyer = { id: 1, name: nm, phone: ph, address: "Hyderabad", bank: "SBI - 1234567890" };
+      try { localStorage.setItem('meestore_buyer', JSON.stringify(curBuyer)); } catch(e){}
+      syncBuyerUI();
+      alert("Welcome, " + nm + "!");
+    }
+
+    function syncBuyerUI() {
+      try {
+        if (curBuyer) {
+          document.getElementById('welcomeUserText').innerText = curBuyer.name;
+          document.getElementById('buyerLoggedInBox').style.display = 'block';
+          document.getElementById('buyerGuestBox').style.display = 'none';
+          document.getElementById('profNameBig').innerText = curBuyer.name;
+          document.getElementById('profPhoneBig').innerText = curBuyer.phone;
+        } else {
+          document.getElementById('welcomeUserText').innerText = "Hello, Sign In >";
+          document.getElementById('buyerLoggedInBox').style.display = 'none';
+          document.getElementById('buyerGuestBox').style.display = 'block';
+        }
+      } catch(e) {}
+    }
+
+    function editDeliveryAddressPrompt() {
+      const a = prompt("Enter New Delivery Address:", curBuyer.address || "");
+      if (a) { curBuyer.address = a; try { localStorage.setItem('meestore_buyer', JSON.stringify(curBuyer)); } catch(e){} alert("Address updated!"); }
+    }
+
+    function editBankDetailsPrompt() {
+      const b = prompt("Enter Bank Details / UPI ID for Refunds:", curBuyer.bank || "");
+      if (b) { curBuyer.bank = b; try { localStorage.setItem('meestore_buyer', JSON.stringify(curBuyer)); } catch(e){} alert("Bank details saved!"); }
+    }
+
+    function buyerLogout() {
+      try { localStorage.removeItem('meestore_buyer'); } catch(e){}
+      curBuyer = null;
+      syncBuyerUI();
+      closeAllScreens();
+    }
+
+    function filterCat(cat, btn) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProductGrid(cat === 'all' ? allProducts : allProducts.filter(p => p.category && p.category.includes(cat)));
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      renderProductGrid(allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q))));
+    });
+
+    // Startup Execution
+    renderProductGrid(allProducts);
+    syncBuyerUI();
   </script>
 </body>
 </html>
