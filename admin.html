@@ -66,22 +66,26 @@
     </div>
   </div>
 
-  <script>
-    function loadAdminData() {
-      fetch("https://meestore.onrender.com/api/admin/report")
-        .then(r => r.json())
-        .then(d => {
-          document.getElementById('adSellers').innerText = d.total_sellers ?? 0;
-          document.getElementById('adBuyers').innerText = d.total_buyers ?? 0;
-          document.getElementById('adTurnover').innerText = (d.gross_turnover ?? 0).toFixed(2);
-          document.getElementById('adIncome').innerText = (d.admin_earnings ?? d.admin_income_2_percent ?? 0).toFixed(2);
-          document.getElementById('adLoss').innerText = (d.technical_loss ?? d.technical_returns_loss ?? 0).toFixed(2);
-        })
-        .catch(err => {
-          console.log("Admin Data Loading...");
-        });
-    }
-    loadAdminData();
+  <<script>
+  function loadAdminData() {
+    fetch("https://meestore.onrender.com/api/admin/report")
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById('adSellers').innerText = d.total_sellers ?? 0;
+        document.getElementById('adBuyers').innerText = d.total_buyers ?? 0;
+        document.getElementById('adTurnover').innerText = Number(d.gross_turnover || 0).toFixed(2);
+        
+        // కీ పేర్లు ఏవైనా సరే సరిగ్గా క్యాలిక్యులేట్ అయ్యేలా
+        const income = d.admin_income_2_percent ?? d.admin_earnings ?? ((d.gross_turnover || 0) * 0.02);
+        const loss = d.technical_returns_loss ?? d.technical_loss ?? 0;
+        
+        document.getElementById('adIncome').innerText = Number(income || 0).toFixed(2);
+        document.getElementById('adLoss').innerText = Number(loss || 0).toFixed(2);
+      })
+      .catch(err => console.log("Loading..."));
+  }
+  loadAdminData();
+</script>
   </script>
 </body>
 </html>
