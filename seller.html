@@ -2,17 +2,17 @@
 <html lang="te">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>MeeStore - సెల్లర్ హబ్</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #f8f9fa; padding-bottom: 40px; }
+    body { background-color: #f8f9fa; padding-bottom: 50px; }
     .header { background: #9c27b0; color: white; padding: 14px; display: flex; justify-content: space-between; align-items: center; }
     .card { background: white; border-radius: 10px; padding: 18px; margin: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
     .form-group { margin-bottom: 12px; }
     .form-label { display: block; font-weight: 600; font-size: 0.85rem; margin-bottom: 4px; color: #333; }
-    .form-input, .form-select { width: 100%; padding: 9px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
+    .form-input, .form-select { width: 100%; padding: 10px 12px; border: 1px solid #ccc; border-radius: 6px; font-size: 0.9rem; }
     .row { display: flex; gap: 10px; }
     .col { flex: 1; }
     .preview-box { width: 100%; height: 160px; border: 2px dashed #9c27b0; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: #fafafa; overflow: hidden; margin-bottom: 8px; }
@@ -25,65 +25,77 @@
 </head>
 <body>
 
+  <!-- Top Bar -->
   <div class="header">
     <div style="font-weight: 700; font-size: 1.1rem;"><i class="fa-solid fa-store me-1"></i>MeeStore Seller Hub</div>
     <a href="index.html" style="color: white; text-decoration: none; font-size: 0.85rem; border: 1px solid white; padding: 4px 10px; border-radius: 15px;">స్టోర్‌కి వెళ్లండి</a>
   </div>
 
-  <!-- Login/Register -->
+  <!-- Login & Register Section -->
   <div id="authBox" class="card" style="max-width: 420px; margin: 20px auto;">
     <div class="auth-tab">
       <button id="sLogBtn" class="active" onclick="toggleSellerAuth(true)">లాగిన్</button>
-      <button id="sRegBtn" onclick="toggleSellerAuth(false)">కొత్త సెల్లర్</button>
+      <button id="sRegBtn" onclick="toggleSellerAuth(false)">కొత్త సెల్లర్ (KYC)</button>
     </div>
 
+    <!-- Seller Login Form -->
     <form id="sLoginForm" onsubmit="handleSellerLogin(event)">
       <div class="form-group">
         <label class="form-label">మొబైల్ నంబర్</label>
-        <input type="tel" id="sLogPhone" class="form-input" required>
+        <input type="tel" id="sLogPhone" class="form-input" placeholder="నమోదు చేసిన మొబైల్" required>
       </div>
       <div class="form-group">
         <label class="form-label">పాస్‌వర్డ్</label>
-        <input type="password" id="sLogPass" class="form-input" required>
+        <input type="password" id="sLogPass" class="form-input" placeholder="పాస్‌వర్డ్" required>
       </div>
       <button type="submit" class="btn">లాగిన్ అవ్వండి</button>
     </form>
 
+    <!-- Seller Registration with Aadhar & UPI -->
     <form id="sRegForm" style="display: none;" onsubmit="handleSellerRegister(event)">
       <div class="form-group">
         <label class="form-label">దుకాణం / బ్రాండ్ పేరు</label>
-        <input type="text" id="sRegShop" class="form-input" required>
+        <input type="text" id="sRegShop" class="form-input" placeholder="ఉదా: మీ స్టోర్ నేమ్" required>
       </div>
       <div class="form-group">
         <label class="form-label">మొబైల్ నంబర్</label>
-        <input type="tel" id="sRegPhone" class="form-input" required>
+        <input type="tel" id="sRegPhone" class="form-input" placeholder="10 అంకెల మొబైల్ నంబర్" required>
       </div>
+
+      <!-- ఆధార్ కార్డు నంబర్ (KYC కోసం) -->
       <div class="form-group">
-        <label class="form-label">మీ UPI ID (డైరెక్ట్ పేమెంట్స్ కోసం)</label>
-        <input type="text" id="sRegUpi" class="form-input" placeholder="name@upi" required>
+        <label class="form-label">ఆధార్ కార్డు నంబర్ (KYC ధృవీకరణ కోసం)</label>
+        <input type="text" id="sRegAadhar" class="form-input" placeholder="12 అంకెల ఆధార్ నంబర్" maxlength="12" pattern="\d{12}" title="ఖచ్చితంగా 12 అంకెలు ఉండాలి" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">మీ UPI ID (డైరెక్ట్ పేమెంట్స్ & విక్రయాల కోసం)</label>
+        <input type="text" id="sRegUpi" class="form-input" placeholder="ఉదా: name@upi లేదా 9876543210@ybl" required>
       </div>
       <div class="form-group">
         <label class="form-label">పాస్‌వర్డ్</label>
-        <input type="password" id="sRegPass" class="form-input" required>
+        <input type="password" id="sRegPass" class="form-input" placeholder="రహస్య పాస్‌వర్డ్" required>
       </div>
-      <button type="submit" class="btn" style="background: #2e7d32;">ఖాతా సృష్టించండి</button>
+      <button type="submit" class="btn" style="background: #2e7d32;">
+        <i class="fa-solid fa-id-card me-1"></i>KYC తో ఖాతా సృష్టించండి
+      </button>
     </form>
   </div>
 
-  <!-- Seller Add Product Dashboard -->
+  <!-- Seller Dashboard (సరుకు వివరాలు & కెమెరా అప్‌లోడ్) -->
   <div id="dashBox" style="display: none;">
     <div class="card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 8px;">
         <h3 id="welcomeShop" style="font-size: 1.1rem; color: #9c27b0;">హలో సెల్లర్!</h3>
-        <button onclick="logoutSeller()" style="background: #e53935; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">లాగౌట్</button>
+        <button onclick="logoutSeller()" style="background: #e53935; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85rem;">లాగౌట్</button>
       </div>
 
-      <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #444;">కొత్త సరుకు పూర్తి వివరాలు జోడించండి</h4>
+      <h4 style="font-size: 0.95rem; margin-bottom: 12px; color: #444;"><i class="fa-solid fa-boxes-stacked me-1"></i>కొత్త సరుకు పూర్తి వివరాలు జోడించండి</h4>
       <form onsubmit="handleAddProduct(event)">
         
         <div class="form-group">
           <label class="form-label">ఉత్పత్తి పేరు (Product Name)</label>
-          <input type="text" id="pName" class="form-input" placeholder="ఉదా: రాగి పిండి, చీర, చెప్పులు" required>
+          <input type="text" id="pName" class="form-input" placeholder="ఉదా: రాగి పిండి, కొర్రలు, కాటన్ చీర" required>
         </div>
 
         <div class="form-group">
@@ -101,9 +113,9 @@
 
         <!-- Direct Camera / Gallery Selection -->
         <div class="form-group">
-          <label class="form-label">ఫోటో (కెమెరా లేదా గ్యాలరీ నుండి తీసుకోండి)</label>
+          <label class="form-label">సరుకు ఫోటో (కెమెరా లేదా గ్యాలరీ నుండి ఎంచుకోండి)</label>
           <div class="preview-box" id="previewContainer">
-            <span style="color: #999;"><i class="fa-solid fa-camera fa-2x"></i><br>ఫోటో ఎంచుకోండి</span>
+            <span style="color: #999; text-align: center;"><i class="fa-solid fa-camera fa-2x"></i><br>ఫోటో ఇంకా ఎంచుకోలేదు</span>
           </div>
           <input type="file" id="pImgInput" accept="image/*" class="form-input" onchange="previewImage(this)" required>
         </div>
@@ -111,7 +123,7 @@
         <div class="row">
           <div class="col form-group">
             <label class="form-label">ధర (₹)</label>
-            <input type="number" id="pPrice" class="form-input" required>
+            <input type="number" id="pPrice" class="form-input" placeholder="అమ్మకపు ధర" required>
           </div>
           <div class="col form-group">
             <label class="form-label">స్టాక్ (సంఖ్య)</label>
@@ -121,7 +133,7 @@
 
         <div class="row">
           <div class="col form-group">
-            <label class="form-label">బరువు (Weight - గ్రాములు/కేజీల్లో)</label>
+            <label class="form-label">బరువు (Weight)</label>
             <input type="text" id="pWeight" class="form-input" placeholder="ఉదా: 500g / 1kg" required>
           </div>
           <div class="col form-group">
@@ -145,26 +157,26 @@
           <label class="form-label">మెటీరియల్ స్వభావం (హానికరమా కాదా?)</label>
           <select id="pHazard" class="form-select">
             <option value="Non-Hazardous">సాధారణమైనది (సురక్షితమైన వస్తువు)</option>
-            <option value="Fragile">పగిలిపోయే వస్తువు (గాజు/మట్టి)</option>
+            <option value="Fragile">పగిలిపోయే స్వభావం (గాజు/మట్టి)</option>
             <option value="Liquid">ద్రవ పదార్థం (Liquid/నూనెలు)</option>
             <option value="Hazardous">ప్రమాదకరమైనది / మండే స్వభావం</option>
           </select>
         </div>
 
-        <!-- Food items license & validity -->
+        <!-- ఆహార పదార్థాల కోసం FSSAI & ఎక్స్‌పైరీ డేట్ -->
         <div id="foodSection">
           <div class="form-group">
-            <label class="form-label" style="color: #2e7d32;">FSSAI ఫుడ్ లైసెన్స్ నంబర్</label>
+            <label class="form-label" style="color: #2e7d32;"><i class="fa-solid fa-certificate me-1"></i>FSSAI ఫుడ్ లైసెన్స్ నంబర్</label>
             <input type="text" id="pFssai" class="form-input" placeholder="14 అంకెల FSSAI నంబర్">
           </div>
           <div class="form-group">
-            <label class="form-label">వ్యాలిడిటీ / ఎక్స్‌పైరీ తేదీ (Expiry Date)</label>
+            <label class="form-label"><i class="fa-regular fa-calendar me-1"></i>వ్యాలిడిటీ / ఎక్స్‌పైరీ తేదీ (Expiry Date)</label>
             <input type="date" id="pExpiry" class="form-input">
           </div>
         </div>
 
         <button type="submit" id="btnLive" class="btn">
-          <i class="fa-solid fa-cloud-arrow-up me-1"></i>ప్రొడక్ట్ లైవ్ చేయండి
+          <i class="fa-solid fa-cloud-arrow-up me-1"></i>ప్రొడక్ట్ పూర్తి వివరాలతో లైవ్ చేయండి
         </button>
       </form>
     </div>
@@ -182,6 +194,7 @@
       document.getElementById('sRegBtn').classList.toggle('active', !isLog);
     }
 
+    // Camera & Gallery Image Preview
     function previewImage(input) {
       if (input.files && input.files[0]) {
         const reader = new FileReader();
@@ -214,8 +227,8 @@
           localStorage.setItem('meestore_seller', JSON.stringify(d));
           curSeller = d;
           showDashboard();
-        } else alert(d.error);
-      } catch(err) { alert("లాగిన్ కాలేకపోయాం"); }
+        } else alert(d.error || "లాగిన్ విఫలమైంది");
+      } catch(err) { alert("సర్వర్‌తో కనెక్ట్ కాలేకపోయాం"); }
     }
 
     async function handleSellerRegister(e) {
@@ -227,16 +240,17 @@
           body: JSON.stringify({
             shop_name: document.getElementById('sRegShop').value,
             phone: document.getElementById('sRegPhone').value,
+            aadhar: document.getElementById('sRegAadhar').value,
             upi_id: document.getElementById('sRegUpi').value,
             password: document.getElementById('sRegPass').value
           })
         });
         const d = await res.json();
         if (res.ok) {
-          alert("రిజిస్ట్రేషన్ పూర్తయింది! లాగిన్ అవ్వండి.");
+          alert("🎉 ఆధార్ KYC తో సెల్లర్ రిజిస్ట్రేషన్ పూర్తయింది! ఇప్పుడు లాగిన్ అవ్వండి.");
           toggleSellerAuth(true);
-        } else alert(d.error);
-      } catch(err) { alert("రిజిస్ట్రేషన్ ఫెయిల్ అయింది"); }
+        } else alert(d.error || "రిజిస్ట్రేషన్ విఫలమైంది");
+      } catch(err) { alert("రిజిస్ట్రేషన్ ప్రాసెస్ కాలేదు"); }
     }
 
     function showDashboard() {
@@ -253,7 +267,7 @@
 
     async function handleAddProduct(e) {
       e.preventDefault();
-      if (!imgBase64) { alert("దయచేసి కెమెరా లేదా గ్యాలరీ నుండి ఫోటో ఎంచుకోండి!"); return; }
+      if (!imgBase64) { alert("దయచేసి కెమెరా లేదా గ్యాలరీ నుండి ప్రొడక్ట్ ఫోటో ఎంచుకోండి!"); return; }
 
       const btn = document.getElementById('btnLive');
       btn.disabled = true;
@@ -285,12 +299,12 @@
           body: JSON.stringify(payload)
         });
         if (res.ok) {
-          alert("🎉 ప్రొడక్ట్ విజయవంతంగా లైవ్ చేయబడింది!");
+          alert("🎉 ప్రొడక్ట్ పూర్తి స్పెసిఫికేషన్లతో లైవ్ అయ్యింది!");
           location.href = "index.html";
         }
       } catch(err) { alert("సేవ్ చేయడం కుదరలేదు"); }
       btn.disabled = false;
-      btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-1"></i>ప్రొడక్ట్ లైవ్ చేయండి`;
+      btn.innerHTML = `<i class="fa-solid fa-cloud-arrow-up me-1"></i>ప్రొడక్ట్ పూర్తి వివరాలతో లైవ్ చేయండి`;
     }
 
     if (curSeller) showDashboard();
