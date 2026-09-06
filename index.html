@@ -10,27 +10,8 @@
     body {
       background: #f8f9fa;
       padding-top: 60px;
-      padding-bottom: 70px;
+      padding-bottom: 75px;
       min-height: 100vh;
-    }
-
-    /* Splash Screen with Guaranteed Inline SVG Logo */
-    #splashScreen {
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: linear-gradient(135deg, #f8bbd0, #fce4ec, #e1bee7);
-      display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 9999999;
-      animation: autoFadeOut 0.4s ease-out 1.2s forwards;
-      pointer-events: none;
-    }
-    @keyframes autoFadeOut {
-      to { opacity: 0; visibility: hidden; display: none; }
-    }
-    .splash-box {
-      width: 110px; height: 110px; background: white; border-radius: 28px;
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 10px 25px rgba(244, 143, 177, 0.6);
-      margin-bottom: 14px;
     }
 
     /* Top Header */
@@ -44,21 +25,21 @@
     .avatar-btn { width: 36px; height: 36px; border-radius: 50%; border: 2px solid #9c27b0; overflow: hidden; cursor: pointer; display: flex; align-items: center; justify-content: center; background: #f3e5f5; }
     .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* కింద ఎల్లప్పుడూ కనిపించే బాటమ్ నావిగేషన్ బార్ (Inline SVG Icons Included) */
+    /* కింద ఎల్లప్పుడూ కనిపించే బాటమ్ నావిగేషన్ బార్ (Seller Hub 100% Fix) */
     .bottom-nav-bar {
       position: fixed !important;
       bottom: 0 !important;
       left: 0 !important;
       right: 0 !important;
       width: 100% !important;
-      height: 60px !important;
+      height: 62px !important;
       background: #ffffff !important;
-      border-top: 1px solid #e0e0e0 !important;
+      border-top: 2px solid #f8bbd0 !important;
       display: flex !important;
       justify-content: space-around !important;
       align-items: center !important;
       z-index: 999999 !important;
-      box-shadow: 0 -2px 10px rgba(0,0,0,0.06) !important;
+      box-shadow: 0 -3px 12px rgba(0,0,0,0.1) !important;
     }
     .nav-btn {
       flex: 1;
@@ -71,21 +52,17 @@
       border: none;
       cursor: pointer;
       color: #666;
-      font-size: 0.72rem;
-      font-weight: 600;
+      font-size: 0.75rem;
+      font-weight: 700;
       text-decoration: none;
       gap: 3px;
     }
     .nav-btn.active {
-      color: #9c27b0 !important;
-      font-weight: 700;
+      color: #9c27b0;
     }
     .nav-btn svg {
       width: 22px;
       height: 22px;
-      fill: #666;
-    }
-    .nav-btn.active svg {
       fill: #9c27b0;
     }
 
@@ -121,15 +98,6 @@
 </head>
 <body>
 
-  <!-- Splash Screen with Guaranteed SVG Logo -->
-  <div id="splashScreen">
-    <div class="splash-box">
-      <svg width="60" height="60" viewBox="0 0 24 24" fill="#9c27b0"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
-    </div>
-    <h1 style="font-weight: 800; font-size: 1.8rem; color: #4a148c;">MeeStore</h1>
-    <p style="font-size: 0.9rem; color: #880e4f; font-weight: 600; margin-top: 4px;">Smart Shopping for Everyone 🌸</p>
-  </div>
-
   <!-- Top Header -->
   <header class="top-header">
     <div style="display: flex; align-items: center; gap: 10px;" onclick="openScreen('profileScreen')">
@@ -137,10 +105,7 @@
         <img id="buyerAvatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="Profile">
       </div>
       <div>
-        <div class="brand-title">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="#9c27b0" style="vertical-align: middle;"><path d="M19 6h-2c0-2.76-2.24-5-5-5S7 3.24 7 6H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-7-3c1.66 0 3 1.34 3 3H9c0-1.66 1.34-3 3-3zm7 17H5V8h14v12z"/></svg>
-          MeeStore
-        </div>
+        <div class="brand-title">MeeStore</div>
         <div style="font-size: 0.72rem; color: #666; font-weight: bold;" id="welcomeUserText">Hello, Sign In &gt;</div>
       </div>
     </div>
@@ -169,48 +134,7 @@
   </div>
 
   <!-- Product Grid -->
-  <div class="product-grid" id="productGrid">
-    <div class="product-card" onclick="showProductDetails(1)">
-      <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" class="product-img" alt="Millets">
-      <div class="card-body">
-        <span class="badge">Grocery & Millets</span>
-        <div class="product-title">Little millets (Organic 500g)</div>
-        <div style="font-size:0.75rem; color:#666;">Weight: <b>500g</b></div>
-        <div class="product-price">₹20</div>
-        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(1)">View &amp; Buy</button>
-      </div>
-    </div>
-    <div class="product-card" onclick="showProductDetails(2)">
-      <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" class="product-img" alt="Saree">
-      <div class="card-body">
-        <span class="badge">Women Fashion</span>
-        <div class="product-title">Banarasi Soft Silk Saree</div>
-        <div style="font-size:0.75rem; color:#666;">Weight: <b>650g</b></div>
-        <div class="product-price">₹499</div>
-        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(2)">View &amp; Buy</button>
-      </div>
-    </div>
-    <div class="product-card" onclick="showProductDetails(3)">
-      <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" class="product-img" alt="Necklace">
-      <div class="card-body">
-        <span class="badge">Jewelry & Fancy</span>
-        <div class="product-title">Gold Plated Temple Necklace</div>
-        <div style="font-size:0.75rem; color:#666;">Weight: <b>150g</b></div>
-        <div class="product-price">₹249</div>
-        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(3)">View &amp; Buy</button>
-      </div>
-    </div>
-    <div class="product-card" onclick="showProductDetails(4)">
-      <img src="https://images.unsplash.com/photo-1605371924599-2d0365da1ae0?w=400" class="product-img" alt="Diya">
-      <div class="card-body">
-        <span class="badge">General & Pooja</span>
-        <div class="product-title">Brass Pooja Diya / Deepam</div>
-        <div style="font-size:0.75rem; color:#666;">Weight: <b>250g</b></div>
-        <div class="product-price">₹120</div>
-        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(4)">View &amp; Buy</button>
-      </div>
-    </div>
-  </div>
+  <div class="product-grid" id="productGrid"></div>
 
   <!-- SCREEN 1: PRODUCT DETAILS -->
   <div id="productDetailScreen" class="app-screen">
@@ -368,7 +292,7 @@
     </div>
   </div>
 
-  <!-- 100% BULLETPROOF BOTTOM NAVIGATION BAR WITH INLINE SVG ICONS -->
+  <!-- 100% BULLETPROOF BOTTOM NAVIGATION BAR (Seller Hub Link Fixed) -->
   <nav class="bottom-nav-bar">
     <button class="nav-btn active" id="btnTabHome" onclick="closeAllScreens()">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
@@ -378,6 +302,7 @@
       <svg viewBox="0 0 24 24"><path d="M12 2l-5.5 9h11z M3.5 13.5h7v7h-7z M13.5 13.5h7v7h-7z"/></svg>
       <span>Categories</span>
     </button>
+    <!-- Seller Hub డైరెక్ట్ లింక్ -->
     <a href="seller.html" class="nav-btn" style="text-decoration:none;">
       <svg viewBox="0 0 24 24"><path d="M20 4H4v2h16V4zm1 10v-2l-1-5H4l-1 5v2h1v6h10v-6h4v6h2v-6h1zm-9 4H6v-4h6v4z"/></svg>
       <span>Seller Hub</span>
@@ -439,10 +364,27 @@
         const parsed = JSON.parse(customItems);
         if (Array.isArray(parsed) && parsed.length > 0) {
           allProducts = [...parsed, ...catalog];
-          renderProductGrid(allProducts);
         }
       }
     } catch(e) {}
+
+    function renderProductGrid(list) {
+      const grid = document.getElementById('productGrid');
+      if (!grid) return;
+      if (!list || list.length === 0) list = allProducts;
+      grid.innerHTML = list.map(p => `
+        <div class="product-card" onclick="showProductDetails('${p.id}')">
+          <img src="${p.image_url}" class="product-img" alt="${p.name}">
+          <div class="card-body">
+            <span class="badge">${p.category || 'General'}</span>
+            <div class="product-title">${p.name}</div>
+            <div style="font-size:0.75rem; color:#666;">Weight: <b>${p.weight || 'N/A'}</b></div>
+            <div class="product-price">₹${p.price}</div>
+            <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails('${p.id}')">View &amp; Buy</button>
+          </div>
+        </div>
+      `).join('');
+    }
 
     function openScreen(screenId) {
       document.querySelectorAll('.app-screen').forEach(s => s.style.display = 'none');
@@ -464,7 +406,9 @@
     }
 
     function showProductDetails(id) {
-      activeProduct = allProducts.find(p => p.id == id) || catalog[0];
+      activeProduct = allProducts.find(p => p.id == id) || allProducts[0];
+      if (!activeProduct) return;
+      
       document.getElementById('pDetailHeaderTitle').innerText = activeProduct.name;
       document.getElementById('pDetailName').innerText = activeProduct.name;
       document.getElementById('pDetailPrice').innerText = "₹" + activeProduct.price;
@@ -620,23 +564,6 @@
       closeAllScreens();
     }
 
-    function renderProductGrid(list) {
-      const grid = document.getElementById('productGrid');
-      if (!list || list.length === 0) list = catalog;
-      grid.innerHTML = list.map(p => `
-        <div class="product-card" onclick="showProductDetails('${p.id}')">
-          <img src="${p.image_url}" class="product-img" alt="${p.name}">
-          <div class="card-body">
-            <span class="badge">${p.category || 'General'}</span>
-            <div class="product-title">${p.name}</div>
-            <div style="font-size:0.75rem; color:#666;">Weight: <b>${p.weight || 'N/A'}</b></div>
-            <div class="product-price">₹${p.price}</div>
-            <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails('${p.id}')">View &amp; Buy</button>
-          </div>
-        </div>
-      `).join('');
-    }
-
     function filterCat(cat, btn) {
       document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
@@ -648,6 +575,8 @@
       renderProductGrid(allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q))));
     });
 
+    // Startup Execution
+    renderProductGrid(allProducts);
     syncBuyerUI();
   </script>
 </body>
