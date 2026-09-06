@@ -3,41 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>MeeStore - ఆన్‌లైన్ షాపింగ్</title>
+  <title>MeeStore</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background-color: #fff5f8; padding-bottom: 70px; }
+    body { background-color: #fff5f8; padding-bottom: 75px; }
 
-    /* లేడీస్ కి నచ్చేలా లైట్ పింక్ & పర్పుల్ లోగో వెల్‌కమ్ బ్యానర్ */
-    #brandWelcomeBanner {
-      background: linear-gradient(135deg, #f8bbd0, #fce4ec);
-      padding: 14px 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      border-bottom: 2px solid #f48fb1;
+    /* 1. యాప్ ఓపెన్ అయ్యేటప్పుడు 1 సెకను వచ్చి పోయే లైట్ పింక్ & పర్పుల్ లోగో స్క్రీన్ */
+    #appSplashScreen {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: linear-gradient(135deg, #f8bbd0, #fce4ec, #e1bee7);
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+      z-index: 999999; color: #4a148c;
+      animation: hideSplashNow 0.5s ease 1.2s forwards;
+      pointer-events: none;
     }
-    .brand-logo-circle {
-      width: 48px;
-      height: 48px;
-      background: white;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-      color: #9c27b0;
-      box-shadow: 0 4px 10px rgba(156, 39, 176, 0.2);
+    @keyframes hideSplashNow {
+      to { opacity: 0; visibility: hidden; display: none; }
+    }
+    .splash-logo-box {
+      width: 90px; height: 90px; background: white; border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 44px; color: #9c27b0;
+      box-shadow: 0 8px 25px rgba(244, 143, 177, 0.5);
+      margin-bottom: 12px;
     }
 
     /* Top Bar - పెద్దగా కనిపించే ఐకాన్లు */
     .top-header { background: white; padding: 10px 14px; position: sticky; top: 0; z-index: 100; border-bottom: 1px solid #f8bbd0; display: flex; justify-content: space-between; align-items: center; }
-    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.4rem; display: flex; align-items: center; gap: 6px; }
-    .avatar-wrapper { position: relative; width: 44px; height: 44px; cursor: pointer; display: flex; align-items: center; }
-    .avatar-img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #ba68c8; }
-    .camera-badge { position: absolute; bottom: -2px; right: -2px; background: #9c27b0; color: white; border-radius: 50%; width: 16px; height: 16px; font-size: 9px; display: flex; align-items: center; justify-content: center; }
+    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; }
+    .avatar-wrapper { position: relative; width: 42px; height: 42px; cursor: pointer; display: flex; align-items: center; }
+    .avatar-img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; border: 2px solid #ba68c8; }
+    .camera-badge { position: absolute; bottom: -2px; right: -2px; background: #9c27b0; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 8px; display: flex; align-items: center; justify-content: center; }
 
     /* Search Bar */
     .search-box { padding: 8px 12px; background: white; }
@@ -46,7 +43,7 @@
     /* Categories Horizontal Bar */
     .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 10px; padding: 10px 12px; background: white; border-bottom: 1px solid #f8bbd0; }
     .cat-scroll::-webkit-scrollbar { display: none; }
-    .cat-btn { border-radius: 20px; font-size: 0.85rem; padding: 7px 14px; border: 1px solid #f48fb1; background: white; color: #4a148c; cursor: pointer; font-weight: 600; }
+    .cat-btn { border-radius: 20px; font-size: 0.85rem; padding: 6px 14px; border: 1px solid #f48fb1; background: white; color: #4a148c; cursor: pointer; font-weight: 600; }
     .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
 
     /* Product Grid */
@@ -58,7 +55,7 @@
     .product-title { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #333; }
     .product-price { font-size: 1.1rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
 
-    /* Full App Pages (Meesho Tabs) */
+    /* Meesho Tabs */
     .app-page { display: none; }
     .app-page.active-page { display: block; }
 
@@ -66,7 +63,7 @@
     .page-header i { font-size: 1.4rem; cursor: pointer; color: #9c27b0; padding: 4px; }
     .page-title { font-size: 1.15rem; font-weight: 700; color: #333; }
 
-    /* Bottom Fixed Navigation - పెద్ద ఐకాన్లతో */
+    /* Bottom Fixed Navigation */
     .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 60px; background: white; border-top: 1px solid #f8bbd0; display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05); }
     .nav-btn { display: flex; flex-direction: column; align-items: center; background: none; border: none; color: #666; font-size: 0.75rem; cursor: pointer; text-decoration: none; font-weight: 600; }
     .nav-btn i { font-size: 1.4rem; margin-bottom: 3px; }
@@ -74,18 +71,16 @@
 
     .action-btn-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 12px 16px; border-top: 1px solid #f8bbd0; display: flex; gap: 12px; z-index: 10001; }
     .spec-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #fce4ec; font-size: 0.9rem; }
-    .cat-box { background: white; border-radius: 10px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #f8bbd0; cursor: pointer; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .cat-box { background: white; border-radius: 10px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #f8bbd0; cursor: pointer; }
   </style>
 </head>
 <body>
 
-  <!-- లేడీస్ కు ఇష్టమైన లైట్ పింక్ బ్రాండ్ వెల్కమ్ బ్యానర్ -->
-  <div id="brandWelcomeBanner">
-    <div class="brand-logo-circle"><i class="fa-solid fa-bag-shopping"></i></div>
-    <div>
-      <div style="font-weight: 800; font-size: 1.15rem; color: #4a148c; letter-spacing: 0.5px;">MeeStore</div>
-      <div style="font-size: 0.72rem; color: #880e4f; font-weight: 600;">మహిళలకు నమ్మకమైన షాపింగ్ స్టోర్ 🌸</div>
-    </div>
+  <!-- 1. యాప్ ఓపెన్ అయ్యేటప్పుడు కనిపించే లోగో స్క్రీన్ -->
+  <div id="appSplashScreen">
+    <div class="splash-logo-box"><i class="fa-solid fa-bag-shopping"></i></div>
+    <h2 style="font-weight: 800; letter-spacing: 0.5px; color: #4a148c;">MeeStore</h2>
+    <p style="font-size: 0.85rem; color: #880e4f; font-weight: 600; margin-top: 4px;">మహిళలకు నమ్మకమైన షాపింగ్ స్టోర్ 🌸</p>
   </div>
 
   <!-- Top App Bar -->
@@ -109,7 +104,7 @@
     </div>
   </div>
 
-  <!-- 1. హోమ్ పేజీ (HOME PAGE) -->
+  <!-- 1. హోమ్ పేజీ -->
   <div id="homePage" class="app-page active-page">
     <div class="search-box">
       <input type="text" id="searchInput" class="search-input" placeholder="చీరలు, కిరాణా, జ్యువెలరీ వస్తువులను వెతకండి...">
@@ -128,7 +123,7 @@
     <div class="product-grid" id="productGrid"></div>
   </div>
 
-  <!-- 2. పూర్తి ప్రొడక్ట్ వివరాల పేజీ (MEESHO STYLE PRODUCT DETAILS PAGE) -->
+  <!-- 2. ప్రొడక్ట్ వివరాల పేజీ -->
   <div id="productDetailPage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
@@ -143,7 +138,6 @@
       <span class="badge" id="pDetailCat">Category</span>
     </div>
 
-    <!-- పూర్తి వివరాలు: బరువు, కొలతలు, నేచర్, ప్యాకింగ్, లైసెన్స్ -->
     <div style="padding: 16px; background: white; margin-bottom: 85px; border-radius: 12px; margin-left: 12px; margin-right: 12px; border: 1px solid #f8bbd0;">
       <h3 style="font-size: 1rem; margin-bottom: 14px; border-bottom: 2px solid #9c27b0; display: inline-block; padding-bottom: 4px; color: #4a148c;">సరుకు పూర్తి స్పెసిఫికేషన్లు (Specifications)</h3>
       <div class="spec-row"><span>బరువు (Weight):</span><b id="pDetailWeight">-</b></div>
@@ -168,7 +162,7 @@
     </div>
   </div>
 
-  <!-- 3. కేటగిరీల పేజీ (CATEGORIES PAGE) -->
+  <!-- 3. కేటగిరీల పేజీ -->
   <div id="categoriesPage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
@@ -177,7 +171,7 @@
     <div style="padding: 14px;" id="catListContainer"></div>
   </div>
 
-  <!-- 4. కార్ట్ పేజీ (CART PAGE) -->
+  <!-- 4. కార్ట్ పేజీ -->
   <div id="cartPage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
@@ -193,7 +187,7 @@
     </div>
   </div>
 
-  <!-- 5. చెక్‌అవుట్ & కొరియర్ పేజీ (CHECKOUT PAGE) -->
+  <!-- 5. చెక్‌అవుట్ పేజీ -->
   <div id="checkoutPage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
@@ -201,13 +195,11 @@
     </div>
 
     <div style="padding: 15px; padding-bottom: 40px;">
-      <!-- డెలివరీ అడ్రస్ -->
       <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #f8bbd0;">
         <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-location-dot text-danger me-1"></i>డెలివరీ చిరునామా (కొరియర్ డెలివరీ కోసం)</h4>
         <textarea id="checkAddress" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.9rem;" rows="2" placeholder="ఇంటి నంబర్, వీధి, ఊరు, జిల్లా, పిన్‌కోడ్"></textarea>
       </div>
 
-      <!-- కూపన్ డిస్కౌంట్ -->
       <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #f8bbd0;">
         <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-ticket text-warning me-1"></i>డిస్కౌంట్ కూపన్</h4>
         <div style="display: flex; gap: 8px;">
@@ -217,7 +209,6 @@
         <small id="couponFeedback" style="color: green; display: block; margin-top: 5px; font-weight: bold;"></small>
       </div>
 
-      <!-- బిల్ సమ్మరీ -->
       <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #f8bbd0;">
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>సరుకు మొత్తం:</span><span>₹<span id="billSub">0</span></span></div>
         <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: green;"><span>కూపన్ డిస్కౌంట్:</span><span>-₹<span id="billDisc">0</span></span></div>
@@ -227,7 +218,6 @@
         </div>
       </div>
 
-      <!-- UPI / QR Payment -->
       <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 16px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
         <p style="font-size: 0.9rem; color: #166534; margin-bottom: 10px; font-weight: bold;">GPay / PhonePe / Paytm ద్వారా చెల్లించండి</p>
         <a id="btnDirectUpiLink" href="#" style="display: block; background: #16a34a; color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-bottom: 10px;">
@@ -243,7 +233,7 @@
     </div>
   </div>
 
-  <!-- 6. బయ్యర్ ప్రత్యేక ప్రొఫైల్ పేజీ (BUYER PROFILE PAGE) -->
+  <!-- 6. బయ్యర్ ప్రొఫైల్ పేజీ -->
   <div id="profilePage" class="app-page">
     <div class="page-header">
       <i class="fa-solid fa-arrow-left" onclick="navigateTo('homePage')"></i>
@@ -296,4 +286,5 @@
       <div id="guestLoginBox" style="background: white; padding: 18px; border-radius: 12px; border: 1px solid #f8bbd0;">
         <h3 style="font-size: 1.15rem; color: #9c27b0; margin-bottom: 12px;">బయ్యర్ లాగిన్ / రిజిస్ట్రేషన్</h3>
         <input type="tel" id="regPhone" placeholder="10 అంకెల మొబైల్ నంబర్" style="width: 100%; padding: 11px; margin-bottom: 12px; border: 1px solid #ddd; border-radius: 8px;">
-        <input type="te
+        <input type="text" id="regName" placeholder="మీ పూర్తి పేరు" style="width: 100%; padding: 11px; margin-bottom: 14px; border: 1px solid #ddd; border-radius: 8px;">
+        <button onclick="buyerQuickRegister()" style="width: 100%; padding: 13px; background: #9c27b0; color: white; border: none;
