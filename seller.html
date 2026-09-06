@@ -9,12 +9,10 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: #fff5f8; padding-bottom: 60px; }
     
-    /* Header Bar */
     .header { background: #9c27b0; color: white; padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 8px rgba(156, 39, 176, 0.2); }
     .header-title { font-weight: 800; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
     .btn-back-store { color: white; text-decoration: none; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.6); padding: 6px 14px; border-radius: 18px; font-weight: 600; background: rgba(255,255,255,0.1); }
     
-    /* Card Containers */
     .card { background: white; border-radius: 12px; padding: 20px; margin: 16px; box-shadow: 0 2px 10px rgba(244, 143, 177, 0.25); border: 1px solid #f8bbd0; }
     .form-group { margin-bottom: 14px; }
     .form-label { display: block; font-weight: 700; font-size: 0.88rem; margin-bottom: 6px; color: #4a148c; }
@@ -23,11 +21,9 @@
     .row { display: flex; gap: 12px; }
     .col { flex: 1; }
     
-    /* Image Preview */
     .preview-box { width: 100%; height: 180px; border: 2px dashed #ba68c8; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: #fafafa; overflow: hidden; margin-bottom: 8px; }
     .preview-box img { width: 100%; height: 100%; object-fit: contain; }
     
-    /* Buttons */
     .btn-primary-action { background: #9c27b0; color: white; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 1rem; box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3); }
     .auth-tabs { display: flex; gap: 10px; margin-bottom: 18px; }
     .auth-tab-btn { flex: 1; padding: 10px; border: 1px solid #f48fb1; background: white; border-radius: 8px; cursor: pointer; font-weight: 700; color: #666; font-size: 0.9rem; }
@@ -42,7 +38,7 @@
     <a href="index.html" class="btn-back-store"><i class="fa-solid fa-arrow-left me-1"></i> Back to Store</a>
   </div>
 
-  <!-- Seller Auth Section (Login / KYC Register) -->
+  <!-- Seller Auth Section -->
   <div id="sellerAuthCard" class="card" style="max-width: 440px; margin: 24px auto;">
     <div class="auth-tabs">
       <button id="tabSellerLoginBtn" class="auth-tab-btn active" onclick="switchSellerAuth(true)">Sign In</button>
@@ -90,7 +86,7 @@
     </form>
   </div>
 
-  <!-- Seller Dashboard (Add Products & Inventory) -->
+  <!-- Seller Dashboard -->
   <div id="sellerDashboardCard" style="display: none; max-width: 700px; margin: 16px auto;">
     <div class="card">
       <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 18px; border-bottom: 1px solid #f8bbd0; padding-bottom: 10px;">
@@ -119,7 +115,7 @@
           </select>
         </div>
 
-        <!-- Camera & Gallery Direct Image Selector -->
+        <!-- Camera & Gallery Image Selector -->
         <div class="form-group">
           <label class="form-label">Product Image (Take Photo or Choose from Gallery)</label>
           <div class="preview-box" id="imagePreviewBox">
@@ -162,28 +158,28 @@
           </div>
         </div>
 
-        <!-- మెటీరియల్ స్వభావం (Hazardous or Non-Hazardous) -->
+        <!-- Material Nature / Hazard -->
         <div class="form-group">
           <label class="form-label">Material Nature / Hazard</label>
           <select id="pHazard" class="form-select">
-            <option value="Non-Hazardous">Safe / Non-Hazardous (సాధారణమైనది)</option>
-            <option value="Fragile">Fragile (గాజు / సున్నితమైన వస్తువు)</option>
-            <option value="Liquid">Liquid / Oil (ద్రవ పదార్థాలు)</option>
-            <option value="Hazardous">Flammable / Hazardous (మండే స్వభావం)</option>
+            <option value="Non-Hazardous">Safe / Non-Hazardous (Regular Item)</option>
+            <option value="Fragile">Fragile (Glass / Clay / Breakable)</option>
+            <option value="Liquid">Liquid / Oil (Bottled Liquid)</option>
+            <option value="Hazardous">Flammable / Hazardous (Dangerous)</option>
           </select>
         </div>
 
-        <!-- ప్యాకింగ్ వివరాలు (Packaging Type) -->
+        <!-- Packaging Type -->
         <div class="form-group">
-          <label class="form-label">Packaging Type (ప్యాకింగ్ వివరాలు)</label>
+          <label class="form-label">Packaging Type</label>
           <select id="pPackaging" class="form-select">
-            <option value="Corrugated Box">Corrugated Box (బాక్స్ ప్యాకింగ్ - రక్షణ)</option>
-            <option value="Poly Bag / Flyer">Poly Bag / Flyer (ఫ్లైయర్ బ్యాగ్ - బట్టలకు)</option>
-            <option value="Bubble Wrap">Bubble Wrap (బబుల్ ర్యాప్ - పగిలే వస్తువులకు)</option>
+            <option value="Corrugated Box">Corrugated Box (Hard Cardboard Box - High Safety)</option>
+            <option value="Poly Bag / Flyer">Poly Bag / Flyer (Waterproof Plastic Courier Bag)</option>
+            <option value="Bubble Wrap">Bubble Wrap (Shock Absorption Packaging)</option>
           </select>
         </div>
 
-        <!-- Food items verification: FSSAI License & Expiry -->
+        <!-- Food Compliance: FSSAI & Expiry -->
         <div id="foodComplianceGroup" style="display: none; background: #fdfaf6; padding: 12px; border-radius: 8px; margin-bottom: 14px; border: 1px solid #ffe0b2;">
           <div class="form-group">
             <label class="form-label" style="color: #2e7d32;"><i class="fa-solid fa-certificate me-1"></i> FSSAI Food License Number</label>
