@@ -6,15 +6,15 @@
   <title>MeeStore</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #fff5f8; padding-top: 60px; padding-bottom: 65px; min-height: 100vh; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: #fff5f8; padding-top: 60px; padding-bottom: 75px; min-height: 100vh; position: relative; }
 
     /* 1. Splash Screen */
     #splashScreen {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: linear-gradient(135deg, #f8bbd0, #fce4ec, #e1bee7);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 999999;
+      z-index: 9999999;
       animation: autoFadeOut 0.4s ease-out 1.2s forwards;
       pointer-events: none;
     }
@@ -26,7 +26,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 50px; color: #9c27b0;
       box-shadow: 0 10px 25px rgba(244, 143, 177, 0.6);
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     /* 2. Top Header */
@@ -34,18 +34,19 @@
       position: fixed; top: 0; left: 0; right: 0; height: 60px;
       background: white; padding: 0 14px; border-bottom: 1px solid #f8bbd0;
       display: flex; justify-content: space-between; align-items: center;
-      z-index: 1000; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      z-index: 99999; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
-    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; display: flex; align-items: center; gap: 8px; }
+    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; display: flex; align-items: center; gap: 6px; cursor: pointer; }
     .avatar-wrapper { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #ba68c8; overflow: hidden; cursor: pointer; }
     .avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* 3. Bottom Navigation */
+    /* 3. 100% గ్యారెంటీగా కనిపించే కింద బాటమ్ బార్ (BULLETPROOF BOTTOM NAV) */
     .bottom-nav-bar {
-      position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
-      background: white; border-top: 2px solid #f8bbd0;
-      display: flex; justify-content: space-around; align-items: center;
-      z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
+      width: 100vw !important; height: 62px !important;
+      background: #ffffff !important; border-top: 2px solid #f8bbd0 !important;
+      display: flex !important; justify-content: space-around !important; align-items: center !important;
+      z-index: 999999 !important; box-shadow: 0 -3px 15px rgba(0,0,0,0.08) !important;
     }
     .nav-tab-btn {
       flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -54,7 +55,7 @@
     .nav-tab-btn i { font-size: 1.35rem; margin-bottom: 2px; }
     .nav-tab-btn.active { color: #9c27b0; }
 
-    /* Category Scroll & Search */
+    /* Search & Categories */
     .search-box { padding: 10px 14px; background: white; }
     .search-input { width: 100%; padding: 10px 16px; border: 1px solid #f48fb1; border-radius: 20px; outline: none; font-size: 0.92rem; background: #fffcfd; }
     .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 10px 14px; background: white; border-bottom: 1px solid #f8bbd0; }
@@ -62,7 +63,7 @@
     .cat-btn { border-radius: 18px; font-size: 0.82rem; padding: 6px 14px; border: 1px solid #f48fb1; background: white; color: #4a148c; font-weight: 600; cursor: pointer; }
     .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
 
-    /* Product Cards */
+    /* Product Grid */
     .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; }
     .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(244, 143, 177, 0.2); display: flex; flex-direction: column; cursor: pointer; border: 1px solid #fce4ec; }
     .product-img { width: 100%; height: 160px; object-fit: cover; }
@@ -72,10 +73,10 @@
     .product-price { font-size: 1.15rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
     .btn-buy-card { background: #9c27b0; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.88rem; }
 
-    /* Full Overlays */
+    /* Overlays (Details, Cart, Categories, Profile) */
     .full-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: #fff5f8; z-index: 2000; overflow-y: auto; display: none; padding-bottom: 80px;
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: #fff5f8; z-index: 100005; overflow-y: auto; display: none; padding-bottom: 85px;
     }
     .overlay-header { background: white; padding: 14px 16px; border-bottom: 1px solid #f8bbd0; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 10; }
     .overlay-header i { font-size: 1.35rem; cursor: pointer; color: #9c27b0; padding: 4px; }
@@ -113,7 +114,7 @@
     </div>
   </header>
 
-  <!-- Main Scrollable Feed -->
+  <!-- Main Feed -->
   <div class="search-box">
     <input type="text" id="searchInput" class="search-input" placeholder="Search Sarees, Groceries, Kurtis, Jewelry...">
   </div>
@@ -128,7 +129,7 @@
     <button class="cat-btn" onclick="filterCat('Footwear', this)">👠 Footwear</button>
   </div>
 
-  <!-- Direct HTML Products (ఎట్టిపరిస్థితుల్లోనూ ఖాళీగా ఉండదు) -->
+  <!-- Product Grid -->
   <div class="product-grid" id="productGrid">
     <div class="product-card" onclick="showProductDetails(1)">
       <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" class="product-img" alt="Millets">
@@ -286,4 +287,332 @@
         <p style="font-size:0.8rem; color:#666; margin-bottom:6px;">Or scan QR code:</p>
         <img id="upiQrCodeImg" src="" style="max-width:130px; border:1px solid #ddd; padding:4px; background:white; border-radius:6px;" alt="QR">
       </div>
-      <button onclick="placeWhatsAppOrder()" class="btn-action" sty
+      <button onclick="placeWhatsAppOrder()" class="btn-action" style="background:#9c27b0; color:white; box-shadow:0 4px 12px rgba(156,39,176,0.3);"><i class="fa-brands fa-whatsapp me-2"></i> Confirm Order (Instant Alert)</button>
+    </div>
+  </div>
+
+  <!-- OVERLAY 5: BUYER PROFILE -->
+  <div id="profileOverlay" class="full-overlay">
+    <div class="overlay-header">
+      <i class="fa-solid fa-arrow-left" onclick="closeAllOverlays()"></i>
+      <span class="overlay-title">My Account & Settings</span>
+    </div>
+    <div style="padding: 16px;">
+      <div id="buyerLoggedInBox" style="display:none;">
+        <div style="display:flex; align-items:center; gap:15px; background:white; padding:16px; border-radius:12px; margin-bottom:15px; border:1px solid #f8bbd0;">
+          <img id="profImgBig" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width:65px; height:65px; border-radius:50%; object-fit:cover; border:2px solid #9c27b0;" alt="Buyer">
+          <div><h3 id="profNameBig" style="font-size:1.15rem; color:#333;">Customer Name</h3><p id="profPhoneBig" style="font-size:0.85rem; color:#666;">Phone</p></div>
+        </div>
+        <div style="background:white; border-radius:12px; overflow:hidden; border:1px solid #f8bbd0; margin-bottom:15px;">
+          <div class="cat-box" onclick="toggleOrdersBox()" style="border:none; border-bottom:1px solid #fce4ec; border-radius:0;">
+            <span><i class="fa-solid fa-box text-primary me-2"></i> My Orders & Tracking</span><i class="fa-solid fa-chevron-right text-muted"></i>
+          </div>
+          <div class="cat-box" onclick="alert('Return request placed! Courier partner will pick up soon.')" style="border:none; border-bottom:1px solid #fce4ec; border-radius:0;">
+            <span><i class="fa-solid fa-rotate-left text-warning me-2"></i> Returns & Refunds</span><i class="fa-solid fa-chevron-right text-muted"></i>
+          </div>
+          <div class="cat-box" onclick="editBankDetailsPrompt()" style="border:none; border-bottom:1px solid #fce4ec; border-radius:0;">
+            <span><i class="fa-solid fa-building-columns text-success me-2"></i> Bank & UPI Details (For Refunds)</span><i class="fa-solid fa-chevron-right text-muted"></i>
+          </div>
+          <div class="cat-box" onclick="editDeliveryAddressPrompt()" style="border:none; border-bottom:1px solid #fce4ec; border-radius:0;">
+            <span><i class="fa-solid fa-location-dot text-danger me-2"></i> Edit Delivery Address</span><i class="fa-solid fa-chevron-right text-muted"></i>
+          </div>
+        </div>
+        <div id="ordersContainerBox" style="display:none; background:white; padding:14px; border-radius:10px; margin-bottom:15px; border:1px solid #f8bbd0;">
+          <h4 style="font-size:0.95rem; margin-bottom:8px; color:#4a148c;">Order History:</h4>
+          <div id="ordersHistoryList">No orders yet</div>
+        </div>
+        <button onclick="buyerLogout()" class="btn-action" style="background:#e53935; color:white;"><i class="fa-solid fa-right-from-bracket me-2"></i> Sign Out</button>
+      </div>
+
+      <div id="buyerGuestBox" style="background:white; padding:18px; border-radius:12px; border:1px solid #f8bbd0;">
+        <h3 style="font-size:1.15rem; color:#9c27b0; margin-bottom:14px;">Customer Sign In / Register</h3>
+        <input type="tel" id="guestPhone" placeholder="10-digit Mobile Number" style="width:100%; padding:11px; margin-bottom:12px; border:1px solid #ddd; border-radius:8px;">
+        <input type="text" id="guestName" placeholder="Full Name" style="width:100%; padding:11px; margin-bottom:14px; border:1px solid #ddd; border-radius:8px;">
+        <button onclick="buyerQuickRegister()" class="btn-action" style="background:#9c27b0; color:white;">Sign In / Create Account</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. ఫిక్స్డ్ బాటమ్ బార్ (FIXED AT BOTTOM) -->
+  <nav class="bottom-nav-bar">
+    <button class="nav-tab-btn active" id="btnTabHome" onclick="closeAllOverlays()">
+      <i class="fa-solid fa-house"></i>
+      <span>Home</span>
+    </button>
+    <button class="nav-tab-btn" id="btnTabCat" onclick="openOverlay('categoriesOverlay')">
+      <i class="fa-solid fa-shapes"></i>
+      <span>Categories</span>
+    </button>
+    <a href="seller.html" class="nav-tab-btn" style="text-decoration: none;">
+      <i class="fa-solid fa-shop"></i>
+      <span>Seller Hub</span>
+    </a>
+    <button class="nav-tab-btn" id="btnTabProf" onclick="openOverlay('profileOverlay')">
+      <i class="fa-solid fa-user"></i>
+      <span>Account</span>
+    </button>
+  </nav>
+
+  <script>
+    // Bulletproof Global Variables
+    let curBuyer = null;
+    try {
+      const saved = localStorage.getItem('meestore_buyer');
+      if (saved) curBuyer = JSON.parse(saved);
+    } catch(e) { curBuyer = null; }
+
+    let activeProduct = null;
+    let currentDiscount = 0;
+    let cart = [];
+
+    const catalog = [
+      {
+        id: 1, name: "Little millets (Organic 500g)", category: "Grocery & Millets", price: 20, weight: "500g",
+        dimensions: "15x10x5 cm", packaging: "Corrugated Box", material: "Organic Millet Grain", color: "Natural Brown",
+        hazard: "Non-Hazardous / Safe", fssai: "13624014000123", expiry: "2027-12-31",
+        image_url: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400",
+        seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
+      },
+      {
+        id: 2, name: "Banarasi Soft Silk Saree", category: "Women Fashion", price: 499, weight: "650g",
+        dimensions: "30x25x4 cm", packaging: "Poly Bag / Flyer", material: "Soft Silk", color: "Royal Magenta Pink",
+        hazard: "Non-Hazardous / Safe", fssai: "N/A", expiry: "N/A",
+        image_url: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400",
+        seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
+      },
+      {
+        id: 3, name: "Gold Plated Temple Necklace", category: "Jewelry & Fancy", price: 249, weight: "150g",
+        dimensions: "12x10x3 cm", packaging: "Bubble Wrap & Box", material: "Brass / Micro Gold", color: "Gold",
+        hazard: "Fragile (Non-Hazardous)", fssai: "N/A", expiry: "N/A",
+        image_url: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400",
+        seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
+      },
+      {
+        id: 4, name: "Brass Pooja Diya / Deepam", category: "General & Pooja", price: 120, weight: "250g",
+        dimensions: "10x10x8 cm", packaging: "Corrugated Box", material: "Pure Brass", color: "Golden Yellow",
+        hazard: "Non-Hazardous / Safe", fssai: "N/A", expiry: "N/A",
+        image_url: "https://images.unsplash.com/photo-1605371924599-2d0365da1ae0?w=400",
+        seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
+      }
+    ];
+    let allProducts = catalog;
+
+    function openOverlay(id) {
+      document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none');
+      const target = document.getElementById(id);
+      if (target) target.style.display = 'block';
+
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      if (id === 'categoriesOverlay') document.getElementById('btnTabCat').classList.add('active');
+      if (id === 'profileOverlay') { document.getElementById('btnTabProf').classList.add('active'); syncBuyerUI(); }
+      if (id === 'cartOverlay') renderCartPage();
+
+      window.scrollTo(0, 0);
+    }
+
+    function closeAllOverlays() {
+      document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none');
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('btnTabHome').classList.add('active');
+    }
+
+    function showProductDetails(id) {
+      activeProduct = allProducts.find(p => p.id === id) || catalog[0];
+      document.getElementById('pDetailHeaderTitle').innerText = activeProduct.name;
+      document.getElementById('pDetailName').innerText = activeProduct.name;
+      document.getElementById('pDetailPrice').innerText = "₹" + activeProduct.price;
+      document.getElementById('pDetailCat').innerText = activeProduct.category;
+      document.getElementById('pDetailImg').src = activeProduct.image_url;
+      document.getElementById('pDetailWeight').innerText = activeProduct.weight;
+      document.getElementById('pDetailDim').innerText = activeProduct.dimensions;
+      document.getElementById('pDetailPackaging').innerText = activeProduct.packaging;
+      document.getElementById('pDetailMat').innerText = activeProduct.material;
+      document.getElementById('pDetailColor').innerText = activeProduct.color;
+      document.getElementById('pDetailHazard').innerText = activeProduct.hazard;
+      document.getElementById('pDetailFssai').innerText = activeProduct.fssai;
+      document.getElementById('pDetailExpiry').innerText = activeProduct.expiry;
+
+      openOverlay('productDetailOverlay');
+    }
+
+    function addToCartCurrent() {
+      if (activeProduct) {
+        cart.push(activeProduct);
+        document.getElementById('cartCount').innerText = cart.length;
+        alert("🎉 Item added to cart successfully!");
+      }
+    }
+
+    function renderCartPage() {
+      const cont = document.getElementById('cartItemsContainer');
+      const footer = document.getElementById('cartFooterBox');
+      if (cart.length === 0) {
+        cont.innerHTML = `<div style="text-align:center; padding: 50px 20px; color:#888;"><i class="fa-solid fa-cart-shopping fa-3x mb-3 text-muted"></i><br>Your shopping cart is empty!</div>`;
+        footer.style.display = 'none';
+      } else {
+        let sum = 0;
+        cont.innerHTML = cart.map((it, idx) => {
+          sum += Number(it.price);
+          return `
+            <div style="background:white; border:1px solid #f8bbd0; padding:14px; border-radius:10px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+              <div><b>${it.name}</b><br><span style="color:#9c27b0; font-weight:bold; font-size:1.1rem;">₹${it.price}</span></div>
+              <button onclick="removeCartItem(${idx})" style="background:#fce4ec; border:1px solid #f48fb1; color:#c2185b; padding:6px 14px; border-radius:6px; font-weight:bold; cursor:pointer;">Remove</button>
+            </div>
+          `;
+        }).join('');
+        document.getElementById('cartSumDisplay').innerText = sum;
+        footer.style.display = 'block';
+      }
+    }
+
+    function removeCartItem(idx) {
+      cart.splice(idx, 1);
+      document.getElementById('cartCount').innerText = cart.length;
+      renderCartPage();
+    }
+
+    function startCheckoutCart() {
+      if (!curBuyer) { alert("Please sign in to place an order!"); openOverlay('profileOverlay'); return; }
+      activeProduct = cart[0];
+      setupCheckout(Number(document.getElementById('cartSumDisplay').innerText));
+    }
+
+    function startCheckoutSingle() {
+      if (!curBuyer) { alert("Please sign in to place an order!"); openOverlay('profileOverlay'); return; }
+      setupCheckout(Number(activeProduct.price));
+    }
+
+    function setupCheckout(subTotal) {
+      document.getElementById('billSubVal').innerText = subTotal;
+      document.getElementById('billDiscVal').innerText = "0";
+      currentDiscount = 0;
+      updateCheckoutTotal(subTotal, 0);
+      document.getElementById('checkAddressInput').value = curBuyer.address || '';
+      openOverlay('checkoutOverlay');
+    }
+
+    function applyDiscountCoupon() {
+      const c = document.getElementById('couponCodeInput').value.trim().toUpperCase();
+      const sub = Number(document.getElementById('billSubVal').innerText);
+      if (c === "MEE50" || c === "WELCOME") {
+        currentDiscount = Math.min(50, Math.round(sub * 0.2));
+        document.getElementById('billDiscVal').innerText = currentDiscount;
+        document.getElementById('couponFeedbackMsg').innerText = "🎉 Coupon applied! ₹" + currentDiscount + " Discount.";
+        updateCheckoutTotal(sub, currentDiscount);
+      } else {
+        alert("Invalid coupon code. Try 'MEE50'.");
+      }
+    }
+
+    function updateCheckoutTotal(sub, disc) {
+      const finalAmt = Math.max(1, sub - disc);
+      document.getElementById('billFinalVal').innerText = finalAmt;
+      const upi = (activeProduct && activeProduct.seller_upi) ? activeProduct.seller_upi : 'mujahidsdghf9@ybl';
+      const link = `upi://pay?pa=${upi}&pn=MeeStore&am=${finalAmt}&cu=INR`;
+      document.getElementById('btnUpiDirectLink').href = link;
+      document.getElementById('upiQrCodeImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=130x130&data=${encodeURIComponent(link)}`;
+    }
+
+    async function placeWhatsAppOrder() {
+      const addr = document.getElementById('checkAddressInput').value.trim();
+      if (!addr) { alert("Please enter delivery address!"); return; }
+
+      const amt = document.getElementById('billFinalVal').innerText;
+      const msg = `🛒 *MeeStore Order Placed!*\nItem: ${activeProduct.name}\nAmount: ₹${amt}\nWeight: ${activeProduct.weight}\nDimensions: ${activeProduct.dimensions}\nCustomer: ${curBuyer.name} (${curBuyer.phone})\nDelivery Address: ${addr}\nCourier: Ready for Pickup`;
+      window.open(`https://wa.me/91${activeProduct.seller_phone || '9177411712'}?text=${encodeURIComponent(msg)}`);
+      cart = [];
+      document.getElementById('cartCount').innerText = "0";
+      closeAllOverlays();
+    }
+
+    function filterByCategoryDirect(catName) {
+      closeAllOverlays();
+      renderProductGrid(allProducts.filter(p => p.category && p.category.includes(catName)));
+    }
+
+    function buyerQuickRegister() {
+      const ph = document.getElementById('guestPhone').value.trim();
+      const nm = document.getElementById('guestName').value.trim() || "Customer";
+      if (!ph || ph.length < 10) { alert("Please enter a valid 10-digit mobile number!"); return; }
+      curBuyer = { id: 1, name: nm, phone: ph, address: "Hyderabad", bank: "SBI - 1234567890" };
+      try { localStorage.setItem('meestore_buyer', JSON.stringify(curBuyer)); } catch(e){}
+      syncBuyerUI();
+      alert("Welcome, " + nm + "!");
+    }
+
+    function syncBuyerUI() {
+      try {
+        if (curBuyer) {
+          document.getElementById('welcomeUserText').innerText = curBuyer.name;
+          document.getElementById('buyerLoggedInBox').style.display = 'block';
+          document.getElementById('buyerGuestBox').style.display = 'none';
+          document.getElementById('profNameBig').innerText = curBuyer.name;
+          document.getElementById('profPhoneBig').innerText = curBuyer.phone;
+        } else {
+          document.getElementById('welcomeUserText').innerText = "Hello, Sign In >";
+          document.getElementById('buyerLoggedInBox').style.display = 'none';
+          document.getElementById('buyerGuestBox').style.display = 'block';
+        }
+      } catch(e) {}
+    }
+
+    function editDeliveryAddressPrompt() {
+      const a = prompt("Enter New Delivery Address:", curBuyer.address || "");
+      if (a) { curBuyer.address = a; try { localStorage.setItem('meestore_buyer', JSON.stringify(curBuyer)); } catch(e){} alert("Address updated!"); }
+    }
+
+    function editBankDetailsPrompt() {
+      const b = prompt("Enter Bank Details / UPI ID for Refunds:", curBuyer.bank || "");
+      if (b) { curBuyer.bank = b; try { localStorage.setItem('meestore_buyer', JSON.stringify(curBuyer)); } catch(e){} alert("Bank details saved!"); }
+    }
+
+    function toggleOrdersBox() {
+      const o = document.getElementById('ordersContainerBox');
+      o.style.display = o.style.display === 'none' ? 'block' : 'none';
+      document.getElementById('ordersHistoryList').innerHTML = `
+        <div style="border: 1px solid #f8bbd0; padding: 10px; border-radius: 8px; background:#fffcfd;">
+          <b>Little millets (Organic 500g)</b> - ₹20<br>
+          <small style="color: green;">Status: Shipped (Delhivery AWB #DL12345)</small>
+        </div>
+      `;
+    }
+
+    function buyerLogout() {
+      try { localStorage.removeItem('meestore_buyer'); } catch(e){}
+      curBuyer = null;
+      syncBuyerUI();
+      closeAllOverlays();
+    }
+
+    function renderProductGrid(list) {
+      const grid = document.getElementById('productGrid');
+      if (!list || list.length === 0) list = catalog;
+      grid.innerHTML = list.map(p => `
+        <div class="product-card" onclick="showProductDetails(${p.id})">
+          <img src="${p.image_url}" class="product-img" alt="${p.name}">
+          <div class="card-body">
+            <span class="badge">${p.category}</span>
+            <div class="product-title">${p.name}</div>
+            <div style="font-size:0.75rem; color:#666;">Weight: <b>${p.weight}</b></div>
+            <div class="product-price">₹${p.price}</div>
+            <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(${p.id})">View &amp; Buy</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterCat(cat, btn) {
+      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderProductGrid(cat === 'all' ? allProducts : allProducts.filter(p => p.category && p.category.includes(cat)));
+    }
+
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const q = e.target.value.toLowerCase();
+      renderProductGrid(allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q))));
+    });
+
+    syncBuyerUI();
+  </script>
+</body>
+</html>
