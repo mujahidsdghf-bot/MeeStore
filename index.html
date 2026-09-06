@@ -40,7 +40,7 @@
     .avatar-wrapper { width: 38px; height: 38px; border-radius: 50%; border: 2px solid #ba68c8; overflow: hidden; cursor: pointer; }
     .avatar-wrapper img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* 3. 100% గ్యారెంటీగా కనిపించే కింద బాటమ్ బార్ (BULLETPROOF BOTTOM NAV) */
+    /* 3. Fixed Bottom Navigation Bar */
     .bottom-nav-bar {
       position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important;
       width: 100vw !important; height: 62px !important;
@@ -73,7 +73,7 @@
     .product-price { font-size: 1.15rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
     .btn-buy-card { background: #9c27b0; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.88rem; }
 
-    /* Overlays (Details, Cart, Categories, Profile) */
+    /* Overlays */
     .full-overlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: #fff5f8; z-index: 100005; overflow-y: auto; display: none; padding-bottom: 85px;
@@ -114,11 +114,12 @@
     </div>
   </header>
 
-  <!-- Main Feed -->
+  <!-- Search Box -->
   <div class="search-box">
     <input type="text" id="searchInput" class="search-input" placeholder="Search Sarees, Groceries, Kurtis, Jewelry...">
   </div>
 
+  <!-- Category Bar -->
   <div class="cat-scroll">
     <button class="cat-btn active" onclick="filterCat('all', this)">All</button>
     <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
@@ -129,49 +130,8 @@
     <button class="cat-btn" onclick="filterCat('Footwear', this)">👠 Footwear</button>
   </div>
 
-  <!-- Product Grid -->
-  <div class="product-grid" id="productGrid">
-    <div class="product-card" onclick="showProductDetails(1)">
-      <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" class="product-img" alt="Millets">
-      <div class="card-body">
-        <span class="badge">Grocery & Millets</span>
-        <div class="product-title">Little millets (Organic 500g)</div>
-        <div style="font-size:0.75rem; color:#666;">Weight: <b>500g</b></div>
-        <div class="product-price">₹20</div>
-        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(1)">View &amp; Buy</button>
-      </div>
-    </div>
-    <div class="product-card" onclick="showProductDetails(2)">
-      <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" class="product-img" alt="Saree">
-      <div class="card-body">
-        <span class="badge">Women Fashion</span>
-        <div class="product-title">Banarasi Soft Silk Saree</div>
-        <div style="font-size:0.75rem; color:#666;">Weight: <b>650g</b></div>
-        <div class="product-price">₹499</div>
-        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(2)">View &amp; Buy</button>
-      </div>
-    </div>
-    <div class="product-card" onclick="showProductDetails(3)">
-      <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" class="product-img" alt="Necklace">
-      <div class="card-body">
-        <span class="badge">Jewelry & Fancy</span>
-        <div class="product-title">Gold Plated Temple Necklace</div>
-        <div style="font-size:0.75rem; color:#666;">Weight: <b>150g</b></div>
-        <div class="product-price">₹249</div>
-        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(3)">View &amp; Buy</button>
-      </div>
-    </div>
-    <div class="product-card" onclick="showProductDetails(4)">
-      <img src="https://images.unsplash.com/photo-1605371924599-2d0365da1ae0?w=400" class="product-img" alt="Diya">
-      <div class="card-body">
-        <span class="badge">General & Pooja</span>
-        <div class="product-title">Brass Pooja Diya / Deepam</div>
-        <div style="font-size:0.75rem; color:#666;">Weight: <b>250g</b></div>
-        <div class="product-price">₹120</div>
-        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(4)">View &amp; Buy</button>
-      </div>
-    </div>
-  </div>
+  <!-- Dynamic Product Grid (Loads custom seller products + standard items) -->
+  <div class="product-grid" id="productGrid"></div>
 
   <!-- OVERLAY 1: PRODUCT DETAILS -->
   <div id="productDetailOverlay" class="full-overlay">
@@ -333,7 +293,7 @@
     </div>
   </div>
 
-  <!-- 3. ఫిక్స్డ్ బాటమ్ బార్ (FIXED AT BOTTOM) -->
+  <!-- 3. Fixed Bottom Navigation Bar -->
   <nav class="bottom-nav-bar">
     <button class="nav-tab-btn active" id="btnTabHome" onclick="closeAllOverlays()">
       <i class="fa-solid fa-house"></i>
@@ -354,7 +314,6 @@
   </nav>
 
   <script>
-    // Bulletproof Global Variables
     let curBuyer = null;
     try {
       const saved = localStorage.getItem('meestore_buyer');
@@ -395,7 +354,18 @@
         seller_phone: "9177411712", seller_upi: "mujahidsdghf9@ybl"
       }
     ];
-    let allProducts = catalog;
+
+    // మీరడిగిన కోడ్: సెల్లర్ యాడ్ చేసిన సరుకులను పైన లోడ్ చేస్తుంది
+    let allProducts = [...catalog];
+    try {
+      const customItems = localStorage.getItem('meestore_custom_products');
+      if (customItems) {
+        const parsed = JSON.parse(customItems);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          allProducts = [...parsed, ...catalog];
+        }
+      }
+    } catch(e) {}
 
     function openOverlay(id) {
       document.querySelectorAll('.full-overlay').forEach(o => o.style.display = 'none');
@@ -417,20 +387,20 @@
     }
 
     function showProductDetails(id) {
-      activeProduct = allProducts.find(p => p.id === id) || catalog[0];
+      activeProduct = allProducts.find(p => p.id == id) || catalog[0];
       document.getElementById('pDetailHeaderTitle').innerText = activeProduct.name;
       document.getElementById('pDetailName').innerText = activeProduct.name;
       document.getElementById('pDetailPrice').innerText = "₹" + activeProduct.price;
-      document.getElementById('pDetailCat').innerText = activeProduct.category;
+      document.getElementById('pDetailCat').innerText = activeProduct.category || "General";
       document.getElementById('pDetailImg').src = activeProduct.image_url;
-      document.getElementById('pDetailWeight').innerText = activeProduct.weight;
-      document.getElementById('pDetailDim').innerText = activeProduct.dimensions;
-      document.getElementById('pDetailPackaging').innerText = activeProduct.packaging;
-      document.getElementById('pDetailMat').innerText = activeProduct.material;
-      document.getElementById('pDetailColor').innerText = activeProduct.color;
-      document.getElementById('pDetailHazard').innerText = activeProduct.hazard;
-      document.getElementById('pDetailFssai').innerText = activeProduct.fssai;
-      document.getElementById('pDetailExpiry').innerText = activeProduct.expiry;
+      document.getElementById('pDetailWeight').innerText = activeProduct.weight || "N/A";
+      document.getElementById('pDetailDim').innerText = activeProduct.dimensions || "Standard";
+      document.getElementById('pDetailPackaging').innerText = activeProduct.packaging || "Box";
+      document.getElementById('pDetailMat').innerText = activeProduct.material || "Standard";
+      document.getElementById('pDetailColor').innerText = activeProduct.color || "Standard";
+      document.getElementById('pDetailHazard').innerText = activeProduct.hazard || "Non-Hazardous / Safe";
+      document.getElementById('pDetailFssai').innerText = activeProduct.fssai || "N/A";
+      document.getElementById('pDetailExpiry').innerText = activeProduct.expiry || "N/A";
 
       openOverlay('productDetailOverlay');
     }
@@ -586,16 +556,16 @@
 
     function renderProductGrid(list) {
       const grid = document.getElementById('productGrid');
-      if (!list || list.length === 0) list = catalog;
+      if (!list || list.length === 0) list = allProducts;
       grid.innerHTML = list.map(p => `
-        <div class="product-card" onclick="showProductDetails(${p.id})">
+        <div class="product-card" onclick="showProductDetails('${p.id}')">
           <img src="${p.image_url}" class="product-img" alt="${p.name}">
           <div class="card-body">
-            <span class="badge">${p.category}</span>
+            <span class="badge">${p.category || 'General'}</span>
             <div class="product-title">${p.name}</div>
-            <div style="font-size:0.75rem; color:#666;">Weight: <b>${p.weight}</b></div>
+            <div style="font-size:0.75rem; color:#666;">Weight: <b>${p.weight || 'N/A'}</b></div>
             <div class="product-price">₹${p.price}</div>
-            <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(${p.id})">View &amp; Buy</button>
+            <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails('${p.id}')">View &amp; Buy</button>
           </div>
         </div>
       `).join('');
@@ -612,6 +582,8 @@
       renderProductGrid(allProducts.filter(p => p.name.toLowerCase().includes(q) || (p.category && p.category.toLowerCase().includes(q))));
     });
 
+    // Initial render
+    renderProductGrid(allProducts);
     syncBuyerUI();
   </script>
 </body>
