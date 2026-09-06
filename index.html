@@ -7,52 +7,73 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    
-    html, body {
-      width: 100%;
-      height: 100%;
-      overflow: hidden; /* మొత్తం స్క్రీన్ అనవసరంగా కదలకుండా లాక్ చేస్తుంది */
-      background-color: #fff5f8;
-    }
+    body { background-color: #fff5f8; padding-bottom: 75px; min-height: 100vh; }
 
-    /* 1. స్ప్లాష్ స్క్రీన్ (1.2 సెకన్లలో ఫేడ్ అవుతుంది) */
-    #splashScreen {
+    /* 1. Splash Screen with Big Logo (1.2s Auto Fade) */
+    #splashOverlay {
       position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
       background: linear-gradient(135deg, #f8bbd0, #fce4ec, #e1bee7);
       display: flex; flex-direction: column; justify-content: center; align-items: center;
-      z-index: 9999999;
-      animation: hideSplash 0.4s ease-out 1.2s forwards;
+      z-index: 999999;
+      animation: fadeOutSplash 0.4s ease-out 1.2s forwards;
       pointer-events: none;
     }
-    @keyframes hideSplash {
+    @keyframes fadeOutSplash {
       to { opacity: 0; visibility: hidden; display: none; }
     }
-    .splash-logo {
-      width: 100px; height: 100px; background: white; border-radius: 24px;
+    .splash-box {
+      width: 110px; height: 110px; background: white; border-radius: 28px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 50px; color: #9c27b0;
-      box-shadow: 0 10px 25px rgba(244, 143, 177, 0.6);
-      margin-bottom: 12px;
+      font-size: 55px; color: #9c27b0;
+      box-shadow: 0 12px 30px rgba(244, 143, 177, 0.6);
+      margin-bottom: 16px;
     }
 
-    /* 2. పైన స్థిరంగా ఉండే హెడర్ (FIXED TOP HEADER) */
+    /* 2. Fixed Top App Header */
     .top-header {
-      position: fixed; top: 0; left: 0; right: 0; height: 60px;
-      background: white; padding: 0 16px; border-bottom: 1px solid #f8bbd0;
+      position: sticky; top: 0; left: 0; right: 0; height: 60px;
+      background: white; padding: 0 14px; border-bottom: 1px solid #f8bbd0;
       display: flex; justify-content: space-between; align-items: center;
-      z-index: 10000; box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      z-index: 1000; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
-    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.35rem; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    .brand-title { color: #9c27b0; font-weight: 800; font-size: 1.4rem; display: flex; align-items: center; gap: 8px; cursor: pointer; }
     .avatar-wrapper { position: relative; width: 40px; height: 40px; cursor: pointer; display: flex; align-items: center; }
     .avatar-img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 2px solid #ba68c8; }
     .camera-badge { position: absolute; bottom: -2px; right: -2px; background: #9c27b0; color: white; border-radius: 50%; width: 15px; height: 15px; font-size: 8px; display: flex; align-items: center; justify-content: center; }
 
-    /* 3. కింద స్థిరంగా ఉండే బాటమ్ మెనూ (FIXED BOTTOM NAVIGATION) */
+    /* Search & Category Filter Bar */
+    .search-box { padding: 10px 14px; background: white; }
+    .search-input { width: 100%; padding: 10px 18px; border: 1px solid #f48fb1; border-radius: 22px; outline: none; font-size: 0.92rem; background: #fffcfd; }
+    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 10px 14px; background: white; border-bottom: 1px solid #f8bbd0; }
+    .cat-scroll::-webkit-scrollbar { display: none; }
+    .cat-btn { border-radius: 20px; font-size: 0.82rem; padding: 7px 15px; border: 1px solid #f48fb1; background: white; color: #4a148c; cursor: pointer; font-weight: 600; }
+    .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
+
+    /* Product Grid */
+    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; }
+    .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(244, 143, 177, 0.2); display: flex; flex-direction: column; cursor: pointer; border: 1px solid #fce4ec; }
+    .product-img { width: 100%; height: 160px; object-fit: cover; background: #fdfdfd; }
+    .card-body { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; }
+    .badge { display: inline-block; font-size: 0.68rem; background: #fce4ec; color: #ad1457; padding: 3px 6px; border-radius: 4px; margin-bottom: 4px; align-self: flex-start; font-weight: 700; }
+    .product-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #333; }
+    .product-price { font-size: 1.15rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
+    .btn-buy-card { background: #9c27b0; color: white; border: none; padding: 8px; border-radius: 8px; font-weight: 700; cursor: pointer; width: 100%; font-size: 0.88rem; }
+
+    /* 3. Full Screen Overlays (Details, Cart, Categories, Profile) */
+    .page-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: #fff5f8; z-index: 10005; overflow-y: auto; display: none; padding-bottom: 85px;
+    }
+    .overlay-header { background: white; padding: 14px 16px; border-bottom: 1px solid #f8bbd0; display: flex; align-items: center; gap: 14px; position: sticky; top: 0; z-index: 10; }
+    .overlay-header i { font-size: 1.4rem; cursor: pointer; color: #9c27b0; padding: 4px; }
+    .overlay-title { font-size: 1.15rem; font-weight: 700; color: #333; }
+
+    /* 4. Fixed Bottom Navigation Bar */
     .bottom-nav-bar {
       position: fixed; bottom: 0; left: 0; right: 0; height: 60px;
       background: white; border-top: 2px solid #f8bbd0;
       display: flex; justify-content: space-around; align-items: center;
-      z-index: 10000; box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+      z-index: 9999; box-shadow: 0 -3px 12px rgba(0,0,0,0.06);
     }
     .nav-tab-btn {
       flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -61,62 +82,26 @@
     .nav-tab-btn i { font-size: 1.35rem; margin-bottom: 2px; }
     .nav-tab-btn.active { color: #9c27b0; }
 
-    /* 4. మధ్యలో మాత్రమే స్క్రోల్ అయ్యే ప్రధాన భాగం (SCROLLABLE MIDDLE VIEW) */
-    .main-scroll-area {
-      position: absolute;
-      top: 60px; /* పైన హెడర్ ఎత్తు */
-      bottom: 60px; /* కింద మెనూ ఎత్తు */
-      left: 0;
-      right: 0;
-      overflow-y: auto; /* కేవలం ఇది మాత్రమే స్క్రోల్ అవుతుంది */
-      -webkit-overflow-scrolling: touch;
-    }
-
-    /* Search & Categories */
-    .search-box { padding: 10px 14px; background: white; }
-    .search-input { width: 100%; padding: 10px 16px; border: 1px solid #f48fb1; border-radius: 20px; outline: none; font-size: 0.92rem; background: #fffcfd; }
-    .cat-scroll { display: flex; overflow-x: auto; white-space: nowrap; gap: 8px; padding: 10px 14px; background: white; border-bottom: 1px solid #f8bbd0; }
-    .cat-scroll::-webkit-scrollbar { display: none; }
-    .cat-btn { border-radius: 18px; font-size: 0.82rem; padding: 6px 14px; border: 1px solid #f48fb1; background: white; color: #4a148c; cursor: pointer; font-weight: 600; }
-    .cat-btn.active { background: #9c27b0; color: white; border-color: #9c27b0; }
-
-    /* Product Cards */
-    .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; }
-    .product-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(244, 143, 177, 0.2); display: flex; flex-direction: column; cursor: pointer; border: 1px solid #fce4ec; }
-    .product-img { width: 100%; height: 160px; object-fit: cover; background: #fdfdfd; }
-    .card-body { padding: 10px; display: flex; flex-direction: column; flex-grow: 1; }
-    .badge { display: inline-block; font-size: 0.65rem; background: #fce4ec; color: #ad1457; padding: 2px 6px; border-radius: 4px; margin-bottom: 4px; align-self: flex-start; font-weight: 700; }
-    .product-title { font-size: 0.88rem; font-weight: 600; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #333; }
-    .product-price { font-size: 1.1rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
-
-    /* Tabs Visibility */
-    .spa-tab-content { display: none; }
-    .spa-tab-content.active { display: block; }
-
-    /* Header for Sub-pages */
-    .view-sub-header { background: white; padding: 14px 16px; border-bottom: 1px solid #f8bbd0; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 10; }
-    .view-sub-header i { font-size: 1.3rem; cursor: pointer; color: #9c27b0; padding: 4px; }
-    .view-sub-title { font-size: 1.1rem; font-weight: 700; color: #333; }
-
-    /* Specs & Lists */
-    .spec-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid #fce4ec; font-size: 0.88rem; }
+    /* Reusable rows & elements */
+    .spec-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #fce4ec; font-size: 0.9rem; }
     .cat-item-card { background: white; border-radius: 10px; padding: 14px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid #f8bbd0; cursor: pointer; }
-    .btn-action { width: 100%; padding: 13px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
+    .action-footer-bar { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 12px 16px; border-top: 1px solid #f8bbd0; display: flex; gap: 12px; z-index: 10010; box-shadow: 0 -2px 10px rgba(0,0,0,0.06); }
+    .btn-action { flex: 1; padding: 13px; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; display: flex; align-items: center; justify-content: center; gap: 6px; }
     .form-ctrl { width: 100%; padding: 11px 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 0.92rem; outline: none; margin-bottom: 12px; background: #fffcfd; }
   </style>
 </head>
 <body>
 
   <!-- Splash Screen -->
-  <div id="splashScreen">
-    <div class="splash-logo"><i class="fa-solid fa-bag-shopping"></i></div>
-    <h1 style="font-weight: 800; font-size: 1.7rem; color: #4a148c;">MeeStore</h1>
-    <p style="font-size: 0.88rem; color: #880e4f; font-weight: 600; margin-top: 4px;">Smart Shopping for Everyone 🌸</p>
+  <div id="splashOverlay">
+    <div class="splash-box"><i class="fa-solid fa-bag-shopping"></i></div>
+    <h1 style="font-weight: 800; font-size: 1.8rem; color: #4a148c;">MeeStore</h1>
+    <p style="font-size: 0.9rem; color: #880e4f; font-weight: 600; margin-top: 4px;">Smart Shopping for Everyone 🌸</p>
   </div>
 
-  <!-- 1. స్థిరంగా ఉండే టాప్ హెడర్ (FIXED TOP) -->
+  <!-- Top Fixed Bar -->
   <header class="top-header">
-    <div style="display: flex; align-items: center; gap: 10px;" onclick="switchTab('profileView')">
+    <div style="display: flex; align-items: center; gap: 10px;" onclick="openPage('profileOverlay')">
       <label for="buyerPicInput" class="avatar-wrapper" onclick="event.stopPropagation()">
         <img id="buyerAvatarImg" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" class="avatar-img" alt="Profile">
         <div class="camera-badge"><i class="fa-solid fa-camera"></i></div>
@@ -129,179 +114,195 @@
     </div>
     <div style="display: flex; gap: 8px; align-items: center;">
       <a href="admin.html" style="background: #fce4ec; padding: 6px 12px; border-radius: 16px; font-size: 0.75rem; text-decoration: none; color: #ad1457; font-weight: bold; border: 1px solid #f48fb1;">Admin</a>
-      <button onclick="switchTab('cartView')" style="background: white; border: 1px solid #f48fb1; border-radius: 16px; padding: 6px 12px; font-size: 0.9rem; cursor: pointer; color: #9c27b0;">
+      <button onclick="openPage('cartOverlay')" style="background: white; border: 1px solid #f48fb1; border-radius: 16px; padding: 6px 12px; font-size: 0.9rem; cursor: pointer; color: #9c27b0;">
         <i class="fa-solid fa-cart-shopping"></i> <span id="cartCount" style="color: #d81b60; font-weight: bold;">0</span>
       </button>
     </div>
   </header>
 
-  <!-- 2. మధ్యలో మాత్రమే స్క్రోల్ అయ్యే ప్రధాన భాగం (SCROLLABLE AREA) -->
-  <main class="main-scroll-area">
+  <!-- Search Bar -->
+  <div class="search-box">
+    <input type="text" id="searchInput" class="search-input" placeholder="Search Sarees, Groceries, Kurtis, Jewelry...">
+  </div>
 
-    <!-- TAB 1: HOME PAGE -->
-    <div id="homeView" class="spa-tab-content active">
-      <div class="search-box">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search Sarees, Groceries, Kurtis, Jewelry...">
-      </div>
+  <!-- Category Filter Bar -->
+  <div class="cat-scroll" id="catScroll">
+    <button class="cat-btn active" onclick="filterCat('all', this)">All</button>
+    <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
+    <button class="cat-btn" onclick="filterCat('Grocery & Millets', this)">🌾 Grocery & Millets</button>
+    <button class="cat-btn" onclick="filterCat('Jewelry & Fancy', this)">💍 Jewelry & Fancy</button>
+    <button class="cat-btn" onclick="filterCat('General & Pooja', this)">🪔 General & Pooja</button>
+    <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
+    <button class="cat-btn" onclick="filterCat('Footwear', this)">👠 Footwear</button>
+  </div>
 
-      <div class="cat-scroll" id="catScroll">
-        <button class="cat-btn active" onclick="filterCat('all', this)">All</button>
-        <button class="cat-btn" onclick="filterCat('Women Fashion', this)">👗 Women Fashion</button>
-        <button class="cat-btn" onclick="filterCat('Grocery & Millets', this)">🌾 Grocery & Millets</button>
-        <button class="cat-btn" onclick="filterCat('Jewelry & Fancy', this)">💍 Jewelry & Fancy</button>
-        <button class="cat-btn" onclick="filterCat('General & Pooja', this)">🪔 General & Pooja</button>
-        <button class="cat-btn" onclick="filterCat('Men Fashion', this)">👕 Men Fashion</button>
-        <button class="cat-btn" onclick="filterCat('Footwear', this)">👠 Footwear</button>
-      </div>
-
-      <div class="product-grid" id="productGrid"></div>
-    </div>
-
-    <!-- TAB 2: PRODUCT DETAILS VIEW -->
-    <div id="productDetailView" class="spa-tab-content">
-      <div class="view-sub-header">
-        <i class="fa-solid fa-arrow-left" onclick="switchTab('homeView')"></i>
-        <span class="view-sub-title" id="pDetailHeaderTitle">Product Details</span>
-      </div>
-
-      <img id="pDetailImg" src="" style="width: 100%; height: 280px; object-fit: contain; background: white; border-bottom: 1px solid #f8bbd0;">
-
-      <div style="padding: 16px; background: white; margin-bottom: 10px; border-bottom: 1px solid #fce4ec;">
-        <h2 id="pDetailName" style="font-size: 1.25rem; margin-bottom: 6px; color: #222;">Item Name</h2>
-        <div id="pDetailPrice" style="font-size: 1.5rem; font-weight: 800; color: #9c27b0; margin-bottom: 6px;">₹0</div>
-        <span class="badge" id="pDetailCat">Category</span>
-      </div>
-
-      <div style="padding: 16px; background: white; margin: 12px; border-radius: 12px; border: 1px solid #f8bbd0;">
-        <h3 style="font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #9c27b0; display: inline-block; padding-bottom: 4px; color: #4a148c;">Logistics & Specifications</h3>
-        <div class="spec-row"><span>Net Weight:</span><b id="pDetailWeight">-</b></div>
-        <div class="spec-row"><span>Dimensions (L x W x H):</span><b id="pDetailDim">-</b></div>
-        <div class="spec-row"><span>Packaging Type:</span><b id="pDetailPackaging" style="color: #6a1b9a;">-</b></div>
-        <div class="spec-row"><span>Material / Fabric:</span><b id="pDetailMat">-</b></div>
-        <div class="spec-row"><span>Color:</span><b id="pDetailColor">-</b></div>
-        <div class="spec-row"><span>Hazard / Safety:</span><b id="pDetailHazard">-</b></div>
-        <div class="spec-row"><span>FSSAI License:</span><b id="pDetailFssai" style="color: green;">-</b></div>
-        <div class="spec-row"><span>Expiry Date:</span><b id="pDetailExpiry">-</b></div>
-        <div class="spec-row"><span>Courier Shipping:</span><b style="color: #0288d1;">Delhivery / Shiprocket Express</b></div>
-        <div class="spec-row"><span>Return Policy:</span><b style="color: #2e7d32;">7 Days Easy Return & Refund</b></div>
-      </div>
-
-      <div style="padding: 0 12px 20px 12px; display: flex; gap: 10px;">
-        <button class="btn-action" onclick="addToCartCurrent()" style="background: #fce4ec; color: #9c27b0; border: 1px solid #9c27b0;">
-          <i class="fa-solid fa-cart-plus"></i> Add to Cart
-        </button>
-        <button class="btn-action" onclick="startCheckoutSingle()" style="background: #9c27b0; color: white;">
-          <i class="fa-solid fa-bolt"></i> Buy Now
-        </button>
+  <!-- Product Grid (Hardcoded Items - 100% Guaranteed to Display) -->
+  <div class="product-grid" id="productGrid">
+    <!-- Item 1 -->
+    <div class="product-card" onclick="showProductDetails(1)">
+      <img src="https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" class="product-img" alt="Millets">
+      <div class="card-body">
+        <span class="badge">Grocery & Millets</span>
+        <div class="product-title">Little millets (Organic 500g)</div>
+        <div style="font-size:0.75rem; color:#666;">Weight: <b>500g</b></div>
+        <div class="product-price">₹20</div>
+        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(1)">View &amp; Buy</button>
       </div>
     </div>
-
-    <!-- TAB 3: CATEGORIES VIEW -->
-    <div id="categoriesView" class="spa-tab-content">
-      <div class="view-sub-header">
-        <i class="fa-solid fa-arrow-left" onclick="switchTab('homeView')"></i>
-        <span class="view-sub-title">All Categories</span>
-      </div>
-      <div style="padding: 14px;" id="categoriesContainer"></div>
-    </div>
-
-    <!-- TAB 4: CART VIEW -->
-    <div id="cartView" class="spa-tab-content">
-      <div class="view-sub-header">
-        <i class="fa-solid fa-arrow-left" onclick="switchTab('homeView')"></i>
-        <span class="view-sub-title">Shopping Cart</span>
-      </div>
-      <div style="padding: 14px;" id="cartItemsContainer"></div>
-      <div id="cartFooterBox" style="display: none; padding: 14px; background: white; border-top: 1px solid #f8bbd0;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-          <span style="font-size: 0.9rem; color: #666;">Total Amount:</span>
-          <b style="font-size: 1.3rem; color: #9c27b0;">₹<span id="cartSumDisplay">0</span></b>
-        </div>
-        <button class="btn-action" onclick="startCheckoutCart()" style="background: #9c27b0; color: white;">
-          Proceed to Checkout &gt;
-        </button>
+    <!-- Item 2 -->
+    <div class="product-card" onclick="showProductDetails(2)">
+      <img src="https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" class="product-img" alt="Saree">
+      <div class="card-body">
+        <span class="badge">Women Fashion</span>
+        <div class="product-title">Banarasi Soft Silk Saree</div>
+        <div style="font-size:0.75rem; color:#666;">Weight: <b>650g</b></div>
+        <div class="product-price">₹499</div>
+        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(2)">View &amp; Buy</button>
       </div>
     </div>
-
-    <!-- TAB 5: CHECKOUT VIEW -->
-    <div id="checkoutView" class="spa-tab-content">
-      <div class="view-sub-header">
-        <i class="fa-solid fa-arrow-left" onclick="switchTab('homeView')"></i>
-        <span class="view-sub-title">Order Checkout</span>
-      </div>
-      <div style="padding: 16px;">
-        <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #f8bbd0;">
-          <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-location-dot text-danger me-1"></i> Delivery Address</h4>
-          <textarea id="checkAddressInput" class="form-ctrl" rows="2" placeholder="House No, Street, Landmark, City, Pincode" style="margin-bottom: 0;"></textarea>
-        </div>
-
-        <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #f8bbd0;">
-          <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-ticket text-warning me-1"></i> Apply Coupon</h4>
-          <div style="display: flex; gap: 8px;">
-            <input type="text" id="couponCodeInput" placeholder="Enter MEE50" class="form-ctrl" style="margin-bottom: 0; text-transform: uppercase;">
-            <button onclick="applyDiscountCoupon()" style="padding: 10px 18px; background: #4a148c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Apply</button>
-          </div>
-          <small id="couponFeedbackMsg" style="color: green; display: block; margin-top: 5px; font-weight: bold;"></small>
-        </div>
-
-        <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #f8bbd0;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Item Total:</span><span>₹<span id="billSubVal">0</span></span></div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: green;"><span>Coupon Discount:</span><span>-₹<span id="billDiscVal">0</span></span></div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #0288d1;"><span>Express Delivery:</span><span>FREE</span></div>
-          <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.15rem; border-top: 1px solid #eee; padding-top: 10px;">
-            <span>Grand Total:</span><span style="color: #9c27b0;">₹<span id="billFinalVal">0</span></span>
-          </div>
-        </div>
-
-        <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 16px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
-          <p style="font-size: 0.9rem; color: #166534; margin-bottom: 10px; font-weight: bold;">Pay via UPI App (GPay / PhonePe / Paytm)</p>
-          <a id="btnUpiDirectLink" href="#" style="display: block; background: #16a34a; color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-bottom: 10px;">
-            <i class="fa-solid fa-mobile-screen me-2"></i> Pay via UPI App
-          </a>
-          <p style="font-size: 0.8rem; color: #666; margin-bottom: 6px;">Or scan QR code to pay:</p>
-          <img id="upiQrCodeImg" src="" style="max-width: 130px; border: 1px solid #ddd; padding: 4px; background: white; border-radius: 6px;" alt="QR">
-        </div>
-
-        <button onclick="placeWhatsAppOrder()" class="btn-action" style="background: #9c27b0; color: white; box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);">
-          <i class="fa-brands fa-whatsapp me-2"></i> Confirm Order (Instant Notification)
-        </button>
+    <!-- Item 3 -->
+    <div class="product-card" onclick="showProductDetails(3)">
+      <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" class="product-img" alt="Necklace">
+      <div class="card-body">
+        <span class="badge">Jewelry & Fancy</span>
+        <div class="product-title">Gold Plated Temple Necklace</div>
+        <div style="font-size:0.75rem; color:#666;">Weight: <b>150g</b></div>
+        <div class="product-price">₹249</div>
+        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(3)">View &amp; Buy</button>
       </div>
     </div>
+    <!-- Item 4 -->
+    <div class="product-card" onclick="showProductDetails(4)">
+      <img src="https://images.unsplash.com/photo-1605371924599-2d0365da1ae0?w=400" class="product-img" alt="Diya">
+      <div class="card-body">
+        <span class="badge">General & Pooja</span>
+        <div class="product-title">Brass Pooja Diya / Deepam</div>
+        <div style="font-size:0.75rem; color:#666;">Weight: <b>250g</b></div>
+        <div class="product-price">₹120</div>
+        <button class="btn-buy-card" onclick="event.stopPropagation(); showProductDetails(4)">View &amp; Buy</button>
+      </div>
+    </div>
+  </div>
 
-    <!-- TAB 6: BUYER ACCOUNT & SETTINGS -->
-    <div id="profileView" class="spa-tab-content">
-      <div class="view-sub-header">
-        <i class="fa-solid fa-arrow-left" onclick="switchTab('homeView')"></i>
-        <span class="view-sub-title">My Account & Settings</span>
+  <!-- OVERLAY 1: PRODUCT FULL SPECIFICATIONS PAGE -->
+  <div id="productDetailOverlay" class="page-overlay">
+    <div class="overlay-header">
+      <i class="fa-solid fa-arrow-left" onclick="closeAllOverlays()"></i>
+      <span class="overlay-title" id="pDetailHeaderTitle">Product Details</span>
+    </div>
+
+    <img id="pDetailImg" src="" style="width: 100%; height: 280px; object-fit: contain; background: white; border-bottom: 1px solid #f8bbd0;">
+
+    <div style="padding: 16px; background: white; margin-bottom: 10px; border-bottom: 1px solid #fce4ec;">
+      <h2 id="pDetailName" style="font-size: 1.25rem; margin-bottom: 6px; color: #222;">Item Name</h2>
+      <div id="pDetailPrice" style="font-size: 1.5rem; font-weight: 800; color: #9c27b0; margin-bottom: 6px;">₹0</div>
+      <span class="badge" id="pDetailCat">Category</span>
+    </div>
+
+    <div style="padding: 16px; background: white; margin: 12px; border-radius: 12px; border: 1px solid #f8bbd0;">
+      <h3 style="font-size: 1rem; margin-bottom: 12px; border-bottom: 2px solid #9c27b0; display: inline-block; padding-bottom: 4px; color: #4a148c;">Logistics & Specifications</h3>
+      <div class="spec-row"><span>Net Weight:</span><b id="pDetailWeight">-</b></div>
+      <div class="spec-row"><span>Dimensions (L x W x H):</span><b id="pDetailDim">-</b></div>
+      <div class="spec-row"><span>Packaging Type:</span><b id="pDetailPackaging" style="color: #6a1b9a;">-</b></div>
+      <div class="spec-row"><span>Material / Fabric:</span><b id="pDetailMat">-</b></div>
+      <div class="spec-row"><span>Color:</span><b id="pDetailColor">-</b></div>
+      <div class="spec-row"><span>Hazard / Safety:</span><b id="pDetailHazard">-</b></div>
+      <div class="spec-row"><span>FSSAI License:</span><b id="pDetailFssai" style="color: green;">-</b></div>
+      <div class="spec-row"><span>Expiry Date:</span><b id="pDetailExpiry">-</b></div>
+      <div class="spec-row"><span>Courier Shipping:</span><b style="color: #0288d1;">Delhivery / Shiprocket Express</b></div>
+      <div class="spec-row"><span>Return Policy:</span><b style="color: #2e7d32;">7 Days Easy Return & Refund</b></div>
+    </div>
+
+    <div class="action-footer-bar">
+      <button class="btn-action" onclick="addToCartCurrent()" style="background: #fce4ec; color: #9c27b0; border: 1px solid #9c27b0;">
+        <i class="fa-solid fa-cart-plus"></i> Add to Cart
+      </button>
+      <button class="btn-action" onclick="startCheckoutSingle()" style="background: #9c27b0; color: white;">
+        <i class="fa-solid fa-bolt"></i> Buy Now
+      </button>
+    </div>
+  </div>
+
+  <!-- OVERLAY 2: CATEGORIES LIST PAGE -->
+  <div id="categoriesOverlay" class="page-overlay">
+    <div class="overlay-header">
+      <i class="fa-solid fa-arrow-left" onclick="closeAllOverlays()"></i>
+      <span class="overlay-title">All Categories</span>
+    </div>
+    <div style="padding: 14px;" id="categoriesContainer"></div>
+  </div>
+
+  <!-- OVERLAY 3: SHOPPING CART PAGE -->
+  <div id="cartOverlay" class="page-overlay">
+    <div class="overlay-header">
+      <i class="fa-solid fa-arrow-left" onclick="closeAllOverlays()"></i>
+      <span class="overlay-title">Shopping Cart</span>
+    </div>
+    <div style="padding: 14px;" id="cartItemsContainer"></div>
+    <div id="cartFooterBox" style="display: none; padding: 14px; background: white; border-top: 1px solid #f8bbd0; position: fixed; bottom: 0; left: 0; right: 0; z-index: 10010;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+        <span style="font-size: 0.9rem; color: #666;">Total Amount:</span>
+        <b style="font-size: 1.3rem; color: #9c27b0;">₹<span id="cartSumDisplay">0</span></b>
+      </div>
+      <button class="btn-action" onclick="startCheckoutCart()" style="background: #9c27b0; color: white; width: 100%;">
+        Proceed to Checkout &gt;
+      </button>
+    </div>
+  </div>
+
+  <!-- OVERLAY 4: CHECKOUT & SHIPPING PAGE -->
+  <div id="checkoutOverlay" class="page-overlay">
+    <div class="overlay-header">
+      <i class="fa-solid fa-arrow-left" onclick="openPage('cartOverlay')"></i>
+      <span class="overlay-title">Order Checkout</span>
+    </div>
+    <div style="padding: 16px;">
+      <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #f8bbd0;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-location-dot text-danger me-1"></i> Delivery Address</h4>
+        <textarea id="checkAddressInput" class="form-ctrl" rows="2" placeholder="House No, Street, Landmark, City, Pincode" style="margin-bottom: 0;"></textarea>
       </div>
 
-      <div style="padding: 16px;">
-        <div id="buyerLoggedInBox" style="display: none;">
-          <div style="display: flex; align-items: center; gap: 15px; background: white; padding: 16px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #f8bbd0;">
-            <img id="profImgBig" src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" style="width: 65px; height: 65px; border-radius: 50%; object-fit: cover; border: 2px solid #9c27b0;" alt="Buyer">
-            <div>
-              <h3 id="profNameBig" style="font-size: 1.15rem; color: #333;">Customer Name</h3>
-              <p id="profPhoneBig" style="font-size: 0.85rem; color: #666;">Phone Number</p>
-            </div>
-          </div>
+      <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 12px; border: 1px solid #f8bbd0;">
+        <h4 style="font-size: 0.95rem; margin-bottom: 6px; color: #4a148c;"><i class="fa-solid fa-ticket text-warning me-1"></i> Apply Coupon</h4>
+        <div style="display: flex; gap: 8px;">
+          <input type="text" id="couponCodeInput" placeholder="Enter MEE50" class="form-ctrl" style="margin-bottom: 0; text-transform: uppercase;">
+          <button onclick="applyDiscountCoupon()" style="padding: 10px 18px; background: #4a148c; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Apply</button>
+        </div>
+        <small id="couponFeedbackMsg" style="color: green; display: block; margin-top: 5px; font-weight: bold;"></small>
+      </div>
 
-          <div style="background: white; border-radius: 12px; overflow: hidden; border: 1px solid #f8bbd0; margin-bottom: 15px;">
-            <div class="cat-item-card" onclick="toggleOrdersBox()" style="border: none; border-bottom: 1px solid #fce4ec; border-radius: 0;">
-              <span><i class="fa-solid fa-box text-primary me-2"></i> My Orders & Tracking</span>
-              <i class="fa-solid fa-chevron-right text-muted"></i>
-            </div>
-            <div class="cat-item-card" onclick="alert('Return request registered! Courier pickup will be scheduled.')" style="border: none; border-bottom: 1px solid #fce4ec; border-radius: 0;">
-              <span><i class="fa-solid fa-rotate-left text-warning me-2"></i> Returns & Refunds</span>
-              <i class="fa-solid fa-chevron-right text-muted"></i>
-            </div>
-            <div class="cat-item-card" onclick="editBankDetailsPrompt()" style="border: none; border-bottom: 1px solid #fce4ec; border-radius: 0;">
-              <span><i class="fa-solid fa-building-columns text-success me-2"></i> Bank & UPI Details (For Refunds)</span>
-              <i class="fa-solid fa-chevron-right text-muted"></i>
-            </div>
-            <div class="cat-item-card" onclick="editDeliveryAddressPrompt()" style="border: none; border-bottom: 1px solid #fce4ec; border-radius: 0;">
-              <span><i class="fa-solid fa-location-dot text-danger me-2"></i> Edit Delivery Address</span>
-              <i class="fa-solid fa-chevron-right text-muted"></i>
-            </div>
-            <div class="cat-item-card" onclick="alert('Cyber Security: SHA-256 password protection active.')" style="border: none; border-radius: 0;">
-              <span><i class="fa-solid fa-shield-halved text-info me-2"></i> Account Security & Privacy</span>
-              <i class="fa-so
+      <div style="background: white; padding: 14px; border-radius: 10px; margin-bottom: 15px; border: 1px solid #f8bbd0;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;"><span>Item Total:</span><span>₹<span id="billSubVal">0</span></span></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: green;"><span>Coupon Discount:</span><span>-₹<span id="billDiscVal">0</span></span></div>
+        <div style="display: flex; justify-content: space-between; margin-bottom: 6px; color: #0288d1;"><span>Express Delivery:</span><span>FREE</span></div>
+        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 1.15rem; border-top: 1px solid #eee; padding-top: 10px;">
+          <span>Grand Total:</span><span style="color: #9c27b0;">₹<span id="billFinalVal">0</span></span>
+        </div>
+      </div>
+
+      <div style="background: #f0fdf4; border: 1px solid #bbf7d0; padding: 16px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+        <p style="font-size: 0.9rem; color: #166534; margin-bottom: 10px; font-weight: bold;">Pay via UPI App (GPay / PhonePe / Paytm)</p>
+        <a id="btnUpiDirectLink" href="#" style="display: block; background: #16a34a; color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-bottom: 10px;">
+          <i class="fa-solid fa-mobile-screen me-2"></i> Pay via UPI App
+        </a>
+        <p style="font-size: 0.8rem; color: #666; margin-bottom: 6px;">Or scan QR code to pay:</p>
+        <img id="upiQrCodeImg" src="" style="max-width: 130px; border: 1px solid #ddd; padding: 4px; background: white; border-radius: 6px;" alt="QR">
+      </div>
+
+      <button onclick="placeWhatsAppOrder()" class="btn-action" style="width: 100%; background: #9c27b0; color: white; box-shadow: 0 4px 12px rgba(156, 39, 176, 0.3);">
+        <i class="fa-brands fa-whatsapp me-2"></i> Confirm Order (Instant Notification)
+      </button>
+    </div>
+  </div>
+
+  <!-- OVERLAY 5: BUYER PROFILE & SETTINGS PAGE -->
+  <div id="profileOverlay" class="page-overlay">
+    <div class="overlay-header">
+      <i class="fa-solid fa-arrow-left" onclick="closeAllOverlays()"></i>
+      <span class="overlay-title">My Account & Settings</span>
+    </div>
+
+    <div style="padding: 16px;">
+      <div id="buyerLoggedInBox" style="display: none;">
+        <div style="display: flex; align-items: center; gap: 15px; background: white; padding: 16px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #f8bbd0;">
+          <img id="profImgBig" src="https://cdn-icons-png.flatico
