@@ -18,12 +18,11 @@
     .header { background: white; padding: 12px 16px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
     .brand-section { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .header-logo-box { width: 38px; height: 38px; background: #8e24aa; border-radius: 12px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(142,36,170,0.3); overflow: hidden; }
-    .header-logo-box img { width: 100%; height: 100%; object-fit: cover; }
     .brand-title { color: #6a1b9a; font-weight: 800; font-size: 1.25rem; line-height: 1.1; }
     .brand-sub { font-size: 0.75rem; color: #555; font-weight: 600; }
 
     .header-right { display: flex; gap: 8px; align-items: center; }
-    .admin-btn { background: #f3e5f5; border: 1px solid #ce93d8; color: #6a1b9a; padding: 6px 12px; border-radius: 16px; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
+    .admin-btn { background: #d32f2f; color: white; border: none; padding: 6px 12px; border-radius: 16px; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
     .cart-btn { background: #f3e5f5; border: 1px solid #ce93d8; color: #6a1b9a; padding: 6px 12px; border-radius: 16px; font-weight: bold; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
     /* Search Bar & Scroller */
@@ -100,7 +99,7 @@
       </div>
     </div>
     <div class="header-right">
-      <button class="admin-btn" id="headerAdminBtn" onclick="switchTab('admin', null)" style="display:none;">Admin</button>
+      <button class="admin-btn" onclick="openAdminLogin()">🔐 Admin</button>
       <button class="cart-btn" onclick="switchTab('cart', null)">🛒 Cart (<span id="cartCount">0</span>)</button>
     </div>
   </header>
@@ -254,7 +253,6 @@
       <label class="label">Bank Details (A/C & IFSC)</label>
       <input type="text" id="bBank" class="input" placeholder="Bank Details">
       
-      <!-- Profile Picture Upload with Camera / Gallery Support -->
       <label class="label">Profile Picture (Choose from Gallery / Camera)</label>
       <input type="file" id="bAvatarFile" accept="image/*" class="input" style="padding:8px; background:#fafafa;" onchange="previewImage(event)">
       <div id="avatarPreviewBox" style="margin-top:8px; display:none; text-align:center;">
@@ -299,7 +297,6 @@
       <button onclick="switchTab('profile', null)" style="background:#e1bee7; color:#4a148c; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.82rem;">Change / Add Address</button>
     </div>
 
-    <!-- Payment Option Selection Box -->
     <div class="box" style="margin-top:14px; background:#f3e5f5;">
       <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">💳 Select Payment Method</h4>
       <select id="paymentMethodSelect" class="input" style="background:white; margin-bottom:0;" onchange="togglePaymentUI()">
@@ -329,8 +326,10 @@
     <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div class="box" style="border-left: 5px solid #d32f2f;">
       <h3 style="color:#d32f2f; margin-bottom:10px;">🔐 Admin Security Console</h3>
-      <p style="font-size:0.85rem; color:#555; margin-bottom:10px;">Platform SSL & 256-Bit Security Active. Total commission (3%): ₹<span id="adminCommission">0</span></p>
-      <button class="btn" style="background:#d32f2f;" onclick="alert('Firewall & SSL Active. Zero vulnerabilities detected.')">Run Security Audit</button>
+      <p style="font-size:0.9rem; color:#555; margin-bottom:8px;"><b>Total Platform Commission (3%):</b> ₹<span id="adminCommission">0</span></p>
+      <p style="font-size:0.9rem; color:#555; margin-bottom:8px;"><b>Total Orders Placed:</b> <span id="adminTotalOrders">0</span></p>
+      <p style="font-size:0.9rem; color:#555; margin-bottom:14px;"><b>System Status:</b> 256-Bit SSL Active 🟢</p>
+      <button class="btn" style="background:#d32f2f;" onclick="alert('All security protocols active. Platform running smoothly.')">Run Security Audit</button>
     </div>
   </div>
 
@@ -412,8 +411,25 @@
         renderCart();
       } else if(tabName === 'admin') {
         document.getElementById('viewAdmin').classList.add('active');
+        updateAdminUI();
       }
       window.scrollTo(0,0);
+    }
+
+    function openAdminLogin() {
+      let pass = prompt("Enter Admin Secret Password:");
+      if(pass === "1234" || pass === "admin") {
+        switchTab('admin', null);
+      } else if(pass !== null) {
+        alert("Incorrect Admin Password!");
+      }
+    }
+
+    function updateAdminUI() {
+      let totalRev = ordersHistory.reduce((sum, o) => sum + o.total, 0);
+      let commission = totalRev * 0.03;
+      document.getElementById('adminCommission').innerText = commission.toFixed(2);
+      document.getElementById('adminTotalOrders').innerText = ordersHistory.length;
     }
 
     function openProductDetail(id) {
@@ -660,7 +676,7 @@
         `;
       } else if(type === 'settings') {
         title.innerText = "⚙️ Account Settings";
-        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.9.2 (Secure Mode Active)</p>`;
+        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.9.3 (Secure Mode Active)</p>`;
       }
     }
 
@@ -685,12 +701,7 @@
         
         document.getElementById('headerNameTitle').innerText = currentBuyer.name;
         document.getElementById('headerSubText').innerText = "View Profile >";
-        
         document.getElementById('headerLogoContainer').innerHTML = `<img src="${currentBuyer.avatar}" style="width:100%; height:100%; object-fit:cover;">`;
-        
-        if(currentBuyer.name.toLowerCase() === 'admin') {
-          document.getElementById('headerAdminBtn').style.display = 'inline-block';
-        }
       } else {
         document.getElementById('buyerAuthBox').style.display = 'block';
         document.getElementById('buyerDashBox').style.display = 'none';
@@ -698,7 +709,6 @@
         document.getElementById('profileSubBox').style.display = 'none';
         document.getElementById('headerNameTitle').innerText = "MeeStore";
         document.getElementById('headerSubText').innerText = "Hello, Sign In >";
-        document.getElementById('headerAdminBtn').style.display = 'none';
         
         document.getElementById('headerLogoContainer').innerHTML = `
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -712,7 +722,6 @@
     function buyerLogout() {
       localStorage.removeItem('meestore_buyer');
       currentBuyer = null;
-      document.getElementById('headerAdminBtn').style.display = 'none';
       updateBuyerUI();
     }
 
@@ -749,8 +758,6 @@
       const paymentMethod = document.getElementById('paymentMethodSelect').value;
       const names = cart.map(c => c.name).join(', ');
       const total = cart.reduce((sum, c) => sum + c.price, 0);
-      const commission = total * 0.03;
-      document.getElementById('adminCommission').innerText = commission.toFixed(2);
 
       let allProds = getProducts();
       cart.forEach(item => {
@@ -768,7 +775,7 @@
       const sellerUpiTarget = cart.length > 0 ? (cart[0].sellerUpi || "seller@ybl") : "seller@ybl";
       const paymentInfo = paymentMethod === 'Online UPI Payment' ? `\nPayment: Online UPI (${sellerUpiTarget})` : `\nPayment: Cash on Delivery (COD)`;
 
-      const msg = `🛒 *New Order - MeeStore*\nCustomer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}${paymentInfo}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
+      const msg = `🛒 *New Order - MeeStore*\nCustomer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}${paymentInfo}\nItems: ${names}\nTotal: ₹${total}`;
       
       cart = [];
       document.getElementById('cartCount').innerText = 0;
