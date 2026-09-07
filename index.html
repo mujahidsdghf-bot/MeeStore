@@ -6,38 +6,51 @@
   <title>MeeStore - Professional E-Commerce Platform</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #f4f6f8; padding-bottom: 75px; }
+    body { background: #f4f6f8; padding-bottom: 85px; font-size: 1rem; }
+
+    /* Splash Screen (1.5 Seconds Logo) */
+    #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease; }
+    #splashScreen img { width: 90px; height: 90px; border-radius: 50%; object-fit: cover; margin-bottom: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    #splashScreen h1 { color: #9c27b0; font-size: 2rem; font-weight: 800; }
+    #splashScreen p { color: #666; font-size: 1rem; margin-top: 6px; }
 
     /* Header */
-    .header { background: white; padding: 12px 16px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-    .brand { display: flex; align-items: center; gap: 8px; color: #9c27b0; font-weight: 800; font-size: 1.3rem; }
-    .brand img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+    .header { background: white; padding: 14px 18px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.06); }
+    .brand { display: flex; align-items: center; gap: 10px; color: #9c27b0; font-weight: 800; font-size: 1.4rem; }
+    .brand img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; }
     
     /* Views */
-    .view-container { display: none; padding: 14px; }
+    .view-container { display: none; padding: 16px; }
     .view-container.active { display: block; }
 
     /* Product Grid */
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .card { background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0; padding: 10px; display: flex; flex-direction: column; cursor: pointer; }
-    .card img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; }
-    .title { font-size: 0.88rem; font-weight: bold; margin: 6px 0; color: #333; }
-    .price { font-size: 1.1rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
-    .btn { background: #9c27b0; color: white; border: none; padding: 9px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.88rem; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .card { background: white; border-radius: 10px; overflow: hidden; border: 1px solid #e0e0e0; padding: 12px; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+    .card img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; }
+    .title { font-size: 0.98rem; font-weight: bold; margin: 8px 0 4px 0; color: #333; }
+    .price { font-size: 1.2rem; font-weight: 800; color: #9c27b0; margin-bottom: 10px; }
+    .btn { background: #9c27b0; color: white; border: none; padding: 11px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.95rem; }
 
-    /* Bottom Navigation (Fixed Order as Requested) */
-    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 62px; background: white; border-top: 2px solid #f8bbd0; display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.06); }
-    .nav-item { background: none; border: none; font-size: 0.72rem; font-weight: bold; color: #666; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    /* Bottom Navigation (Home, Category, Seller Hub, My Orders) */
+    .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 68px; background: white; border-top: 2px solid #f8bbd0; display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.06); }
+    .nav-item { background: none; border: none; font-size: 0.8rem; font-weight: bold; color: #666; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
     .nav-item.active { color: #9c27b0; }
 
     /* Forms & Boxes */
-    .box { background: white; padding: 16px; border-radius: 10px; border: 1px solid #e0e0e0; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-    .input { width: 100%; padding: 10px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 0.9rem; }
-    .label { font-size: 0.8rem; font-weight: bold; color: #4a148c; display: block; margin-bottom: 2px; }
-    .security-badge { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; padding: 8px; border-radius: 6px; font-size: 0.75rem; text-align: center; margin-bottom: 10px; font-weight: bold; }
+    .box { background: white; padding: 18px; border-radius: 12px; border: 1px solid #e0e0e0; margin-bottom: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .input { width: 100%; padding: 12px; margin: 6px 0 14px 0; border: 1px solid #ccc; border-radius: 8px; outline: none; font-size: 1rem; }
+    .label { font-size: 0.88rem; font-weight: bold; color: #4a148c; display: block; margin-bottom: 4px; }
+    .security-badge { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; padding: 10px; border-radius: 8px; font-size: 0.85rem; text-align: center; margin-bottom: 12px; font-weight: bold; }
   </style>
 </head>
 <body>
+
+  <!-- Splash Screen (1.5 Seconds) -->
+  <div id="splashScreen">
+    <img src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=200" alt="Logo">
+    <h1>MeeStore</h1>
+    <p>Loading Professional E-Commerce...</p>
+  </div>
 
   <!-- Header -->
   <header class="header">
@@ -45,11 +58,12 @@
       <img src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=100" alt="Logo">
       <span>MeeStore</span>
     </div>
-    <div style="display:flex; gap:8px; align-items:center;">
-      <button onclick="switchTab('profile', document.getElementById('navProfile'))" style="background:#e1bee7; border:none; padding:6px 10px; border-radius:14px; font-weight:bold; color:#4a148c; cursor:pointer; font-size:0.78rem;">
-        👤 <span id="headerProfileName">Profile</span>
+    <div style="display:flex; gap:10px; align-items:center;">
+      <button onclick="switchTab('profile', document.getElementById('navProfile'))" style="background:#e1bee7; border:none; padding:8px 12px; border-radius:18px; font-weight:bold; color:#4a148c; cursor:pointer; font-size:0.88rem; display:flex; align-items:center; gap:6px;">
+        <img id="headerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=50" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+        <span id="headerCustomerName">Customer Account</span>
       </button>
-      <button onclick="switchTab('cart', document.getElementById('navCart'))" style="background:#f3e5f5; border:1px solid #ce93d8; padding:6px 12px; border-radius:14px; color:#7b1fa2; font-weight:bold; cursor:pointer; font-size:0.78rem;">
+      <button onclick="switchTab('cart', document.getElementById('navCart'))" style="background:#f3e5f5; border:1px solid #ce93d8; padding:8px 14px; border-radius:18px; color:#7b1fa2; font-weight:bold; cursor:pointer; font-size:0.88rem;">
         🛒 (<span id="cartCount">0</span>)
       </button>
     </div>
@@ -58,7 +72,7 @@
   <!-- VIEW 1: HOME -->
   <div id="viewHome" class="view-container active">
     <div class="security-badge">🔒 256-Bit SSL Encrypted & Cyber Security Protected Platform</div>
-    <div style="margin-bottom: 12px;">
+    <div style="margin-bottom: 14px;">
       <input type="text" class="input" placeholder="Search products, millets, sarees..." oninput="filterProducts(this.value)">
     </div>
     <div class="grid" id="productGrid"></div>
@@ -66,60 +80,79 @@
 
   <!-- VIEW 2: CATEGORIES -->
   <div id="viewCategories" class="view-container">
-    <h3 style="color:#4a148c; margin-bottom:12px;">Categories</h3>
-    <div class="box" onclick="filterCat('Women Fashion')" style="cursor:pointer; font-weight:bold;">👗 Women Fashion (Clothes)</div>
-    <div class="box" onclick="filterCat('Grocery & Millets')" style="cursor:pointer; font-weight:bold;">🌾 Grocery & Millets</div>
-    <div class="box" onclick="filterCat('Jewelry & Fancy')" style="cursor:pointer; font-weight:bold;">💍 Jewelry & Fancy</div>
-    <div class="box" onclick="filterCat('Electronics')" style="cursor:pointer; font-weight:bold;">📱 Electronics & Gadgets</div>
+    <h3 style="color:#4a148c; margin-bottom:14px; font-size:1.2rem;">All Categories</h3>
+    <div class="box" onclick="filterCat('Women Fashion')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">👗 Women Fashion (Clothes)</div>
+    <div class="box" onclick="filterCat('Men Fashion')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">👕 Men Fashion</div>
+    <div class="box" onclick="filterCat('Kids Wear')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">👶 Kids Wear</div>
+    <div class="box" onclick="filterCat('Grocery & Millets')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">🌾 Grocery & Millets</div>
+    <div class="box" onclick="filterCat('Jewelry & Fancy')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">💍 Jewelry & Fancy</div>
+    <div class="box" onclick="filterCat('Electronics & Gadgets')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">📱 Electronics & Gadgets</div>
+    <div class="box" onclick="filterCat('Home & Kitchen')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">🏠 Home & Kitchen</div>
+    <div class="box" onclick="filterCat('Footwear')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">👠 Footwear</div>
+    <div class="box" onclick="filterCat('Beauty & Personal Care')" style="cursor:pointer; font-weight:bold; font-size:1.05rem;">💄 Beauty & Personal Care</div>
   </div>
 
-  <!-- VIEW 3: SELLER HUB -->
+  <!-- VIEW 3: SELLER HUB (OTP Login & Detailed SKU/Product Add) -->
   <div id="viewSeller" class="view-container">
     <div id="sellerAuthBox" class="box">
-      <h3 style="color:#9c27b0; margin-bottom:12px; text-align:center;">🏪 Seller Hub Login / Register</h3>
+      <h3 style="color:#9c27b0; margin-bottom:14px; text-align:center; font-size:1.2rem;">🏪 Seller Hub OTP Login & Register</h3>
       <label class="label">Shop Name</label>
       <input type="text" id="sShopName" class="input" placeholder="Store Name">
       <label class="label">Mobile Number</label>
-      <input type="tel" id="sPhone" class="input" placeholder="Mobile Number">
-      <label class="label">Seller Verification ID</label>
-      <input type="text" id="sAadhaar" class="input" maxlength="12" placeholder="12-digit ID">
-      <label class="label">Seller UPI ID (97% Payout, 3% Commission)</label>
+      <div style="display:flex; gap:8px;">
+        <input type="tel" id="sPhone" class="input" placeholder="10-digit mobile" style="margin-bottom:0;">
+        <button class="btn" style="width:130px; padding:10px;" onclick="sendSellerOTP()">Send OTP</button>
+      </div>
+      <div id="otpSection" style="display:none; margin-top:14px;">
+        <label class="label">Enter 4-Digit OTP (Use 1234)</label>
+        <input type="text" id="sOtpInput" class="input" maxlength="4" placeholder="1234">
+      </div>
+      <label class="label" style="margin-top:10px;">Seller UPI ID (97% Payout, 3% Commission)</label>
       <input type="text" id="sUpi" class="input" placeholder="seller@ybl">
-      <button class="btn" onclick="sellerLogin()">Register / Login Seller</button>
+      <button class="btn" style="margin-top:8px;" onclick="verifySellerOTP()">Verify OTP & Login Seller</button>
     </div>
 
     <div id="sellerDashBox" style="display:none;">
       <div class="box" style="border-left: 5px solid #9c27b0;">
-        <h3 id="dashShopName" style="color:#4a148c;"></h3>
-        <p id="dashDetails" style="font-size:0.82rem; color:#555; margin:4px 0;"></p>
-        <button onclick="sellerLogout()" style="background:#ffebee; color:#c62828; border:none; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold; cursor:pointer;">Sign Out</button>
+        <h3 id="dashShopName" style="color:#4a148c; font-size:1.2rem;"></h3>
+        <p id="dashDetails" style="font-size:0.9rem; color:#555; margin:6px 0;"></p>
+        <button onclick="sellerLogout()" style="background:#ffebee; color:#c62828; border:none; padding:6px 12px; border-radius:6px; font-size:0.85rem; font-weight:bold; cursor:pointer;">Sign Out</button>
       </div>
 
-      <div style="display:flex; gap:8px; margin-bottom:12px;">
-        <div class="box" style="flex:1; text-align:center; padding:10px;">
-          <div style="font-size:0.75rem; color:#666;">Total Stock</div>
-          <div id="statStock" style="font-size:1.1rem; font-weight:800; color:#9c27b0;">0</div>
+      <div style="display:flex; gap:10px; margin-bottom:14px;">
+        <div class="box" style="flex:1; text-align:center; padding:12px; margin-bottom:0;">
+          <div style="font-size:0.8rem; color:#666;">Total Stock</div>
+          <div id="statStock" style="font-size:1.3rem; font-weight:800; color:#9c27b0;">0</div>
         </div>
-        <div class="box" style="flex:1; text-align:center; padding:10px;">
-          <div style="font-size:0.75rem; color:#666;">Sold Items</div>
-          <div id="statSold" style="font-size:1.1rem; font-weight:800; color:#16a34a;">0</div>
+        <div class="box" style="flex:1; text-align:center; padding:12px; margin-bottom:0;">
+          <div style="font-size:0.8rem; color:#666;">Sold Items</div>
+          <div id="statSold" style="font-size:1.3rem; font-weight:800; color:#16a34a;">0</div>
         </div>
-        <div class="box" style="flex:1; text-align:center; padding:10px;">
-          <div style="font-size:0.75rem; color:#666;">Returns</div>
-          <div id="statReturns" style="font-size:1.1rem; font-weight:800; color:#dc2626;">0</div>
+        <div class="box" style="flex:1; text-align:center; padding:12px; margin-bottom:0;">
+          <div style="font-size:0.8rem; color:#666;">Returns</div>
+          <div id="statReturns" style="font-size:1.3rem; font-weight:800; color:#dc2626;">0</div>
         </div>
       </div>
 
       <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:10px;">Add Detailed Product</h4>
+        <h4 style="color:#4a148c; margin-bottom:12px; font-size:1.1rem;">Add Detailed Product (Meesho Style)</h4>
         <label class="label">Product Name</label>
         <input type="text" id="pName" class="input" placeholder="Name">
+        <div style="display:flex; gap:10px;">
+          <div style="flex:1;"><label class="label">SKU ID</label><input type="text" id="pSku" class="input" placeholder="SKU12345"></div>
+          <div style="flex:1;"><label class="label">Product ID / No.</label><input type="text" id="pIdNo" class="input" placeholder="PID987"></div>
+        </div>
         <label class="label">Category</label>
         <select id="pCat" class="input">
           <option value="Women Fashion">Women Fashion</option>
+          <option value="Men Fashion">Men Fashion</option>
+          <option value="Kids Wear">Kids Wear</option>
           <option value="Grocery & Millets">Grocery & Millets</option>
           <option value="Jewelry & Fancy">Jewelry & Fancy</option>
-          <option value="Electronics">Electronics</option>
+          <option value="Electronics & Gadgets">Electronics & Gadgets</option>
+          <option value="Home & Kitchen">Home & Kitchen</option>
+          <option value="Footwear">Footwear</option>
+          <option value="Beauty & Personal Care">Beauty & Personal Care</option>
         </select>
         <label class="label">Price (₹)</label>
         <input type="number" id="pPrice" class="input" placeholder="Price">
@@ -136,67 +169,64 @@
     </div>
   </div>
 
-  <!-- VIEW 4: MY ORDERS & BUYER PROFILE -->
+  <!-- VIEW 4: CUSTOMER PROFILE & MY ORDERS -->
   <div id="viewProfile" class="view-container">
     <div id="buyerAuthBox" class="box">
-      <h3 style="color:#9c27b0; margin-bottom:12px; text-align:center;">👤 Buyer Profile & Verification</h3>
-      <label class="label">Full Name</label>
-      <input type="text" id="bName" class="input" placeholder="Name">
+      <h3 style="color:#9c27b0; margin-bottom:14px; text-align:center; font-size:1.2rem;">👤 Customer Profile & Registration</h3>
+      <label class="label">Customer Name</label>
+      <input type="text" id="bName" class="input" placeholder="Enter your full name">
       <label class="label">Mobile Number</label>
       <input type="tel" id="bPhone" class="input" placeholder="Mobile">
-      <label class="label">Verification ID</label>
-      <input type="text" id="bAadhaar" class="input" maxlength="12" placeholder="ID Number">
       <label class="label">Delivery Address</label>
       <input type="text" id="bAddressInput" class="input" placeholder="Door No, Street, City, Pincode">
       <label class="label">Bank Details (A/C & IFSC)</label>
       <input type="text" id="bBank" class="input" placeholder="Bank Details">
-      <button class="btn" onclick="buyerLogin()">Verify & Save Profile</button>
+      <button class="btn" onclick="buyerLogin()">Save Profile & Continue</button>
     </div>
 
     <div id="buyerDashBox" style="display:none;">
-      <div class="box" style="border-left: 5px solid #16a34a; display:flex; gap:12px; align-items:center;">
-        <img id="buyerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">
+      <div class="box" style="border-left: 5px solid #16a34a; display:flex; gap:14px; align-items:center;">
+        <img id="buyerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" style="width:70px; height:70px; border-radius:50%; object-fit:cover;">
         <div>
-          <h3 id="bDashName" style="color:#16a34a;"></h3>
-          <p id="bDashPhone" style="font-size:0.8rem; color:#555;"></p>
-          <p id="bDashAadhaar" style="font-size:0.8rem; color:#555;"></p>
+          <h3 id="bDashName" style="color:#16a34a; font-size:1.2rem;"></h3>
+          <p id="bDashPhone" style="font-size:0.9rem; color:#555;"></p>
         </div>
       </div>
       
       <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:6px;">📍 Saved Delivery Address</h4>
-        <p id="bDashAddress" style="font-size:0.85rem; color:#444; margin-bottom:8px;"></p>
-        <button onclick="editAddressPrompt()" style="background:#e1bee7; color:#4a148c; border:none; padding:5px 10px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.78rem;">Edit Address</button>
+        <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">📍 Saved Delivery Address</h4>
+        <p id="bDashAddress" style="font-size:0.92rem; color:#444; margin-bottom:10px;"></p>
+        <button onclick="editAddressPrompt()" style="background:#e1bee7; color:#4a148c; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.85rem;">Edit Address</button>
       </div>
 
       <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:8px;">📦 My Orders & Returns History</h4>
-        <div id="buyerOrdersList"><p style="font-size:0.85rem; color:#666;">No active orders found.</p></div>
-        <button onclick="buyerLogout()" style="margin-top:12px; background:#ffebee; color:#c62828; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.8rem;">Logout Profile</button>
+        <h4 style="color:#4a148c; margin-bottom:10px; font-size:1.05rem;">📦 My Orders & Returns History</h4>
+        <div id="buyerOrdersList"><p style="font-size:0.9rem; color:#666;">No active orders found.</p></div>
+        <button onclick="buyerLogout()" style="margin-top:14px; background:#ffebee; color:#c62828; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.88rem;">Logout Profile</button>
       </div>
     </div>
   </div>
 
   <!-- VIEW 5: CART -->
   <div id="viewCart" class="view-container">
-    <h3 style="color:#4a148c; margin-bottom:12px;">Shopping Cart & Checkout</h3>
+    <h3 style="color:#4a148c; margin-bottom:14px; font-size:1.2rem;">Shopping Cart & Checkout</h3>
     <div id="cartItemsList"></div>
     
     <div class="box" style="margin-top:14px; background:#fafafa;">
-      <h4 style="color:#4a148c; margin-bottom:6px;">📍 Select Delivery Address</h4>
-      <p id="cartSelectedAddress" style="font-size:0.85rem; color:#333; margin-bottom:8px;">No address saved. Please update in Profile.</p>
-      <button onclick="switchTab('profile', document.getElementById('navProfile'))" style="background:#e1bee7; color:#4a148c; border:none; padding:5px 10px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.75rem;">Change / Add Address</button>
+      <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">📍 Select Delivery Address</h4>
+      <p id="cartSelectedAddress" style="font-size:0.92rem; color:#333; margin-bottom:10px;">No address saved. Please update in Profile.</p>
+      <button onclick="switchTab('profile', document.getElementById('navProfile'))" style="background:#e1bee7; color:#4a148c; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.82rem;">Change / Add Address</button>
     </div>
 
     <div id="cartTotalBox" style="display:none; margin-top:14px;" class="box">
-      <h3>Total: ₹<span id="cartSum">0</span></h3>
-      <button class="btn" style="margin-top:10px; background:#16a34a;" onclick="checkoutWhatsApp()">Proceed & Order via WhatsApp</button>
+      <h3 style="font-size:1.2rem;">Total: ₹<span id="cartSum">0</span></h3>
+      <button class="btn" style="margin-top:12px; background:#16a34a;" onclick="checkoutWhatsApp()">Proceed & Order via WhatsApp</button>
     </div>
   </div>
 
   <!-- VIEW 6: DETAILED PRODUCT PAGE -->
   <div id="viewProductDetail" class="view-container">
-    <button onclick="switchTab('home', document.getElementById('navHome'))" style="background:#eee; border:none; padding:6px 12px; border-radius:4px; font-weight:bold; margin-bottom:12px; cursor:pointer;">← Back to Home</button>
+    <button onclick="switchTab('home', document.getElementById('navHome'))" style="background:#eee; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; margin-bottom:14px; cursor:pointer; font-size:0.9rem;">← Back to Home</button>
     <div class="box" id="productDetailContent"></div>
   </div>
 
@@ -209,7 +239,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION (Exact Order: Home, Category, Seller Hub, My Orders) -->
+  <!-- BOTTOM NAVIGATION (Home, Category, Seller Hub, My Orders) -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="switchTab('home', this)">🏠<span>Home</span></button>
     <button class="nav-item" id="navCat" onclick="switchTab('categories', this)">📂<span>Category</span></button>
@@ -219,15 +249,22 @@
   </nav>
 
   <script>
+    // 1.5s Splash Screen Timer
+    setTimeout(() => {
+      const splash = document.getElementById('splashScreen');
+      splash.style.opacity = '0';
+      setTimeout(() => splash.style.display = 'none', 500);
+    }, 1500);
+
     let cart = [];
     let currentSeller = JSON.parse(localStorage.getItem('meestore_seller') || 'null');
     let currentBuyer = JSON.parse(localStorage.getItem('meestore_buyer') || 'null');
     let ordersHistory = JSON.parse(localStorage.getItem('meestore_orders') || '[]');
 
     const baseProducts = [
-      { id: 1, name: "Little millets (500g)", category: "Grocery & Millets", price: 20, nature: "Organic", dim: "15x10 cm", weight: "500g", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
-      { id: 2, name: "Soft Silk Saree", category: "Women Fashion", price: 499, nature: "Pure Silk", dim: "6m", weight: "400g", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
-      { id: 3, name: "Temple Necklace", category: "Jewelry & Fancy", price: 249, nature: "Gold Plated", dim: "Standard", weight: "100g", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" }
+      { id: 1, name: "Little millets (500g)", sku: "SKUMLT500", pid: "PID101", category: "Grocery & Millets", price: 20, nature: "Organic", dim: "15x10 cm", weight: "500g", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
+      { id: 2, name: "Soft Silk Saree", sku: "SKUSILK01", pid: "PID102", category: "Women Fashion", price: 499, nature: "Pure Silk", dim: "6m", weight: "400g", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
+      { id: 3, name: "Temple Necklace", sku: "SKUNECL03", pid: "PID103", category: "Jewelry & Fancy", price: 249, nature: "Gold Plated", dim: "Standard", weight: "100g", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" }
     ];
 
     function getProducts() {
@@ -280,13 +317,15 @@
       document.getElementById('viewProductDetail').classList.add('active');
       
       document.getElementById('productDetailContent').innerHTML = `
-        <img src="${p.img}" style="width:100%; height:220px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
-        <h2 style="color:#333; margin-bottom:6px;">${p.name}</h2>
-        <div style="font-size:1.4rem; font-weight:800; color:#9c27b0; margin-bottom:10px;">₹${p.price}</div>
-        <p style="font-size:0.85rem; color:#555; margin-bottom:6px;"><b>Category:</b> ${p.category}</p>
-        <p style="font-size:0.85rem; color:#555; margin-bottom:6px;"><b>Nature / Material:</b> ${p.nature || 'Standard'}</p>
-        <p style="font-size:0.85rem; color:#555; margin-bottom:6px;"><b>Dimensions:</b> ${p.dim || 'Standard Size'}</p>
-        <p style="font-size:0.85rem; color:#555; margin-bottom:14px;"><b>Weight & Hazard Info:</b> ${p.weight || 'Non-hazardous'}</p>
+        <img src="${p.img}" style="width:100%; height:240px; object-fit:cover; border-radius:10px; margin-bottom:12px;">
+        <h2 style="color:#333; margin-bottom:8px; font-size:1.4rem;">${p.name}</h2>
+        <div style="font-size:1.6rem; font-weight:800; color:#9c27b0; margin-bottom:12px;">₹${p.price}</div>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>SKU ID:</b> ${p.sku || 'N/A'}</p>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Product ID:</b> ${p.pid || 'N/A'}</p>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Category:</b> ${p.category}</p>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Nature / Material:</b> ${p.nature || 'Standard'}</p>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Dimensions:</b> ${p.dim || 'Standard Size'}</p>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:16px;"><b>Weight & Hazard Info:</b> ${p.weight || 'Non-hazardous'}</p>
         <div style="display:flex; gap:10px;">
           <button class="btn" style="background:#16a34a;" onclick="addToCart(${p.id}); alert('Added to Cart!');">Add to Cart</button>
           <button class="btn" onclick="addToCart(${p.id}); switchTab('cart', document.getElementById('navCart'));">Buy Now</button>
@@ -312,15 +351,15 @@
       }
 
       if(cart.length === 0) {
-        list.innerHTML = "<p style='color:#777; text-align:center; padding:30px;'>Your cart is empty.</p>";
+        list.innerHTML = "<p style='color:#777; text-align:center; padding:30px; font-size:1rem;'>Your cart is empty.</p>";
         box.style.display = 'none';
       } else {
         let sum = 0;
         list.innerHTML = cart.map((c, i) => {
           sum += c.price;
-          return `<div style="background:white; padding:10px; border:1px solid #e0e0e0; border-radius:6px; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
-            <span><b>${c.name}</b> - ₹${c.price}</span>
-            <button onclick="cart.splice(${i},1); renderCart(); document.getElementById('cartCount').innerText=cart.length;" style="background:#ffebee; color:#c62828; border:none; padding:4px 8px; border-radius:4px; cursor:pointer;">Remove</button>
+          return `<div style="background:white; padding:12px; border:1px solid #e0e0e0; border-radius:8px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:0.98rem;"><b>${c.name}</b> - ₹${c.price}</span>
+            <button onclick="cart.splice(${i},1); renderCart(); document.getElementById('cartCount').innerText=cart.length;" style="background:#ffebee; color:#c62828; border:none; padding:6px 10px; border-radius:6px; cursor:pointer; font-weight:bold;">Remove</button>
           </div>`;
         }).join('');
         document.getElementById('cartSum').innerText = sum;
@@ -328,17 +367,26 @@
       }
     }
 
-    function sellerLogin() {
+    // Seller OTP Login Logic
+    function sendSellerOTP() {
+      const phone = document.getElementById('sPhone').value.trim();
+      if(phone.length !== 10) { alert("Please enter valid 10-digit mobile number!"); return; }
+      document.getElementById('otpSection').style.display = 'block';
+      alert("📲 OTP sent to " + phone + ". (Simulation OTP: 1234)");
+    }
+
+    function verifySellerOTP() {
       const shopName = document.getElementById('sShopName').value.trim();
       const phone = document.getElementById('sPhone').value.trim();
+      const otp = document.getElementById('sOtpInput').value.trim();
       const upi = document.getElementById('sUpi').value.trim();
-      if(!shopName || !phone || !upi) {
-        alert("Please fill all details including UPI ID!");
-        return;
-      }
+
+      if(!shopName || !phone || !upi) { alert("Please fill Shop Name, Mobile and UPI ID!"); return; }
+      if(otp !== '1234') { alert("Invalid OTP! Please enter 1234"); return; }
+
       currentSeller = { shopName, phone, upi };
       localStorage.setItem('meestore_seller', JSON.stringify(currentSeller));
-      alert("✅ Seller Account Registered!");
+      alert("✅ Seller OTP Verified & Logged in successfully!");
       updateSellerUI();
     }
 
@@ -354,6 +402,7 @@
       } else {
         document.getElementById('sellerAuthBox').style.display = 'block';
         document.getElementById('sellerDashBox').style.display = 'none';
+        document.getElementById('otpSection').style.display = 'none';
       }
     }
 
@@ -365,6 +414,8 @@
 
     function addSellerProduct() {
       const name = document.getElementById('pName').value.trim();
+      const sku = document.getElementById('pSku').value.trim();
+      const pid = document.getElementById('pIdNo').value.trim();
       const price = Number(document.getElementById('pPrice').value);
       const nature = document.getElementById('pNature').value.trim();
       const dim = document.getElementById('pDim').value.trim();
@@ -374,13 +425,15 @@
 
       if(!name || !price || !img) { alert("Please fill Name, Price and Image URL!"); return; }
 
-      const newP = { id: Date.now(), name, category: cat, price, nature, dim, weight, img };
+      const newP = { id: Date.now(), name, sku, pid, category: cat, price, nature, dim, weight, img };
       let custom = JSON.parse(localStorage.getItem('meestore_custom_prods') || '[]');
       custom.unshift(newP);
       localStorage.setItem('meestore_custom_prods', JSON.stringify(custom));
       alert("🎉 Product published! 97% payment goes to Seller UPI (" + currentSeller.upi + ") and 3% platform commission retained.");
       
       document.getElementById('pName').value = '';
+      document.getElementById('pSku').value = '';
+      document.getElementById('pIdNo').value = '';
       document.getElementById('pPrice').value = '';
       document.getElementById('pNature').value = '';
       document.getElementById('pDim').value = '';
@@ -389,6 +442,7 @@
       switchTab('home', document.getElementById('navHome'));
     }
 
+    // Customer Profile Logic
     function buyerLogin() {
       const name = document.getElementById('bName').value.trim();
       const phone = document.getElementById('bPhone').value.trim();
@@ -396,13 +450,13 @@
       const bank = document.getElementById('bBank').value.trim();
 
       if(!name || !phone || !address) {
-        alert("Please enter Name, Phone and Delivery Address!");
+        alert("Please enter Customer Name, Phone and Delivery Address!");
         return;
       }
 
       currentBuyer = { name, phone, address, bank };
       localStorage.setItem('meestore_buyer', JSON.stringify(currentBuyer));
-      alert("✅ Profile & Address Saved Successfully!");
+      alert("✅ Customer Profile Saved Successfully!");
       updateBuyerUI();
 
       if(name.toLowerCase() === 'admin') {
@@ -427,11 +481,16 @@
         document.getElementById('bDashName').innerText = currentBuyer.name;
         document.getElementById('bDashPhone').innerText = "Phone: " + currentBuyer.phone;
         document.getElementById('bDashAddress').innerText = currentBuyer.address;
-        document.getElementById('headerProfileName').innerText = currentBuyer.name.split(' ')[0];
         
+        document.getElementById('headerCustomerName').innerText = currentBuyer.name;
+        
+        if(currentBuyer.name.toLowerCase() === 'admin') {
+          document.getElementById('navAdmin').style.display = 'flex';
+        }
+
         if(ordersHistory.length > 0) {
           document.getElementById('buyerOrdersList').innerHTML = ordersHistory.map(o => `
-            <div style="border-bottom:1px solid #eee; padding:6px 0; font-size:0.82rem;">
+            <div style="border-bottom:1px solid #eee; padding:8px 0; font-size:0.9rem;">
               <b>Items:</b> ${o.items}<br><b>Address:</b> ${o.address}<br><b>Total:</b> ₹${o.total} (${o.status})
             </div>
           `).join('');
@@ -439,7 +498,8 @@
       } else {
         document.getElementById('buyerAuthBox').style.display = 'block';
         document.getElementById('buyerDashBox').style.display = 'none';
-        document.getElementById('headerProfileName').innerText = "Profile";
+        document.getElementById('headerCustomerName').innerText = "Customer Account";
+        document.getElementById('navAdmin').style.display = 'none';
       }
     }
 
@@ -477,7 +537,7 @@
       ordersHistory.unshift(orderObj);
       localStorage.setItem('meestore_orders', JSON.stringify(ordersHistory));
 
-      const msg = `🛒 *New Order - MeeStore*\nBuyer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
+      const msg = `🛒 *New Order - MeeStore*\nCustomer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
       
       cart = [];
       document.getElementById('cartCount').innerText = 0;
