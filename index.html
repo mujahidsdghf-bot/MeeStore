@@ -41,7 +41,7 @@
     .view-container { display: none; padding: 12px 16px; }
     .view-container.active { display: block; }
 
-    /* Universal Back Button for Sub-pages */
+    /* Universal Back Button */
     .back-btn { background: #ede7f6; color: #5e35b1; border: 1px solid #d1c4e9; padding: 8px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 12px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; }
 
     /* Product Grid */
@@ -50,7 +50,8 @@
     .card { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e0e0e0; padding: 10px; display: flex; flex-direction: column; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.04); }
     .card img { width: 100%; height: 140px; object-fit: cover; border-radius: 8px; }
     .card-title { font-size: 0.92rem; font-weight: bold; margin: 8px 0 4px 0; color: #333; line-height: 1.2; }
-    .card-price { font-size: 1.15rem; font-weight: 800; color: #6a1b9a; margin-bottom: 8px; }
+    .card-price { font-size: 1.15rem; font-weight: 800; color: #6a1b9a; margin-bottom: 4px; }
+    .card-stock { font-size: 0.78rem; color: #666; margin-bottom: 8px; font-weight: 600; }
     .card-btn { background: #6a1b9a; color: white; border: none; padding: 9px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.9rem; }
 
     /* Bottom Navigation */
@@ -163,7 +164,7 @@
         <label class="label">Enter 4-Digit OTP (Use 1234)</label>
         <input type="text" id="sOtpInput" class="input" maxlength="4" placeholder="1234">
       </div>
-      <label class="label" style="margin-top:10px;">Seller UPI ID (97% Payout, 3% Commission)</label>
+      <label class="label" style="margin-top:10px;">Seller UPI ID (Payments go directly to you)</label>
       <input type="text" id="sUpi" class="input" placeholder="seller@ybl">
       <button class="btn" style="margin-top:8px;" onclick="verifySellerOTP()">Verify OTP & Login Seller</button>
     </div>
@@ -190,13 +191,23 @@
         </div>
       </div>
 
+      <!-- Seller Stock & Products List Box -->
       <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:12px; font-size:1.1rem;">Add Detailed Product</h4>
+        <h4 style="color:#4a148c; margin-bottom:10px; font-size:1.1rem;">📊 My Published Products & Stock</h4>
+        <div id="sellerProductsList"><p style="font-size:0.85rem; color:#666;">No products added yet.</p></div>
+      </div>
+
+      <div class="box">
+        <h4 style="color:#4a148c; margin-bottom:12px; font-size:1.1rem;">Add New Product & Quantity</h4>
         <label class="label">Product Name</label>
         <input type="text" id="pName" class="input" placeholder="Name">
         <div style="display:flex; gap:10px;">
-          <div style="flex:1;"><label class="label">SKU ID</label><input type="text" id="pSku" class="input" placeholder="SKU12345"></div>
+          <div style="flex:1;"><label class="label">SKU ID</label><input type="text" id="pSku" class="input" placeholder="SKU123"></div>
           <div style="flex:1;"><label class="label">Product ID</label><input type="text" id="pIdNo" class="input" placeholder="PID987"></div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <div style="flex:1;"><label class="label">Price (₹)</label><input type="number" id="pPrice" class="input" placeholder="Price"></div>
+          <div style="flex:1;"><label class="label">Total Quantity / Stock</label><input type="number" id="pQty" class="input" placeholder="e.g. 20"></div>
         </div>
         <label class="label">Category</label>
         <select id="pCat" class="input">
@@ -207,26 +218,22 @@
           <option value="Jewelry & Fancy">Jewelry & Fancy</option>
           <option value="Home & Kitchen">Home & Kitchen</option>
         </select>
-        <label class="label">Price (₹)</label>
-        <input type="number" id="pPrice" class="input" placeholder="Price">
         <label class="label">Brand & Manufacturer</label>
-        <input type="text" id="pBrand" class="input" placeholder="e.g. MeeStore Organic / Local Artisan">
-        <label class="label">Color & Size / Specification</label>
-        <input type="text" id="pColorSize" class="input" placeholder="e.g. Purple / 500g / Free Size">
+        <input type="text" id="pBrand" class="input" placeholder="e.g. MeeStore Organic">
+        <label class="label">Color & Size</label>
+        <input type="text" id="pColorSize" class="input" placeholder="e.g. Purple / 500g">
         <label class="label">Nature / Material</label>
         <input type="text" id="pNature" class="input" placeholder="e.g. Cotton, Organic">
-        <label class="label">Dimensions (L x W x H)</label>
-        <input type="text" id="pDim" class="input" placeholder="e.g. 10x5x2 cm">
-        <label class="label">Weight & Hazard Info</label>
-        <input type="text" id="pWeight" class="input" placeholder="e.g. 500g, Non-hazardous">
+        <label class="label">Dimensions & Weight</label>
+        <input type="text" id="pDim" class="input" placeholder="e.g. 10x5 cm, 500g">
         <label class="label">Image URL</label>
         <input type="text" id="pImg" class="input" placeholder="Image web link">
-        <button class="btn" onclick="addSellerProduct()">Publish Product</button>
+        <button class="btn" onclick="addSellerProduct()">Publish Product & Stock</button>
       </div>
     </div>
   </div>
 
-  <!-- VIEW 4: CUSTOMER PROFILE -->
+  <!-- VIEW 4: CUSTOMER PROFILE WITH CAMERA / GALLERY UPLOAD -->
   <div id="viewProfile" class="view-container">
     <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div id="buyerAuthBox" class="box">
@@ -246,8 +253,11 @@
       <input type="text" id="bAddressInput" class="input" placeholder="Door No, Street, City, Pincode">
       <label class="label">Bank Details (A/C & IFSC)</label>
       <input type="text" id="bBank" class="input" placeholder="Bank Details">
-      <label class="label">Profile Picture URL</label>
-      <input type="text" id="bAvatarInput" class="input" placeholder="Image URL for profile picture">
+      
+      <!-- Direct Camera / Gallery File Upload for Profile Picture -->
+      <label class="label">Profile Picture (Open Camera or Gallery)</label>
+      <input type="file" id="bAvatarFile" accept="image/*" class="input" style="padding:8px; background:#fafafa;">
+      
       <button class="btn" style="margin-top:8px;" onclick="verifyBuyerOTP()">Verify OTP & Save Profile</button>
     </div>
 
@@ -274,7 +284,7 @@
     </div>
   </div>
 
-  <!-- VIEW 5: CART -->
+  <!-- VIEW 5: CART WITH DYNAMIC SELLER UPI & COD -->
   <div id="viewCart" class="view-container">
     <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <h3 style="color:#6a1b9a; margin-bottom:14px; font-size:1.2rem;">Shopping Cart & Checkout</h3>
@@ -289,10 +299,14 @@
     <!-- Payment Option Selection Box -->
     <div class="box" style="margin-top:14px; background:#f3e5f5;">
       <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">💳 Select Payment Method</h4>
-      <select id="paymentMethodSelect" class="input" style="background:white; margin-bottom:0;">
+      <select id="paymentMethodSelect" class="input" style="background:white; margin-bottom:0;" onchange="togglePaymentUI()">
         <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
         <option value="Online UPI Payment">Online UPI Payment</option>
       </select>
+      <div id="upiPaymentDetails" style="margin-top:10px; display:none; font-size:0.9rem; color:#4a148c; background:white; padding:10px; border-radius:6px;">
+        <p><b>Seller UPI ID:</b> <span id="checkoutSellerUpi">Will be directed to seller UPI</span></p>
+        <p style="font-size:0.78rem; color:#666; margin-top:4px;">Payment goes directly to the respective product seller.</p>
+      </div>
     </div>
 
     <div id="cartTotalBox" style="display:none; margin-top:14px;" class="box">
@@ -338,10 +352,10 @@
     let ordersHistory = JSON.parse(localStorage.getItem('meestore_orders') || '[]');
 
     const baseProducts = [
-      { id: 1, name: "Little millets (Organic)", sku: "SKUMLT500", pid: "PID101", brand: "MeeStore Organics", colorSize: "500g Pack", category: "Grocery & Millets", price: 20, nature: "Organic", dim: "15x10 cm", weight: "500g", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
-      { id: 2, name: "Banarasi Soft Silk Saree", sku: "SKUSILK01", pid: "PID102", brand: "Varanasi Weaves", colorSize: "Royal Purple / 6m", category: "Women Fashion", price: 499, nature: "Pure Silk", dim: "6m", weight: "400g", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
-      { id: 3, name: "Temple Necklace", sku: "SKUNECL03", pid: "PID103", brand: "South Jewels", colorSize: "Gold Plated / Standard", category: "Jewelry & Fancy", price: 249, nature: "Gold Plated", dim: "Standard", weight: "100g", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" },
-      { id: 4, name: "Cotton Printed Kurti", sku: "SKUKURTI", pid: "PID104", brand: "Ethnic Hub", colorSize: "Blue / L", category: "Women Fashion", price: 349, nature: "Cotton", dim: "Standard", weight: "300g", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400" }
+      { id: 1, name: "Little millets (Organic)", sku: "SKUMLT500", pid: "PID101", brand: "MeeStore Organics", colorSize: "500g Pack", category: "Grocery & Millets", price: 20, qty: 15, sold: 0, returns: 0, sellerUpi: "meestore@ybl", nature: "Organic", dim: "15x10 cm", weight: "500g", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
+      { id: 2, name: "Banarasi Soft Silk Saree", sku: "SKUSILK01", pid: "PID102", brand: "Varanasi Weaves", colorSize: "Royal Purple / 6m", category: "Women Fashion", price: 499, qty: 8, sold: 0, returns: 0, sellerUpi: "sareehouse@ybl", nature: "Pure Silk", dim: "6m", weight: "400g", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
+      { id: 3, name: "Temple Necklace", sku: "SKUNECL03", pid: "PID103", brand: "South Jewels", colorSize: "Gold Plated / Standard", category: "Jewelry & Fancy", price: 249, qty: 12, sold: 0, returns: 0, sellerUpi: "jewels@ybl", nature: "Gold Plated", dim: "Standard", weight: "100g", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" },
+      { id: 4, name: "Cotton Printed Kurti", sku: "SKUKURTI", pid: "PID104", brand: "Ethnic Hub", colorSize: "Blue / L", category: "Women Fashion", price: 349, qty: 10, sold: 0, returns: 0, sellerUpi: "ethnic@ybl", nature: "Cotton", dim: "Standard", weight: "300g", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400" }
     ];
 
     function getProducts() {
@@ -357,7 +371,8 @@
           <img src="${p.img}" alt="${p.name}">
           <div class="card-title">${p.name}</div>
           <div class="card-price">₹${p.price}</div>
-          <button class="card-btn" onclick="event.stopPropagation(); addToCart(${p.id})">Add to Cart</button>
+          <div class="card-stock">Stock Left: ${p.qty !== undefined ? p.qty : 10}</div>
+          <button class="card-btn" onclick="event.stopPropagation(); addToCart(${p.id})">${p.qty === 0 ? 'Out of Stock' : 'Add to Cart'}</button>
         </div>
       `).join('');
     }
@@ -410,6 +425,7 @@
         <img src="${p.img}" style="width:100%; height:260px; object-fit:cover; border-radius:10px; margin-bottom:12px;">
         <h2 style="color:#333; margin-bottom:8px; font-size:1.35rem;">${p.name}</h2>
         <div style="font-size:1.6rem; font-weight:800; color:#6a1b9a; margin-bottom:12px;">₹${p.price}</div>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Available Stock:</b> ${p.qty !== undefined ? p.qty : 10} Units</p>
         <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>SKU ID:</b> ${p.sku || 'N/A'}</p>
         <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Product ID:</b> ${p.pid || 'N/A'}</p>
         <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Brand / Manufacturer:</b> ${p.brand || 'Standard'}</p>
@@ -429,8 +445,13 @@
     function addToCart(id) {
       const item = getProducts().find(p => p.id === id);
       if(item) {
+        if(item.qty <= 0) {
+          alert("Sorry, this item is out of stock!");
+          return;
+        }
         cart.push(item);
         document.getElementById('cartCount').innerText = cart.length;
+        alert("🎉 " + item.name + " added to cart!");
       }
     }
 
@@ -456,6 +477,20 @@
         }).join('');
         document.getElementById('cartSum').innerText = sum;
         box.style.display = 'block';
+      }
+    }
+
+    function togglePaymentUI() {
+      const method = document.getElementById('paymentMethodSelect').value;
+      const upiBox = document.getElementById('upiPaymentDetails');
+      if(method === 'Online UPI Payment') {
+        upiBox.style.display = 'block';
+        if(cart.length > 0) {
+          // Show primary seller UPI or aggregated
+          document.getElementById('checkoutSellerUpi').innerText = cart[0].sellerUpi || (currentSeller ? currentSeller.upi : "seller@ybl");
+        }
+      } else {
+        upiBox.style.display = 'none';
       }
     }
 
@@ -487,9 +522,19 @@
         document.getElementById('sellerDashBox').style.display = 'block';
         document.getElementById('dashShopName').innerText = "🏪 " + currentSeller.shopName;
         document.getElementById('dashDetails').innerHTML = `Phone: ${currentSeller.phone} | UPI: ${currentSeller.upi}`;
-        document.getElementById('statStock').innerText = getProducts().length;
+        
+        const prods = getProducts();
+        document.getElementById('statStock').innerText = prods.reduce((acc, p) => acc + (p.qty || 0), 0);
         document.getElementById('statSold').innerText = ordersHistory.length;
         document.getElementById('statReturns').innerText = "0";
+
+        // Render Seller Products Table / List with stock count
+        document.getElementById('sellerProductsList').innerHTML = prods.map(p => `
+          <div style="border-bottom:1px solid #eee; padding:8px 0; display:flex; justify-content:space-between; align-items:center; font-size:0.9rem;">
+            <span><b>${p.name}</b> (₹${p.price})</span>
+            <span>Stock: <b>${p.qty !== undefined ? p.qty : 10}</b></span>
+          </div>
+        `).join('');
       } else {
         document.getElementById('sellerAuthBox').style.display = 'block';
         document.getElementById('sellerDashBox').style.display = 'none';
@@ -508,6 +553,7 @@
       const sku = document.getElementById('pSku').value.trim();
       const pid = document.getElementById('pIdNo').value.trim();
       const price = Number(document.getElementById('pPrice').value);
+      const qty = Number(document.getElementById('pQty').value) || 10;
       const brand = document.getElementById('pBrand').value.trim();
       const colorSize = document.getElementById('pColorSize').value.trim();
       const nature = document.getElementById('pNature').value.trim();
@@ -516,18 +562,23 @@
       const img = document.getElementById('pImg').value.trim();
       const cat = document.getElementById('pCat').value;
 
-      if(!name || !price || !img || !sku || !pid) { alert("Please fill all required fields including SKU ID and Product ID!"); return; }
+      if(!name || !price || !img || !sku || !pid) { alert("Please fill all required fields including SKU ID, Product ID and Price!"); return; }
 
-      const newP = { id: Date.now(), name, sku, pid, brand, colorSize, category: cat, price, nature, dim, weight, img };
+      const newP = { 
+        id: Date.now(), name, sku, pid, brand, colorSize, category: cat, price, qty, sold: 0, returns: 0, 
+        sellerUpi: currentSeller ? currentSeller.upi : "seller@ybl", nature, dim, weight, img 
+      };
+      
       let custom = JSON.parse(localStorage.getItem('meestore_custom_prods') || '[]');
       custom.unshift(newP);
       localStorage.setItem('meestore_custom_prods', JSON.stringify(custom));
-      alert("🎉 Product published successfully with full specifications!");
+      alert("🎉 Product published successfully with " + qty + " stock units!");
       
       document.getElementById('pName').value = '';
       document.getElementById('pSku').value = '';
       document.getElementById('pIdNo').value = '';
       document.getElementById('pPrice').value = '';
+      document.getElementById('pQty').value = '';
       document.getElementById('pBrand').value = '';
       document.getElementById('pColorSize').value = '';
       document.getElementById('pNature').value = '';
@@ -550,15 +601,28 @@
       const otp = document.getElementById('bOtpInput').value.trim();
       const address = document.getElementById('bAddressInput').value.trim();
       const bank = document.getElementById('bBank').value.trim();
-      let avatar = document.getElementById('bAvatarInput').value.trim();
+      const fileInput = document.getElementById('bAvatarFile');
 
       if(!name || !phone || !address) { alert("Please fill Name, Phone and Delivery Address!"); return; }
       if(otp !== '1234') { alert("Invalid OTP! Please enter 1234"); return; }
-      if(!avatar) avatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100";
 
+      let avatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100";
+      if(fileInput.files && fileInput.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          avatar = e.target.result;
+          saveBuyerData(name, phone, address, bank, avatar);
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        saveBuyerData(name, phone, address, bank, avatar);
+      }
+    }
+
+    function saveBuyerData(name, phone, address, bank, avatar) {
       currentBuyer = { name, phone, address, bank, avatar };
       localStorage.setItem('meestore_buyer', JSON.stringify(currentBuyer));
-      alert("✅ Customer OTP Verified & Saved Successfully!");
+      alert("✅ Customer OTP Verified & Profile Saved Successfully!");
       updateBuyerUI();
     }
 
@@ -590,7 +654,7 @@
         `;
       } else if(type === 'settings') {
         title.innerText = "⚙️ Account Settings";
-        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.7.0 (Secure Mode Active)</p>`;
+        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.8.0 (Secure Mode Active)</p>`;
       }
     }
 
@@ -673,11 +737,24 @@
       const commission = total * 0.03;
       document.getElementById('adminCommission').innerText = commission.toFixed(2);
 
+      // Reduce stock of ordered items
+      let allProds = getProducts();
+      cart.forEach(item => {
+        let found = allProds.find(p => p.id === item.id);
+        if(found && found.qty > 0) {
+          found.qty -= 1;
+        }
+      });
+      localStorage.setItem('meestore_custom_prods', JSON.stringify(allProds.filter(p => p.id > 10))); // Save custom updates
+
       const orderObj = { items: names, total, address: currentBuyer.address, paymentMethod, status: 'Ordered Successfully' };
       ordersHistory.unshift(orderObj);
       localStorage.setItem('meestore_orders', JSON.stringify(ordersHistory));
 
-      const msg = `🛒 *New Order - MeeStore*\nCustomer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}\nPayment Method: ${paymentMethod}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
+      const sellerUpiTarget = cart.length > 0 ? (cart[0].sellerUpi || "seller@ybl") : "seller@ybl";
+      const paymentInfo = paymentMethod === 'Online UPI Payment' ? `\nPayment Method: Online UPI (${sellerUpiTarget})` : `\nPayment Method: Cash on Delivery (COD)`;
+
+      const msg = `🛒 *New Order - MeeStore*\nCustomer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}${paymentInfo}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
       
       cart = [];
       document.getElementById('cartCount').innerText = 0;
