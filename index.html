@@ -191,7 +191,6 @@
         </div>
       </div>
 
-      <!-- Seller Stock & Products List Box -->
       <div class="box">
         <h4 style="color:#4a148c; margin-bottom:10px; font-size:1.1rem;">📊 My Published Products & Stock</h4>
         <div id="sellerProductsList"><p style="font-size:0.85rem; color:#666;">No products added yet.</p></div>
@@ -233,7 +232,7 @@
     </div>
   </div>
 
-  <!-- VIEW 4: CUSTOMER PROFILE WITH CAMERA / GALLERY UPLOAD -->
+  <!-- VIEW 4: CUSTOMER PROFILE -->
   <div id="viewProfile" class="view-container">
     <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div id="buyerAuthBox" class="box">
@@ -254,7 +253,6 @@
       <label class="label">Bank Details (A/C & IFSC)</label>
       <input type="text" id="bBank" class="input" placeholder="Bank Details">
       
-      <!-- Direct Camera / Gallery File Upload for Profile Picture -->
       <label class="label">Profile Picture (Open Camera or Gallery)</label>
       <input type="file" id="bAvatarFile" accept="image/*" class="input" style="padding:8px; background:#fafafa;">
       
@@ -284,7 +282,7 @@
     </div>
   </div>
 
-  <!-- VIEW 5: CART WITH DYNAMIC SELLER UPI & COD -->
+  <!-- VIEW 5: CART WITH DIRECT UPI APP PAYMENT & COD -->
   <div id="viewCart" class="view-container">
     <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <h3 style="color:#6a1b9a; margin-bottom:14px; font-size:1.2rem;">Shopping Cart & Checkout</h3>
@@ -301,11 +299,11 @@
       <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">💳 Select Payment Method</h4>
       <select id="paymentMethodSelect" class="input" style="background:white; margin-bottom:0;" onchange="togglePaymentUI()">
         <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
-        <option value="Online UPI Payment">Online UPI Payment</option>
+        <option value="Online UPI Payment">Online UPI Payment (GPay / PhonePe / Paytm)</option>
       </select>
-      <div id="upiPaymentDetails" style="margin-top:10px; display:none; font-size:0.9rem; color:#4a148c; background:white; padding:10px; border-radius:6px;">
-        <p><b>Seller UPI ID:</b> <span id="checkoutSellerUpi">Will be directed to seller UPI</span></p>
-        <p style="font-size:0.78rem; color:#666; margin-top:4px;">Payment goes directly to the respective product seller.</p>
+      <div id="upiPaymentDetails" style="margin-top:12px; display:none; background:white; padding:12px; border-radius:8px; text-align:center;">
+        <p style="font-size:0.9rem; color:#4a148c; margin-bottom:8px;"><b>Seller UPI ID:</b> <span id="checkoutSellerUpi" style="color:#2e7d32;">seller@ybl</span></p>
+        <a id="upiPayNowBtn" href="#" class="btn" style="background:#16a34a; text-decoration:none; display:block; padding:10px; text-align:center;">Pay Now via UPI App</a>
       </div>
     </div>
 
@@ -477,6 +475,7 @@
         }).join('');
         document.getElementById('cartSum').innerText = sum;
         box.style.display = 'block';
+        togglePaymentUI();
       }
     }
 
@@ -485,10 +484,13 @@
       const upiBox = document.getElementById('upiPaymentDetails');
       if(method === 'Online UPI Payment') {
         upiBox.style.display = 'block';
-        if(cart.length > 0) {
-          // Show primary seller UPI or aggregated
-          document.getElementById('checkoutSellerUpi').innerText = cart[0].sellerUpi || (currentSeller ? currentSeller.upi : "seller@ybl");
-        }
+        let sum = cart.reduce((acc, c) => acc + c.price, 0);
+        let targetUpi = (cart.length > 0 && cart[0].sellerUpi) ? cart[0].sellerUpi : (currentSeller ? currentSeller.upi : "seller@ybl");
+        document.getElementById('checkoutSellerUpi').innerText = targetUpi;
+        
+        // Dynamic UPI intent link for GPay, PhonePe, Paytm
+        let upiLink = `upi://pay?pa=${targetUpi}&pn=MeeStore%20Seller&am=${sum}&cu=INR`;
+        document.getElementById('upiPayNowBtn').setAttribute('href', upiLink);
       } else {
         upiBox.style.display = 'none';
       }
@@ -528,7 +530,6 @@
         document.getElementById('statSold').innerText = ordersHistory.length;
         document.getElementById('statReturns').innerText = "0";
 
-        // Render Seller Products Table / List with stock count
         document.getElementById('sellerProductsList').innerHTML = prods.map(p => `
           <div style="border-bottom:1px solid #eee; padding:8px 0; display:flex; justify-content:space-between; align-items:center; font-size:0.9rem;">
             <span><b>${p.name}</b> (₹${p.price})</span>
@@ -654,7 +655,7 @@
         `;
       } else if(type === 'settings') {
         title.innerText = "⚙️ Account Settings";
-        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.8.0 (Secure Mode Active)</p>`;
+        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.9.0 (Secure Mode Active)</p>`;
       }
     }
 
@@ -737,7 +738,6 @@
       const commission = total * 0.03;
       document.getElementById('adminCommission').innerText = commission.toFixed(2);
 
-      // Reduce stock of ordered items
       let allProds = getProducts();
       cart.forEach(item => {
         let found = allProds.find(p => p.id === item.id);
@@ -745,14 +745,14 @@
           found.qty -= 1;
         }
       });
-      localStorage.setItem('meestore_custom_prods', JSON.stringify(allProds.filter(p => p.id > 10))); // Save custom updates
+      localStorage.setItem('meestore_custom_prods', JSON.stringify(allProds.filter(p => p.id > 4)));
 
       const orderObj = { items: names, total, address: currentBuyer.address, paymentMethod, status: 'Ordered Successfully' };
       ordersHistory.unshift(orderObj);
       localStorage.setItem('meestore_orders', JSON.stringify(ordersHistory));
 
       const sellerUpiTarget = cart.length > 0 ? (cart[0].sellerUpi || "seller@ybl") : "seller@ybl";
-      const paymentInfo = paymentMethod === 'Online UPI Payment' ? `\nPayment Method: Online UPI (${sellerUpiTarget})` : `\nPayment Method: Cash on Delivery (COD)`;
+      const paymentInfo = paymentMethod === 'Online UPI Payment' ? `\nPayment: Online UPI (${sellerUpiTarget})` : `\nPayment: Cash on Delivery (COD)`;
 
       const msg = `🛒 *New Order - MeeStore*\nCustomer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}${paymentInfo}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
       
