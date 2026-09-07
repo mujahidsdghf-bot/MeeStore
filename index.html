@@ -8,7 +8,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%); padding-bottom: 80px; font-size: 1.02rem; color: #333; min-height: 100vh; }
 
-    /* Splash Screen matching your screenshot */
+    /* Splash Screen */
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #f8bbd0 0%, #e1bee7 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease; }
     #splashScreen .logo-box { background: white; padding: 20px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 14px; display: flex; justify-content: center; align-items: center; }
     #splashScreen h1 { color: #6a1b9a; font-size: 1.8rem; font-weight: 800; }
@@ -41,6 +41,9 @@
     .view-container { display: none; padding: 12px 16px; }
     .view-container.active { display: block; }
 
+    /* Universal Back Button for Sub-pages */
+    .back-btn { background: #ede7f6; color: #5e35b1; border: 1px solid #d1c4e9; padding: 8px 14px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 12px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px; }
+
     /* Product Grid */
     .section-title { font-size: 1.1rem; font-weight: 800; color: #4a148c; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -66,7 +69,7 @@
 </head>
 <body>
 
-  <!-- Splash Screen with Shopping Bag Logo -->
+  <!-- Splash Screen -->
   <div id="splashScreen">
     <div class="logo-box">
       <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#8e24aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -79,7 +82,7 @@
     <p>Smart Shopping for Everyone 🌸</p>
   </div>
 
-  <!-- Header with Shopping Bag Logo -->
+  <!-- Header -->
   <header class="header">
     <div class="brand-section" onclick="switchTab('profile', null)">
       <div class="header-logo-box">
@@ -134,6 +137,7 @@
 
   <!-- VIEW 2: CATEGORIES -->
   <div id="viewCategories" class="view-container">
+    <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <h3 style="color:#4a148c; margin-bottom:14px; font-size:1.2rem;">All Categories</h3>
     <div class="box" onclick="filterCatNav('Women Fashion')" style="cursor:pointer; font-weight:bold;">👗 Women Fashion (Kurtis, Sarees)</div>
     <div class="box" onclick="filterCatNav('Men Fashion')" style="cursor:pointer; font-weight:bold;">👕 Men Fashion (Shirts, Trousers)</div>
@@ -145,6 +149,7 @@
 
   <!-- VIEW 3: SELLER HUB -->
   <div id="viewSeller" class="view-container">
+    <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div id="sellerAuthBox" class="box">
       <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">🏪 Seller Hub OTP Login & Register</h3>
       <label class="label">Shop Name</label>
@@ -186,12 +191,12 @@
       </div>
 
       <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:12px; font-size:1.1rem;">Add Detailed Product (SKU & Product ID)</h4>
+        <h4 style="color:#4a148c; margin-bottom:12px; font-size:1.1rem;">Add Detailed Product</h4>
         <label class="label">Product Name</label>
         <input type="text" id="pName" class="input" placeholder="Name">
         <div style="display:flex; gap:10px;">
           <div style="flex:1;"><label class="label">SKU ID</label><input type="text" id="pSku" class="input" placeholder="SKU12345"></div>
-          <div style="flex:1;"><label class="label">Product ID / No.</label><input type="text" id="pIdNo" class="input" placeholder="PID987"></div>
+          <div style="flex:1;"><label class="label">Product ID</label><input type="text" id="pIdNo" class="input" placeholder="PID987"></div>
         </div>
         <label class="label">Category</label>
         <select id="pCat" class="input">
@@ -204,6 +209,10 @@
         </select>
         <label class="label">Price (₹)</label>
         <input type="number" id="pPrice" class="input" placeholder="Price">
+        <label class="label">Brand & Manufacturer</label>
+        <input type="text" id="pBrand" class="input" placeholder="e.g. MeeStore Organic / Local Artisan">
+        <label class="label">Color & Size / Specification</label>
+        <input type="text" id="pColorSize" class="input" placeholder="e.g. Purple / 500g / Free Size">
         <label class="label">Nature / Material</label>
         <input type="text" id="pNature" class="input" placeholder="e.g. Cotton, Organic">
         <label class="label">Dimensions (L x W x H)</label>
@@ -217,8 +226,9 @@
     </div>
   </div>
 
-  <!-- VIEW 4: CUSTOMER PROFILE & DASHBOARD -->
+  <!-- VIEW 4: CUSTOMER PROFILE -->
   <div id="viewProfile" class="view-container">
+    <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div id="buyerAuthBox" class="box">
       <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">👤 Customer OTP Login & Registration</h3>
       <label class="label">Customer Name</label>
@@ -266,6 +276,7 @@
 
   <!-- VIEW 5: CART -->
   <div id="viewCart" class="view-container">
+    <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <h3 style="color:#6a1b9a; margin-bottom:14px; font-size:1.2rem;">Shopping Cart & Checkout</h3>
     <div id="cartItemsList"></div>
     
@@ -273,6 +284,15 @@
       <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">📍 Select Delivery Address</h4>
       <p id="cartSelectedAddress" style="font-size:0.92rem; color:#333; margin-bottom:10px;">No address saved. Please update in Profile.</p>
       <button onclick="switchTab('profile', null)" style="background:#e1bee7; color:#4a148c; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.82rem;">Change / Add Address</button>
+    </div>
+
+    <!-- Payment Option Selection Box -->
+    <div class="box" style="margin-top:14px; background:#f3e5f5;">
+      <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">💳 Select Payment Method</h4>
+      <select id="paymentMethodSelect" class="input" style="background:white; margin-bottom:0;">
+        <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+        <option value="Online UPI Payment">Online UPI Payment</option>
+      </select>
     </div>
 
     <div id="cartTotalBox" style="display:none; margin-top:14px;" class="box">
@@ -283,12 +303,13 @@
 
   <!-- VIEW 6: DETAILED PRODUCT PAGE -->
   <div id="viewProductDetail" class="view-container">
-    <button onclick="switchTab('home', null)" style="background:#eee; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; margin-bottom:14px; cursor:pointer; font-size:0.9rem;">← Back to Home</button>
+    <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div class="box" id="productDetailContent"></div>
   </div>
 
   <!-- VIEW 7: ADMIN CONSOLE -->
   <div id="viewAdmin" class="view-container">
+    <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div class="box" style="border-left: 5px solid #d32f2f;">
       <h3 style="color:#d32f2f; margin-bottom:10px;">🔐 Admin Security Console</h3>
       <p style="font-size:0.85rem; color:#555; margin-bottom:10px;">Platform SSL & 256-Bit Security Active. Total commission (3%): ₹<span id="adminCommission">0</span></p>
@@ -317,10 +338,10 @@
     let ordersHistory = JSON.parse(localStorage.getItem('meestore_orders') || '[]');
 
     const baseProducts = [
-      { id: 1, name: "Little millets (Organic)", sku: "SKUMLT500", pid: "PID101", category: "Grocery & Millets", price: 20, nature: "Organic", dim: "15x10 cm", weight: "500g", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
-      { id: 2, name: "Banarasi Soft Silk Saree", sku: "SKUSILK01", pid: "PID102", category: "Women Fashion", price: 499, nature: "Pure Silk", dim: "6m", weight: "400g", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
-      { id: 3, name: "Temple Necklace", sku: "SKUNECL03", pid: "PID103", category: "Jewelry & Fancy", price: 249, nature: "Gold Plated", dim: "Standard", weight: "100g", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" },
-      { id: 4, name: "Cotton Printed Kurti", sku: "SKUKURTI", pid: "PID104", category: "Women Fashion", price: 349, nature: "Cotton", dim: "Standard", weight: "300g", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400" }
+      { id: 1, name: "Little millets (Organic)", sku: "SKUMLT500", pid: "PID101", brand: "MeeStore Organics", colorSize: "500g Pack", category: "Grocery & Millets", price: 20, nature: "Organic", dim: "15x10 cm", weight: "500g", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
+      { id: 2, name: "Banarasi Soft Silk Saree", sku: "SKUSILK01", pid: "PID102", brand: "Varanasi Weaves", colorSize: "Royal Purple / 6m", category: "Women Fashion", price: 499, nature: "Pure Silk", dim: "6m", weight: "400g", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
+      { id: 3, name: "Temple Necklace", sku: "SKUNECL03", pid: "PID103", brand: "South Jewels", colorSize: "Gold Plated / Standard", category: "Jewelry & Fancy", price: 249, nature: "Gold Plated", dim: "Standard", weight: "100g", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" },
+      { id: 4, name: "Cotton Printed Kurti", sku: "SKUKURTI", pid: "PID104", brand: "Ethnic Hub", colorSize: "Blue / L", category: "Women Fashion", price: 349, nature: "Cotton", dim: "Standard", weight: "300g", img: "https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400" }
     ];
 
     function getProducts() {
@@ -391,6 +412,8 @@
         <div style="font-size:1.6rem; font-weight:800; color:#6a1b9a; margin-bottom:12px;">₹${p.price}</div>
         <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>SKU ID:</b> ${p.sku || 'N/A'}</p>
         <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Product ID:</b> ${p.pid || 'N/A'}</p>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Brand / Manufacturer:</b> ${p.brand || 'Standard'}</p>
+        <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Color & Size:</b> ${p.colorSize || 'Standard'}</p>
         <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Category:</b> ${p.category}</p>
         <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Nature / Material:</b> ${p.nature || 'Standard'}</p>
         <p style="font-size:0.92rem; color:#555; margin-bottom:6px;"><b>Dimensions:</b> ${p.dim || 'Standard Size'}</p>
@@ -485,24 +508,28 @@
       const sku = document.getElementById('pSku').value.trim();
       const pid = document.getElementById('pIdNo').value.trim();
       const price = Number(document.getElementById('pPrice').value);
+      const brand = document.getElementById('pBrand').value.trim();
+      const colorSize = document.getElementById('pColorSize').value.trim();
       const nature = document.getElementById('pNature').value.trim();
       const dim = document.getElementById('pDim').value.trim();
       const weight = document.getElementById('pWeight').value.trim();
       const img = document.getElementById('pImg').value.trim();
       const cat = document.getElementById('pCat').value;
 
-      if(!name || !price || !img || !sku || !pid) { alert("Please fill all fields including SKU ID and Product ID!"); return; }
+      if(!name || !price || !img || !sku || !pid) { alert("Please fill all required fields including SKU ID and Product ID!"); return; }
 
-      const newP = { id: Date.now(), name, sku, pid, category: cat, price, nature, dim, weight, img };
+      const newP = { id: Date.now(), name, sku, pid, brand, colorSize, category: cat, price, nature, dim, weight, img };
       let custom = JSON.parse(localStorage.getItem('meestore_custom_prods') || '[]');
       custom.unshift(newP);
       localStorage.setItem('meestore_custom_prods', JSON.stringify(custom));
-      alert("🎉 Product published with SKU: " + sku + " & ID: " + pid + "!");
+      alert("🎉 Product published successfully with full specifications!");
       
       document.getElementById('pName').value = '';
       document.getElementById('pSku').value = '';
       document.getElementById('pIdNo').value = '';
       document.getElementById('pPrice').value = '';
+      document.getElementById('pBrand').value = '';
+      document.getElementById('pColorSize').value = '';
       document.getElementById('pNature').value = '';
       document.getElementById('pDim').value = '';
       document.getElementById('pWeight').value = '';
@@ -548,7 +575,7 @@
         } else {
           content.innerHTML = ordersHistory.map(o => `
             <div style="border-bottom:1px solid #eee; padding:8px 0; font-size:0.9rem;">
-              <b>Items:</b> ${o.items}<br><b>Address:</b> ${o.address}<br><b>Total:</b> ₹${o.total} (${o.status})
+              <b>Items:</b> ${o.items}<br><b>Payment:</b> ${o.paymentMethod}<br><b>Address:</b> ${o.address}<br><b>Total:</b> ₹${o.total} (${o.status})
             </div>
           `).join('');
         }
@@ -563,7 +590,7 @@
         `;
       } else if(type === 'settings') {
         title.innerText = "⚙️ Account Settings";
-        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.6.0 (Secure Mode Active)</p>`;
+        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.7.0 (Secure Mode Active)</p>`;
       }
     }
 
@@ -640,16 +667,17 @@
         return;
       }
 
+      const paymentMethod = document.getElementById('paymentMethodSelect').value;
       const names = cart.map(c => c.name).join(', ');
       const total = cart.reduce((sum, c) => sum + c.price, 0);
       const commission = total * 0.03;
       document.getElementById('adminCommission').innerText = commission.toFixed(2);
 
-      const orderObj = { items: names, total, address: currentBuyer.address, status: 'Ordered Successfully' };
+      const orderObj = { items: names, total, address: currentBuyer.address, paymentMethod, status: 'Ordered Successfully' };
       ordersHistory.unshift(orderObj);
       localStorage.setItem('meestore_orders', JSON.stringify(ordersHistory));
 
-      const msg = `🛒 *New Order - MeeStore*\nCustomer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
+      const msg = `🛒 *New Order - MeeStore*\nCustomer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}\nPayment Method: ${paymentMethod}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
       
       cart = [];
       document.getElementById('cartCount').innerText = 0;
