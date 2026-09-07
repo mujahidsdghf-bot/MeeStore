@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MeeStore - Online Shopping</title>
+  <title>MeeStore - Professional E-Commerce</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #f8f9fa; padding-bottom: 75px; }
+    body { background: #f4f6f8; padding-bottom: 75px; }
 
     /* Header */
     .header { background: white; padding: 12px 16px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
-    .brand { color: #9c27b0; font-weight: 800; font-size: 1.3rem; }
+    .brand { display: flex; align-items: center; gap: 8px; color: #9c27b0; font-weight: 800; font-size: 1.3rem; }
+    .brand img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
     
     /* Views */
     .view-container { display: none; padding: 14px; }
@@ -39,12 +40,18 @@
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Header with Logo -->
   <header class="header">
-    <div class="brand">🌸 MeeStore</div>
-    <div>
-      <button onclick="switchTab('cart', document.getElementById('navCart'))" style="background:#f3e5f5; border:1px solid #ce93d8; padding:6px 14px; border-radius:14px; color:#7b1fa2; font-weight:bold; cursor:pointer;">
-        🛒 Cart (<span id="cartCount">0</span>)
+    <div class="brand">
+      <img src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=100" alt="Logo">
+      <span>MeeStore</span>
+    </div>
+    <div style="display:flex; gap:8px; align-items:center;">
+      <button onclick="switchTab('profile', document.getElementById('navProfile'))" style="background:#e1bee7; border:none; padding:6px 10px; border-radius:14px; font-weight:bold; color:#4a148c; cursor:pointer; font-size:0.8rem;">
+        👤 <span id="headerUserName">Aadhaar Profile</span>
+      </button>
+      <button onclick="switchTab('cart', document.getElementById('navCart'))" style="background:#f3e5f5; border:1px solid #ce93d8; padding:6px 12px; border-radius:14px; color:#7b1fa2; font-weight:bold; cursor:pointer; font-size:0.8rem;">
+        🛒 (<span id="cartCount">0</span>)
       </button>
     </div>
   </header>
@@ -52,37 +59,37 @@
   <!-- VIEW 1: HOME -->
   <div id="viewHome" class="view-container active">
     <div style="margin-bottom: 12px;">
-      <input type="text" id="searchBox" class="input" placeholder="Search products..." oninput="filterProducts(this.value)">
+      <input type="text" id="searchBox" class="input" placeholder="Search products, millets, sarees..." oninput="filterProducts(this.value)">
     </div>
     <div class="grid" id="productGrid"></div>
   </div>
 
   <!-- VIEW 2: CATEGORIES -->
   <div id="viewCategories" class="view-container">
-    <h3 style="color:#4a148c; margin-bottom:12px;">Categories</h3>
-    <div class="box" onclick="filterCat('Women Fashion')" style="cursor:pointer;">👗 Women Fashion</div>
-    <div class="box" onclick="filterCat('Grocery & Millets')" style="cursor:pointer;">🌾 Grocery & Millets</div>
-    <div class="box" onclick="filterCat('Jewelry & Fancy')" style="cursor:pointer;">💍 Jewelry & Fancy</div>
-    <div class="box" onclick="filterCat('General & Pooja')" style="cursor:pointer;">🪔 General & Pooja</div>
-    <div class="box" onclick="filterCat('Men Fashion')" style="cursor:pointer;">👕 Men Fashion</div>
-    <div class="box" onclick="filterCat('Footwear')" style="cursor:pointer;">👠 Footwear</div>
+    <h3 style="color:#4a148c; margin-bottom:12px;">Shop by Categories</h3>
+    <div class="box" onclick="filterCat('Women Fashion')" style="cursor:pointer; font-weight:bold;">👗 Women Fashion</div>
+    <div class="box" onclick="filterCat('Grocery & Millets')" style="cursor:pointer; font-weight:bold;">🌾 Grocery & Millets</div>
+    <div class="box" onclick="filterCat('Jewelry & Fancy')" style="cursor:pointer; font-weight:bold;">💍 Jewelry & Fancy</div>
+    <div class="box" onclick="filterCat('General & Pooja')" style="cursor:pointer; font-weight:bold;">🪔 General & Pooja</div>
+    <div class="box" onclick="filterCat('Men Fashion')" style="cursor:pointer; font-weight:bold;">👕 Men Fashion</div>
+    <div class="box" onclick="filterCat('Footwear')" style="cursor:pointer; font-weight:bold;">👠 Footwear</div>
+    <div class="box" onclick="filterCat('Electronics & Gadgets')" style="cursor:pointer; font-weight:bold;">📱 Electronics & Gadgets</div>
+    <div class="box" onclick="filterCat('Home & Kitchen')" style="cursor:pointer; font-weight:bold;">🏠 Home & Kitchen</div>
   </div>
 
-  <!-- VIEW 3: SELLER HUB (Full Info, Login & Signup) -->
+  <!-- VIEW 3: SELLER HUB & STOCK MANAGEMENT -->
   <div id="viewSeller" class="view-container">
-    <!-- Seller Login / Signup Box -->
     <div id="sellerAuthBox" class="box">
-      <h3 style="color:#9c27b0; margin-bottom:12px; text-align:center;" id="sellerAuthTitle">Seller Login / Register</h3>
+      <h3 style="color:#9c27b0; margin-bottom:12px; text-align:center;">🏪 Seller Hub Login / Register</h3>
       <label class="label">Shop Name</label>
-      <input type="text" id="sShopName" class="input" placeholder="e.g. Hyderabad Sarees & Millets">
+      <input type="text" id="sShopName" class="input" placeholder="e.g. Hyderabad Organic Store">
       <label class="label">Mobile Number</label>
       <input type="tel" id="sPhone" class="input" placeholder="10-digit mobile number">
       <label class="label">UPI ID (For Payments)</label>
-      <input type="text" id="sUpi" class="input" placeholder="e.g. yourname@ybl">
+      <input type="text" id="sUpi" class="input" placeholder="yourname@ybl">
       <button class="btn" onclick="sellerRegisterLogin()">Sign In / Create Seller Account</button>
     </div>
 
-    <!-- Seller Dashboard & Information -->
     <div id="sellerDashBox" style="display:none;">
       <div class="box" style="border-left: 5px solid #9c27b0;">
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -97,7 +104,7 @@
 
       <div class="stat-row">
         <div class="stat-box">
-          <div style="font-size:0.75rem; color:#880e4f; font-weight:bold;">Total Stock Items</div>
+          <div style="font-size:0.75rem; color:#880e4f; font-weight:bold;">Total Store Stock</div>
           <div id="dashTotalStock" style="font-size:1.2rem; font-weight:800; color:#ad1457;">4</div>
         </div>
         <div class="stat-box" style="background:#e8f5e9; border-color:#a5d6a7;">
@@ -107,9 +114,9 @@
       </div>
 
       <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:12px;">Add New Product to Store</h4>
+        <h4 style="color:#4a148c; margin-bottom:12px;">Add New Product to Stock</h4>
         <label class="label">Product Name</label>
-        <input type="text" id="pName" class="input" placeholder="e.g. Organic Millet Flour">
+        <input type="text" id="pName" class="input" placeholder="Product Name">
         <label class="label">Category</label>
         <select id="pCat" class="input">
           <option value="Grocery & Millets">Grocery & Millets</option>
@@ -118,17 +125,43 @@
           <option value="General & Pooja">General & Pooja</option>
           <option value="Men Fashion">Men Fashion</option>
           <option value="Footwear">Footwear</option>
+          <option value="Electronics & Gadgets">Electronics & Gadgets</option>
+          <option value="Home & Kitchen">Home & Kitchen</option>
         </select>
         <label class="label">Price (₹)</label>
-        <input type="number" id="pPrice" class="input" placeholder="250">
-        <label class="label">Image URL (Unsplash or Direct Link)</label>
-        <input type="text" id="pImg" class="input" placeholder="https://images.unsplash.com/...">
-        <button class="btn" onclick="publishProduct()">Publish Product</button>
+        <input type="number" id="pPrice" class="input" placeholder="Price">
+        <label class="label">Image URL</label>
+        <input type="text" id="pImg" class="input" placeholder="Image web link">
+        <button class="btn" onclick="publishProduct()">Publish Product to Stock</button>
       </div>
     </div>
   </div>
 
-  <!-- VIEW 4: CART -->
+  <!-- VIEW 4: BUYER AADHAAR REGISTRATION & PROFILE -->
+  <div id="viewProfile" class="view-container">
+    <div id="buyerAuthBox" class="box">
+      <h3 style="color:#9c27b0; margin-bottom:12px; text-align:center;">🆔 Buyer Aadhaar Registration & Login</h3>
+      <label class="label">Full Name</label>
+      <input type="text" id="bName" class="input" placeholder="Enter your full name">
+      <label class="label">Mobile Number</label>
+      <input type="tel" id="bPhone" class="input" placeholder="10-digit mobile number">
+      <label class="label">Aadhaar Card Number (12 Digits)</label>
+      <input type="text" id="bAadhaar" class="input" maxlength="12" placeholder="Enter 12-digit Aadhaar number">
+      <button class="btn" onclick="buyerRegisterLogin()">Verify Aadhaar & Login</button>
+    </div>
+
+    <div id="buyerDashBox" style="display:none;">
+      <div class="box" style="border-left: 5px solid #16a34a;">
+        <h3 style="color:#16a34a; margin-bottom:6px;">✅ Aadhaar Verified Buyer Profile</h3>
+        <p><b>Name:</b> <span id="profileName"></span></p>
+        <p><b>Phone:</b> <span id="profilePhone"></span></p>
+        <p><b>Aadhaar ID:</b> <span id="profileAadhaar"></span> (Verified)</p>
+        <button onclick="buyerLogout()" style="margin-top:12px; background:#ffebee; color:#c62828; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer;">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- VIEW 5: CART -->
   <div id="viewCart" class="view-container">
     <h3 style="color:#4a148c; margin-bottom:12px;">Shopping Cart</h3>
     <div id="cartItemsList"></div>
@@ -143,12 +176,14 @@
     <button class="nav-item active" id="navHome" onclick="switchTab('home', this)">🏠<span>Home</span></button>
     <button class="nav-item" id="navCat" onclick="switchTab('categories', this)">📂<span>Categories</span></button>
     <button class="nav-item" id="navSeller" onclick="switchTab('seller', this)">🏪<span>Seller Hub</span></button>
+    <button class="nav-item" id="navProfile" onclick="switchTab('profile', this)">🆔<span>Aadhaar Profile</span></button>
     <button class="nav-item" id="navCart" onclick="switchTab('cart', this)">🛒<span>Cart</span></button>
   </nav>
 
   <script>
     let cart = [];
     let currentSeller = JSON.parse(localStorage.getItem('meestore_current_seller') || 'null');
+    let currentBuyer = JSON.parse(localStorage.getItem('meestore_current_buyer') || 'null');
 
     const baseProducts = [
       { id: 1, name: "Little millets (500g)", category: "Grocery & Millets", price: 20, img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
@@ -187,6 +222,9 @@
       } else if(tabName === 'seller') {
         document.getElementById('viewSeller').classList.add('active');
         updateSellerUI();
+      } else if(tabName === 'profile') {
+        document.getElementById('viewProfile').classList.add('active');
+        updateBuyerUI();
       } else if(tabName === 'cart') {
         document.getElementById('viewCart').classList.add('active');
         renderCart();
@@ -269,12 +307,49 @@
       let custom = JSON.parse(localStorage.getItem('meestore_custom') || '[]');
       custom.unshift(newP);
       localStorage.setItem('meestore_custom', JSON.stringify(custom));
-      alert("🎉 Product published successfully to store!");
+      alert("🎉 Product published successfully to stock!");
       
       document.getElementById('pName').value = '';
       document.getElementById('pPrice').value = '';
       document.getElementById('pImg').value = '';
       switchTab('home', document.getElementById('navHome'));
+    }
+
+    // Buyer Aadhaar Verification Logic
+    function buyerRegisterLogin() {
+      const name = document.getElementById('bName').value.trim();
+      const phone = document.getElementById('bPhone').value.trim();
+      const aadhaar = document.getElementById('bAadhaar').value.trim();
+      if(!name || !phone || aadhaar.length !== 12) { 
+        alert("Please enter valid Name, Phone, and full 12-digit Aadhaar number!"); 
+        return; 
+      }
+      
+      currentBuyer = { name, phone, aadhaar: "XXXX-XXXX-" + aadhaar.slice(-4) };
+      localStorage.setItem('meestore_current_buyer', JSON.stringify(currentBuyer));
+      alert("✅ Aadhaar Verified Successfully! Welcome " + name);
+      updateBuyerUI();
+    }
+
+    function updateBuyerUI() {
+      if(currentBuyer) {
+        document.getElementById('buyerAuthBox').style.display = 'none';
+        document.getElementById('buyerDashBox').style.display = 'block';
+        document.getElementById('profileName').innerText = currentBuyer.name;
+        document.getElementById('profilePhone').innerText = currentBuyer.phone;
+        document.getElementById('profileAadhaar').innerText = currentBuyer.aadhaar;
+        document.getElementById('headerUserName').innerText = currentBuyer.name.split(' ')[0];
+      } else {
+        document.getElementById('buyerAuthBox').style.display = 'block';
+        document.getElementById('buyerDashBox').style.display = 'none';
+        document.getElementById('headerUserName').innerText = "Aadhaar Profile";
+      }
+    }
+
+    function buyerLogout() {
+      localStorage.removeItem('meestore_current_buyer');
+      currentBuyer = null;
+      updateBuyerUI();
     }
 
     function filterCat(catName) {
@@ -291,13 +366,14 @@
     function checkoutWhatsApp() {
       const names = cart.map(c => c.name).join(', ');
       const total = cart.reduce((sum, c) => sum + c.price, 0);
-      const sellerPhone = currentSeller ? currentSeller.phone : '9177411712';
-      const msg = `🛒 *New Order from MeeStore*\nItems: ${names}\nTotal: ₹${total}`;
-      window.open(`https://wa.me/91${sellerPhone}?text=${encodeURIComponent(msg)}`);
+      const buyerInfo = currentBuyer ? `\nBuyer: ${currentBuyer.name} (${currentBuyer.phone}) [Aadhaar Verified]` : '\nBuyer: Guest';
+      const msg = `🛒 *New Order from MeeStore*${buyerInfo}\nItems: ${names}\nTotal: ₹${total}`;
+      window.open(`https://wa.me/919177411712?text=${encodeURIComponent(msg)}`);
     }
 
     // Initial Load
     renderGrid();
+    updateBuyerUI();
   </script>
 </body>
 </html>
