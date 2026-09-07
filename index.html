@@ -86,7 +86,7 @@
   <!-- Header -->
   <header class="header">
     <div class="brand-section" onclick="switchTab('profile', null)">
-      <div class="header-logo-box">
+      <div class="header-logo-box" id="headerLogoContainer">
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
           <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -253,8 +253,12 @@
       <label class="label">Bank Details (A/C & IFSC)</label>
       <input type="text" id="bBank" class="input" placeholder="Bank Details">
       
-      <label class="label">Profile Picture (Open Camera or Gallery)</label>
-      <input type="file" id="bAvatarFile" accept="image/*" class="input" style="padding:8px; background:#fafafa;">
+      <!-- Profile Picture Upload with Camera / Gallery Support -->
+      <label class="label">Profile Picture (Choose from Gallery or Camera)</label>
+      <input type="file" id="bAvatarFile" accept="image/*" class="input" style="padding:8px; background:#fafafa;" onchange="previewImage(event)">
+      <div id="avatarPreviewBox" style="margin-top:8px; display:none; text-align:center;">
+        <img id="avatarPreviewImg" src="" style="width:60px; height:60px; border-radius:50%; object-fit:cover; border:2px solid #6a1b9a;">
+      </div>
       
       <button class="btn" style="margin-top:8px;" onclick="verifyBuyerOTP()">Verify OTP & Save Profile</button>
     </div>
@@ -282,7 +286,7 @@
     </div>
   </div>
 
-  <!-- VIEW 5: CART WITH DIRECT UPI APP PAYMENT & COD -->
+  <!-- VIEW 5: CART -->
   <div id="viewCart" class="view-container">
     <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <h3 style="color:#6a1b9a; margin-bottom:14px; font-size:1.2rem;">Shopping Cart & Checkout</h3>
@@ -348,6 +352,7 @@
     let currentSeller = JSON.parse(localStorage.getItem('meestore_seller') || 'null');
     let currentBuyer = JSON.parse(localStorage.getItem('meestore_buyer') || 'null');
     let ordersHistory = JSON.parse(localStorage.getItem('meestore_orders') || '[]');
+    let tempAvatarBase64 = "";
 
     const baseProducts = [
       { id: 1, name: "Little millets (Organic)", sku: "SKUMLT500", pid: "PID101", brand: "MeeStore Organics", colorSize: "500g Pack", category: "Grocery & Millets", price: 20, qty: 15, sold: 0, returns: 0, sellerUpi: "meestore@ybl", nature: "Organic", dim: "15x10 cm", weight: "500g", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
@@ -488,7 +493,6 @@
         let targetUpi = (cart.length > 0 && cart[0].sellerUpi) ? cart[0].sellerUpi : (currentSeller ? currentSeller.upi : "seller@ybl");
         document.getElementById('checkoutSellerUpi').innerText = targetUpi;
         
-        // Dynamic UPI intent link for GPay, PhonePe, Paytm
         let upiLink = `upi://pay?pa=${targetUpi}&pn=MeeStore%20Seller&am=${sum}&cu=INR`;
         document.getElementById('upiPayNowBtn').setAttribute('href', upiLink);
       } else {
@@ -589,6 +593,19 @@
       switchTab('home', document.getElementById('navHome'));
     }
 
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempAvatarBase64 = e.target.result;
+          document.getElementById('avatarPreviewImg').src = tempAvatarBase64;
+          document.getElementById('avatarPreviewBox').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
     function sendBuyerOTP() {
       const phone = document.getElementById('bPhone').value.trim();
       if(phone.length !== 10) { alert("Please enter valid 10-digit mobile number!"); return; }
@@ -602,25 +619,12 @@
       const otp = document.getElementById('bOtpInput').value.trim();
       const address = document.getElementById('bAddressInput').value.trim();
       const bank = document.getElementById('bBank').value.trim();
-      const fileInput = document.getElementById('bAvatarFile');
 
       if(!name || !phone || !address) { alert("Please fill Name, Phone and Delivery Address!"); return; }
       if(otp !== '1234') { alert("Invalid OTP! Please enter 1234"); return; }
 
-      let avatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100";
-      if(fileInput.files && fileInput.files[0]) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          avatar = e.target.result;
-          saveBuyerData(name, phone, address, bank, avatar);
-        };
-        reader.readAsDataURL(fileInput.files[0]);
-      } else {
-        saveBuyerData(name, phone, address, bank, avatar);
-      }
-    }
+      let avatar = tempAvatarBase64 || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100";
 
-    function saveBuyerData(name, phone, address, bank, avatar) {
       currentBuyer = { name, phone, address, bank, avatar };
       localStorage.setItem('meestore_buyer', JSON.stringify(currentBuyer));
       alert("✅ Customer OTP Verified & Profile Saved Successfully!");
@@ -655,7 +659,7 @@
         `;
       } else if(type === 'settings') {
         title.innerText = "⚙️ Account Settings";
-        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.9.0 (Secure Mode Active)</p>`;
+        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.9.1 (Secure Mode Active)</p>`;
       }
     }
 
@@ -681,6 +685,9 @@
         document.getElementById('headerNameTitle').innerText = currentBuyer.name;
         document.getElementById('headerSubText').innerText = "View Profile >";
         
+        // Update header logo container with user's uploaded avatar instead of shopping bag
+        document.getElementById('headerLogoContainer').innerHTML = `<img src="${currentBuyer.avatar}" style="width:38px; height:38px; border-radius:50%; object-fit:cover; border:2px solid #ce93d8;">`;
+        
         if(currentBuyer.name.toLowerCase() === 'admin') {
           document.getElementById('headerAdminBtn').style.display = 'inline-block';
         }
@@ -692,6 +699,13 @@
         document.getElementById('headerNameTitle').innerText = "MeeStore";
         document.getElementById('headerSubText').innerText = "Hello, Sign In >";
         document.getElementById('headerAdminBtn').style.display = 'none';
+        
+        document.getElementById('headerLogoContainer').innerHTML = `
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>`;
       }
     }
 
