@@ -8,17 +8,16 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%); padding-bottom: 80px; font-size: 1.02rem; color: #333; min-height: 100vh; }
 
-    /* Splash Screen */
+    /* Splash Screen matching your screenshot */
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #f8bbd0 0%, #e1bee7 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease; }
-    #splashScreen .logo-box { background: white; padding: 16px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); margin-bottom: 14px; }
-    #splashScreen img { width: 72px; height: 72px; object-fit: contain; }
+    #splashScreen .logo-box { background: white; padding: 20px; border-radius: 24px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin-bottom: 14px; display: flex; justify-content: center; align-items: center; }
     #splashScreen h1 { color: #6a1b9a; font-size: 1.8rem; font-weight: 800; }
-    #splashScreen p { color: #888; font-size: 0.9rem; margin-top: 4px; }
+    #splashScreen p { color: #777; font-size: 0.9rem; margin-top: 4px; }
 
     /* Top Header */
     .header { background: white; padding: 12px 16px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
     .brand-section { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .brand-section img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid #ce93d8; }
+    .header-logo-box { width: 38px; height: 38px; background: #8e24aa; border-radius: 12px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 5px rgba(142,36,170,0.3); }
     .brand-title { color: #6a1b9a; font-weight: 800; font-size: 1.25rem; line-height: 1.1; }
     .brand-sub { font-size: 0.75rem; color: #555; font-weight: 600; }
 
@@ -67,19 +66,29 @@
 </head>
 <body>
 
-  <!-- Splash Screen -->
+  <!-- Splash Screen with Shopping Bag Logo -->
   <div id="splashScreen">
     <div class="logo-box">
-      <img src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=200" alt="Logo">
+      <svg width="45" height="45" viewBox="0 0 24 24" fill="none" stroke="#8e24aa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <path d="M16 10a4 4 0 0 1-8 0"></path>
+      </svg>
     </div>
     <h1>MeeStore</h1>
     <p>Smart Shopping for Everyone 🌸</p>
   </div>
 
-  <!-- Header (Left: Customer Profile & Picture, Right: Admin & Cart) -->
+  <!-- Header with Shopping Bag Logo -->
   <header class="header">
     <div class="brand-section" onclick="switchTab('profile', null)">
-      <img id="headerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar">
+      <div class="header-logo-box">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <path d="M16 10a4 4 0 0 1-8 0"></path>
+        </svg>
+      </div>
       <div>
         <div class="brand-title" id="headerNameTitle">MeeStore</div>
         <div class="brand-sub" id="headerSubText">Hello, Sign In ></div>
@@ -134,7 +143,7 @@
     <div class="box" onclick="filterCatNav('Home & Kitchen')" style="cursor:pointer; font-weight:bold;">🏠 Home & Kitchen Appliances</div>
   </div>
 
-  <!-- VIEW 3: SELLER HUB (OTP Login & SKU / Product ID) -->
+  <!-- VIEW 3: SELLER HUB -->
   <div id="viewSeller" class="view-container">
     <div id="sellerAuthBox" class="box">
       <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">🏪 Seller Hub OTP Login & Register</h3>
@@ -208,7 +217,7 @@
     </div>
   </div>
 
-  <!-- VIEW 4: CUSTOMER PROFILE & DASHBOARD (Orders, Returns, Bank, Settings, Address) -->
+  <!-- VIEW 4: CUSTOMER PROFILE & DASHBOARD -->
   <div id="viewProfile" class="view-container">
     <div id="buyerAuthBox" class="box">
       <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">👤 Customer OTP Login & Registration</h3>
@@ -241,13 +250,11 @@
         </div>
       </div>
       
-      <!-- Customer Interactive Options -->
       <div class="profile-menu-item" onclick="openSubSection('orders')">📦 My Orders & Returns <span>➔</span></div>
       <div class="profile-menu-item" onclick="openSubSection('bank')">🏦 Bank Account & Refunds <span>➔</span></div>
       <div class="profile-menu-item" onclick="openSubSection('address')">📍 Delivery Address Manager <span>➔</span></div>
       <div class="profile-menu-item" onclick="openSubSection('settings')">⚙️ Account Settings <span>➔</span></div>
 
-      <!-- Dynamic Sub-Section Display Box -->
       <div class="box" id="profileSubBox" style="margin-top:12px; display:none;">
         <h4 id="subBoxTitle" style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;"></h4>
         <div id="subBoxContent"></div>
@@ -289,7 +296,7 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION (Home, Category, Seller Hub, My Orders) -->
+  <!-- BOTTOM NAVIGATION -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="switchTab('home', this)">🏠<span>Home</span></button>
     <button class="nav-item" id="navCat" onclick="switchTab('categories', this)">📂<span>Category</span></button>
@@ -298,7 +305,6 @@
   </nav>
 
   <script>
-    // Splash Screen Timer
     setTimeout(() => {
       const splash = document.getElementById('splashScreen');
       splash.style.opacity = '0';
@@ -430,7 +436,6 @@
       }
     }
 
-    // Seller OTP Logic
     function sendSellerOTP() {
       const phone = document.getElementById('sPhone').value.trim();
       if(phone.length !== 10) { alert("Please enter valid 10-digit mobile number!"); return; }
@@ -505,7 +510,6 @@
       switchTab('home', document.getElementById('navHome'));
     }
 
-    // Customer OTP Logic
     function sendBuyerOTP() {
       const phone = document.getElementById('bPhone').value.trim();
       if(phone.length !== 10) { alert("Please enter valid 10-digit mobile number!"); return; }
@@ -582,8 +586,6 @@
         document.getElementById('bDashPhone').innerText = "Phone: " + currentBuyer.phone;
         document.getElementById('bDashAvatar').src = currentBuyer.avatar;
         
-        // Header Left update
-        document.getElementById('headerAvatar').src = currentBuyer.avatar;
         document.getElementById('headerNameTitle').innerText = currentBuyer.name;
         document.getElementById('headerSubText').innerText = "View Profile >";
         
@@ -595,7 +597,6 @@
         document.getElementById('buyerDashBox').style.display = 'none';
         document.getElementById('buyerOtpSection').style.display = 'none';
         document.getElementById('profileSubBox').style.display = 'none';
-        document.getElementById('headerAvatar').src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100";
         document.getElementById('headerNameTitle').innerText = "MeeStore";
         document.getElementById('headerSubText').innerText = "Hello, Sign In >";
         document.getElementById('headerAdminBtn').style.display = 'none';
@@ -656,7 +657,6 @@
       switchTab('profile', null);
     }
 
-    // Initial Load
     renderGrid();
     updateBuyerUI();
   </script>
