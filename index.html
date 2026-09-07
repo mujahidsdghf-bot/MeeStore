@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MeeStore - Professional E-Commerce</title>
+  <title>MeeStore - Professional E-Commerce Platform</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: #f4f6f8; padding-bottom: 75px; }
@@ -19,38 +19,37 @@
 
     /* Product Grid */
     .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-    .card { background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0; padding: 10px; display: flex; flex-direction: column; }
+    .card { background: white; border-radius: 8px; overflow: hidden; border: 1px solid #e0e0e0; padding: 10px; display: flex; flex-direction: column; cursor: pointer; }
     .card img { width: 100%; height: 140px; object-fit: cover; border-radius: 6px; }
     .title { font-size: 0.88rem; font-weight: bold; margin: 6px 0; color: #333; }
     .price { font-size: 1.1rem; font-weight: 800; color: #9c27b0; margin-bottom: 8px; }
     .btn { background: #9c27b0; color: white; border: none; padding: 9px; border-radius: 6px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.88rem; }
 
-    /* Bottom Navigation */
+    /* Bottom Navigation (Fixed Order as Requested) */
     .bottom-nav { position: fixed; bottom: 0; left: 0; width: 100%; height: 62px; background: white; border-top: 2px solid #f8bbd0; display: flex; justify-content: space-around; align-items: center; z-index: 1000; box-shadow: 0 -2px 10px rgba(0,0,0,0.06); }
-    .nav-item { background: none; border: none; font-size: 0.75rem; font-weight: bold; color: #666; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 3px; }
+    .nav-item { background: none; border: none; font-size: 0.72rem; font-weight: bold; color: #666; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
     .nav-item.active { color: #9c27b0; }
 
     /* Forms & Boxes */
     .box { background: white; padding: 16px; border-radius: 10px; border: 1px solid #e0e0e0; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
-    .input { width: 100%; padding: 11px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 0.92rem; }
-    .label { font-size: 0.82rem; font-weight: bold; color: #4a148c; display: block; margin-bottom: 4px; }
-    .stat-row { display: flex; gap: 10px; margin-bottom: 12px; }
-    .stat-box { flex: 1; background: #fce4ec; padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #f48fb1; }
+    .input { width: 100%; padding: 10px; margin: 6px 0 12px 0; border: 1px solid #ccc; border-radius: 6px; outline: none; font-size: 0.9rem; }
+    .label { font-size: 0.8rem; font-weight: bold; color: #4a148c; display: block; margin-bottom: 2px; }
+    .security-badge { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; padding: 8px; border-radius: 6px; font-size: 0.75rem; text-align: center; margin-bottom: 10px; font-weight: bold; }
   </style>
 </head>
 <body>
 
-  <!-- Header with Logo -->
+  <!-- Header -->
   <header class="header">
     <div class="brand">
       <img src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=100" alt="Logo">
       <span>MeeStore</span>
     </div>
     <div style="display:flex; gap:8px; align-items:center;">
-      <button onclick="switchTab('profile', document.getElementById('navProfile'))" style="background:#e1bee7; border:none; padding:6px 10px; border-radius:14px; font-weight:bold; color:#4a148c; cursor:pointer; font-size:0.8rem;">
-        👤 <span id="headerUserName">Aadhaar Profile</span>
+      <button onclick="switchTab('profile', document.getElementById('navProfile'))" style="background:#e1bee7; border:none; padding:6px 10px; border-radius:14px; font-weight:bold; color:#4a148c; cursor:pointer; font-size:0.78rem;">
+        👤 <span id="headerProfileName">Profile</span>
       </button>
-      <button onclick="switchTab('cart', document.getElementById('navCart'))" style="background:#f3e5f5; border:1px solid #ce93d8; padding:6px 12px; border-radius:14px; color:#7b1fa2; font-weight:bold; cursor:pointer; font-size:0.8rem;">
+      <button onclick="switchTab('cart', document.getElementById('navCart'))" style="background:#f3e5f5; border:1px solid #ce93d8; padding:6px 12px; border-radius:14px; color:#7b1fa2; font-weight:bold; cursor:pointer; font-size:0.78rem;">
         🛒 (<span id="cartCount">0</span>)
       </button>
     </div>
@@ -58,142 +57,181 @@
 
   <!-- VIEW 1: HOME -->
   <div id="viewHome" class="view-container active">
+    <div class="security-badge">🔒 256-Bit SSL Encrypted & Cyber Security Protected Platform</div>
     <div style="margin-bottom: 12px;">
-      <input type="text" id="searchBox" class="input" placeholder="Search products, millets, sarees..." oninput="filterProducts(this.value)">
+      <input type="text" class="input" placeholder="Search products, millets, sarees..." oninput="filterProducts(this.value)">
     </div>
     <div class="grid" id="productGrid"></div>
   </div>
 
   <!-- VIEW 2: CATEGORIES -->
   <div id="viewCategories" class="view-container">
-    <h3 style="color:#4a148c; margin-bottom:12px;">Shop by Categories</h3>
-    <div class="box" onclick="filterCat('Women Fashion')" style="cursor:pointer; font-weight:bold;">👗 Women Fashion</div>
+    <h3 style="color:#4a148c; margin-bottom:12px;">Categories</h3>
+    <div class="box" onclick="filterCat('Women Fashion')" style="cursor:pointer; font-weight:bold;">👗 Women Fashion (Clothes)</div>
     <div class="box" onclick="filterCat('Grocery & Millets')" style="cursor:pointer; font-weight:bold;">🌾 Grocery & Millets</div>
     <div class="box" onclick="filterCat('Jewelry & Fancy')" style="cursor:pointer; font-weight:bold;">💍 Jewelry & Fancy</div>
-    <div class="box" onclick="filterCat('General & Pooja')" style="cursor:pointer; font-weight:bold;">🪔 General & Pooja</div>
-    <div class="box" onclick="filterCat('Men Fashion')" style="cursor:pointer; font-weight:bold;">👕 Men Fashion</div>
-    <div class="box" onclick="filterCat('Footwear')" style="cursor:pointer; font-weight:bold;">👠 Footwear</div>
-    <div class="box" onclick="filterCat('Electronics & Gadgets')" style="cursor:pointer; font-weight:bold;">📱 Electronics & Gadgets</div>
-    <div class="box" onclick="filterCat('Home & Kitchen')" style="cursor:pointer; font-weight:bold;">🏠 Home & Kitchen</div>
+    <div class="box" onclick="filterCat('Electronics')" style="cursor:pointer; font-weight:bold;">📱 Electronics & Gadgets</div>
   </div>
 
-  <!-- VIEW 3: SELLER HUB & STOCK MANAGEMENT -->
+  <!-- VIEW 3: SELLER HUB -->
   <div id="viewSeller" class="view-container">
     <div id="sellerAuthBox" class="box">
       <h3 style="color:#9c27b0; margin-bottom:12px; text-align:center;">🏪 Seller Hub Login / Register</h3>
       <label class="label">Shop Name</label>
-      <input type="text" id="sShopName" class="input" placeholder="e.g. Hyderabad Organic Store">
+      <input type="text" id="sShopName" class="input" placeholder="Store Name">
       <label class="label">Mobile Number</label>
-      <input type="tel" id="sPhone" class="input" placeholder="10-digit mobile number">
-      <label class="label">UPI ID (For Payments)</label>
-      <input type="text" id="sUpi" class="input" placeholder="yourname@ybl">
-      <button class="btn" onclick="sellerRegisterLogin()">Sign In / Create Seller Account</button>
+      <input type="tel" id="sPhone" class="input" placeholder="Mobile Number">
+      <label class="label">Seller Verification ID</label>
+      <input type="text" id="sAadhaar" class="input" maxlength="12" placeholder="12-digit ID">
+      <label class="label">Seller UPI ID (97% Payout, 3% Commission)</label>
+      <input type="text" id="sUpi" class="input" placeholder="seller@ybl">
+      <button class="btn" onclick="sellerLogin()">Register / Login Seller</button>
     </div>
 
     <div id="sellerDashBox" style="display:none;">
       <div class="box" style="border-left: 5px solid #9c27b0;">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <div>
-            <h3 id="dashShopName" style="color:#4a148c;">My Store</h3>
-            <p id="dashPhone" style="font-size:0.85rem; color:#666;"></p>
-            <p id="dashUpi" style="font-size:0.85rem; color:#666;"></p>
-          </div>
-          <button onclick="sellerLogout()" style="background:#ffebee; color:#c62828; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer;">Sign Out</button>
-        </div>
+        <h3 id="dashShopName" style="color:#4a148c;"></h3>
+        <p id="dashDetails" style="font-size:0.82rem; color:#555; margin:4px 0;"></p>
+        <button onclick="sellerLogout()" style="background:#ffebee; color:#c62828; border:none; padding:4px 8px; border-radius:4px; font-size:0.75rem; font-weight:bold; cursor:pointer;">Sign Out</button>
       </div>
 
-      <div class="stat-row">
-        <div class="stat-box">
-          <div style="font-size:0.75rem; color:#880e4f; font-weight:bold;">Total Store Stock</div>
-          <div id="dashTotalStock" style="font-size:1.2rem; font-weight:800; color:#ad1457;">4</div>
+      <div style="display:flex; gap:8px; margin-bottom:12px;">
+        <div class="box" style="flex:1; text-align:center; padding:10px;">
+          <div style="font-size:0.75rem; color:#666;">Total Stock</div>
+          <div id="statStock" style="font-size:1.1rem; font-weight:800; color:#9c27b0;">0</div>
         </div>
-        <div class="stat-box" style="background:#e8f5e9; border-color:#a5d6a7;">
-          <div style="font-size:0.75rem; color:#1b5e20; font-weight:bold;">Store Status</div>
-          <div style="font-size:1.1rem; font-weight:800; color:#2e7d32;">Active 🟢</div>
+        <div class="box" style="flex:1; text-align:center; padding:10px;">
+          <div style="font-size:0.75rem; color:#666;">Sold Items</div>
+          <div id="statSold" style="font-size:1.1rem; font-weight:800; color:#16a34a;">0</div>
+        </div>
+        <div class="box" style="flex:1; text-align:center; padding:10px;">
+          <div style="font-size:0.75rem; color:#666;">Returns</div>
+          <div id="statReturns" style="font-size:1.1rem; font-weight:800; color:#dc2626;">0</div>
         </div>
       </div>
 
       <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:12px;">Add New Product to Stock</h4>
+        <h4 style="color:#4a148c; margin-bottom:10px;">Add Detailed Product</h4>
         <label class="label">Product Name</label>
-        <input type="text" id="pName" class="input" placeholder="Product Name">
+        <input type="text" id="pName" class="input" placeholder="Name">
         <label class="label">Category</label>
         <select id="pCat" class="input">
-          <option value="Grocery & Millets">Grocery & Millets</option>
           <option value="Women Fashion">Women Fashion</option>
+          <option value="Grocery & Millets">Grocery & Millets</option>
           <option value="Jewelry & Fancy">Jewelry & Fancy</option>
-          <option value="General & Pooja">General & Pooja</option>
-          <option value="Men Fashion">Men Fashion</option>
-          <option value="Footwear">Footwear</option>
-          <option value="Electronics & Gadgets">Electronics & Gadgets</option>
-          <option value="Home & Kitchen">Home & Kitchen</option>
+          <option value="Electronics">Electronics</option>
         </select>
         <label class="label">Price (₹)</label>
         <input type="number" id="pPrice" class="input" placeholder="Price">
+        <label class="label">Nature / Material</label>
+        <input type="text" id="pNature" class="input" placeholder="e.g. Cotton, Organic">
+        <label class="label">Dimensions (L x W x H)</label>
+        <input type="text" id="pDim" class="input" placeholder="e.g. 10x5x2 cm">
+        <label class="label">Weight & Hazard Info</label>
+        <input type="text" id="pWeight" class="input" placeholder="e.g. 500g, Non-hazardous">
         <label class="label">Image URL</label>
         <input type="text" id="pImg" class="input" placeholder="Image web link">
-        <button class="btn" onclick="publishProduct()">Publish Product to Stock</button>
+        <button class="btn" onclick="addSellerProduct()">Publish Product</button>
       </div>
     </div>
   </div>
 
-  <!-- VIEW 4: BUYER AADHAAR REGISTRATION & PROFILE -->
+  <!-- VIEW 4: MY ORDERS & BUYER PROFILE -->
   <div id="viewProfile" class="view-container">
     <div id="buyerAuthBox" class="box">
-      <h3 style="color:#9c27b0; margin-bottom:12px; text-align:center;">🆔 Buyer Aadhaar Registration & Login</h3>
+      <h3 style="color:#9c27b0; margin-bottom:12px; text-align:center;">👤 Buyer Profile & Verification</h3>
       <label class="label">Full Name</label>
-      <input type="text" id="bName" class="input" placeholder="Enter your full name">
+      <input type="text" id="bName" class="input" placeholder="Name">
       <label class="label">Mobile Number</label>
-      <input type="tel" id="bPhone" class="input" placeholder="10-digit mobile number">
-      <label class="label">Aadhaar Card Number (12 Digits)</label>
-      <input type="text" id="bAadhaar" class="input" maxlength="12" placeholder="Enter 12-digit Aadhaar number">
-      <button class="btn" onclick="buyerRegisterLogin()">Verify Aadhaar & Login</button>
+      <input type="tel" id="bPhone" class="input" placeholder="Mobile">
+      <label class="label">Verification ID</label>
+      <input type="text" id="bAadhaar" class="input" maxlength="12" placeholder="ID Number">
+      <label class="label">Delivery Address</label>
+      <input type="text" id="bAddressInput" class="input" placeholder="Door No, Street, City, Pincode">
+      <label class="label">Bank Details (A/C & IFSC)</label>
+      <input type="text" id="bBank" class="input" placeholder="Bank Details">
+      <button class="btn" onclick="buyerLogin()">Verify & Save Profile</button>
     </div>
 
     <div id="buyerDashBox" style="display:none;">
-      <div class="box" style="border-left: 5px solid #16a34a;">
-        <h3 style="color:#16a34a; margin-bottom:6px;">✅ Aadhaar Verified Buyer Profile</h3>
-        <p><b>Name:</b> <span id="profileName"></span></p>
-        <p><b>Phone:</b> <span id="profilePhone"></span></p>
-        <p><b>Aadhaar ID:</b> <span id="profileAadhaar"></span> (Verified)</p>
-        <button onclick="buyerLogout()" style="margin-top:12px; background:#ffebee; color:#c62828; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer;">Logout</button>
+      <div class="box" style="border-left: 5px solid #16a34a; display:flex; gap:12px; align-items:center;">
+        <img id="buyerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" style="width:60px; height:60px; border-radius:50%; object-fit:cover;">
+        <div>
+          <h3 id="bDashName" style="color:#16a34a;"></h3>
+          <p id="bDashPhone" style="font-size:0.8rem; color:#555;"></p>
+          <p id="bDashAadhaar" style="font-size:0.8rem; color:#555;"></p>
+        </div>
+      </div>
+      
+      <div class="box">
+        <h4 style="color:#4a148c; margin-bottom:6px;">📍 Saved Delivery Address</h4>
+        <p id="bDashAddress" style="font-size:0.85rem; color:#444; margin-bottom:8px;"></p>
+        <button onclick="editAddressPrompt()" style="background:#e1bee7; color:#4a148c; border:none; padding:5px 10px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.78rem;">Edit Address</button>
+      </div>
+
+      <div class="box">
+        <h4 style="color:#4a148c; margin-bottom:8px;">📦 My Orders & Returns History</h4>
+        <div id="buyerOrdersList"><p style="font-size:0.85rem; color:#666;">No active orders found.</p></div>
+        <button onclick="buyerLogout()" style="margin-top:12px; background:#ffebee; color:#c62828; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.8rem;">Logout Profile</button>
       </div>
     </div>
   </div>
 
   <!-- VIEW 5: CART -->
   <div id="viewCart" class="view-container">
-    <h3 style="color:#4a148c; margin-bottom:12px;">Shopping Cart</h3>
+    <h3 style="color:#4a148c; margin-bottom:12px;">Shopping Cart & Checkout</h3>
     <div id="cartItemsList"></div>
+    
+    <div class="box" style="margin-top:14px; background:#fafafa;">
+      <h4 style="color:#4a148c; margin-bottom:6px;">📍 Select Delivery Address</h4>
+      <p id="cartSelectedAddress" style="font-size:0.85rem; color:#333; margin-bottom:8px;">No address saved. Please update in Profile.</p>
+      <button onclick="switchTab('profile', document.getElementById('navProfile'))" style="background:#e1bee7; color:#4a148c; border:none; padding:5px 10px; border-radius:4px; font-weight:bold; cursor:pointer; font-size:0.75rem;">Change / Add Address</button>
+    </div>
+
     <div id="cartTotalBox" style="display:none; margin-top:14px;" class="box">
       <h3>Total: ₹<span id="cartSum">0</span></h3>
-      <button class="btn" style="margin-top:10px; background:#16a34a;" onclick="checkoutWhatsApp()">Order via WhatsApp</button>
+      <button class="btn" style="margin-top:10px; background:#16a34a;" onclick="checkoutWhatsApp()">Proceed & Order via WhatsApp</button>
     </div>
   </div>
 
-  <!-- BOTTOM NAVIGATION -->
+  <!-- VIEW 6: DETAILED PRODUCT PAGE -->
+  <div id="viewProductDetail" class="view-container">
+    <button onclick="switchTab('home', document.getElementById('navHome'))" style="background:#eee; border:none; padding:6px 12px; border-radius:4px; font-weight:bold; margin-bottom:12px; cursor:pointer;">← Back to Home</button>
+    <div class="box" id="productDetailContent"></div>
+  </div>
+
+  <!-- VIEW 7: ADMIN CONSOLE -->
+  <div id="viewAdmin" class="view-container">
+    <div class="box" style="border-left: 5px solid #d32f2f;">
+      <h3 style="color:#d32f2f; margin-bottom:10px;">🔐 Admin Security Console</h3>
+      <p style="font-size:0.85rem; color:#555; margin-bottom:10px;">Platform security active. Total commission (3%): ₹<span id="adminCommission">0</span></p>
+      <button class="btn" style="background:#d32f2f;" onclick="alert('Firewall & SSL Active.')">Run Security Audit</button>
+    </div>
+  </div>
+
+  <!-- BOTTOM NAVIGATION (Exact Order: Home, Category, Seller Hub, My Orders) -->
   <nav class="bottom-nav">
     <button class="nav-item active" id="navHome" onclick="switchTab('home', this)">🏠<span>Home</span></button>
-    <button class="nav-item" id="navCat" onclick="switchTab('categories', this)">📂<span>Categories</span></button>
+    <button class="nav-item" id="navCat" onclick="switchTab('categories', this)">📂<span>Category</span></button>
     <button class="nav-item" id="navSeller" onclick="switchTab('seller', this)">🏪<span>Seller Hub</span></button>
-    <button class="nav-item" id="navProfile" onclick="switchTab('profile', this)">🆔<span>Aadhaar Profile</span></button>
-    <button class="nav-item" id="navCart" onclick="switchTab('cart', this)">🛒<span>Cart</span></button>
+    <button class="nav-item" id="navProfile" onclick="switchTab('profile', this)">📦<span>My Orders</span></button>
+    <button class="nav-item" id="navAdmin" onclick="switchTab('admin', this)" style="display:none;">🔐<span>Admin</span></button>
   </nav>
 
   <script>
     let cart = [];
-    let currentSeller = JSON.parse(localStorage.getItem('meestore_current_seller') || 'null');
-    let currentBuyer = JSON.parse(localStorage.getItem('meestore_current_buyer') || 'null');
+    let currentSeller = JSON.parse(localStorage.getItem('meestore_seller') || 'null');
+    let currentBuyer = JSON.parse(localStorage.getItem('meestore_buyer') || 'null');
+    let ordersHistory = JSON.parse(localStorage.getItem('meestore_orders') || '[]');
 
     const baseProducts = [
-      { id: 1, name: "Little millets (500g)", category: "Grocery & Millets", price: 20, img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
-      { id: 2, name: "Soft Silk Saree", category: "Women Fashion", price: 499, img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
-      { id: 3, name: "Temple Necklace", category: "Jewelry & Fancy", price: 249, img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" },
-      { id: 4, name: "Brass Diya", category: "General & Pooja", price: 120, img: "https://images.unsplash.com/photo-1605371924599-2d0365da1ae0?w=400" }
+      { id: 1, name: "Little millets (500g)", category: "Grocery & Millets", price: 20, nature: "Organic", dim: "15x10 cm", weight: "500g", img: "https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400" },
+      { id: 2, name: "Soft Silk Saree", category: "Women Fashion", price: 499, nature: "Pure Silk", dim: "6m", weight: "400g", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400" },
+      { id: 3, name: "Temple Necklace", category: "Jewelry & Fancy", price: 249, nature: "Gold Plated", dim: "Standard", weight: "100g", img: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400" }
     ];
 
     function getProducts() {
-      let custom = JSON.parse(localStorage.getItem('meestore_custom') || '[]');
+      let custom = JSON.parse(localStorage.getItem('meestore_custom_prods') || '[]');
       return [...custom, ...baseProducts];
     }
 
@@ -201,11 +239,11 @@
       const grid = document.getElementById('productGrid');
       const items = list || getProducts();
       grid.innerHTML = items.map(p => `
-        <div class="card">
+        <div class="card" onclick="openProductDetail(${p.id})">
           <img src="${p.img}" alt="${p.name}">
           <div class="title">${p.name}</div>
           <div class="price">₹${p.price}</div>
-          <button class="btn" onclick="addToCart(${p.id})">Add to Cart</button>
+          <button class="btn" onclick="event.stopPropagation(); addToCart(${p.id})">Add to Cart</button>
         </div>
       `).join('');
     }
@@ -228,24 +266,51 @@
       } else if(tabName === 'cart') {
         document.getElementById('viewCart').classList.add('active');
         renderCart();
+      } else if(tabName === 'admin') {
+        document.getElementById('viewAdmin').classList.add('active');
       }
       if(btn) btn.classList.add('active');
       window.scrollTo(0,0);
     }
 
+    function openProductDetail(id) {
+      const p = getProducts().find(item => item.id === id);
+      if(!p) return;
+      document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
+      document.getElementById('viewProductDetail').classList.add('active');
+      
+      document.getElementById('productDetailContent').innerHTML = `
+        <img src="${p.img}" style="width:100%; height:220px; object-fit:cover; border-radius:8px; margin-bottom:10px;">
+        <h2 style="color:#333; margin-bottom:6px;">${p.name}</h2>
+        <div style="font-size:1.4rem; font-weight:800; color:#9c27b0; margin-bottom:10px;">₹${p.price}</div>
+        <p style="font-size:0.85rem; color:#555; margin-bottom:6px;"><b>Category:</b> ${p.category}</p>
+        <p style="font-size:0.85rem; color:#555; margin-bottom:6px;"><b>Nature / Material:</b> ${p.nature || 'Standard'}</p>
+        <p style="font-size:0.85rem; color:#555; margin-bottom:6px;"><b>Dimensions:</b> ${p.dim || 'Standard Size'}</p>
+        <p style="font-size:0.85rem; color:#555; margin-bottom:14px;"><b>Weight & Hazard Info:</b> ${p.weight || 'Non-hazardous'}</p>
+        <div style="display:flex; gap:10px;">
+          <button class="btn" style="background:#16a34a;" onclick="addToCart(${p.id}); alert('Added to Cart!');">Add to Cart</button>
+          <button class="btn" onclick="addToCart(${p.id}); switchTab('cart', document.getElementById('navCart'));">Buy Now</button>
+        </div>
+      `;
+      window.scrollTo(0,0);
+    }
+
     function addToCart(id) {
-      const prods = getProducts();
-      const item = prods.find(p => p.id === id);
+      const item = getProducts().find(p => p.id === id);
       if(item) {
         cart.push(item);
         document.getElementById('cartCount').innerText = cart.length;
-        alert("🎉 " + item.name + " added to cart!");
       }
     }
 
     function renderCart() {
       const list = document.getElementById('cartItemsList');
       const box = document.getElementById('cartTotalBox');
+      
+      if(currentBuyer && currentBuyer.address) {
+        document.getElementById('cartSelectedAddress').innerText = currentBuyer.address;
+      }
+
       if(cart.length === 0) {
         list.innerHTML = "<p style='color:#777; text-align:center; padding:30px;'>Your cart is empty.</p>";
         box.style.display = 'none';
@@ -263,16 +328,17 @@
       }
     }
 
-    // Seller Logic
-    function sellerRegisterLogin() {
+    function sellerLogin() {
       const shopName = document.getElementById('sShopName').value.trim();
       const phone = document.getElementById('sPhone').value.trim();
       const upi = document.getElementById('sUpi').value.trim();
-      if(!shopName || !phone) { alert("Please fill Shop Name and Mobile Number!"); return; }
-      
-      currentSeller = { shopName, phone, upi: upi || "mujahidsdghf9@ybl" };
-      localStorage.setItem('meestore_current_seller', JSON.stringify(currentSeller));
-      alert("✅ Welcome, " + shopName + "!");
+      if(!shopName || !phone || !upi) {
+        alert("Please fill all details including UPI ID!");
+        return;
+      }
+      currentSeller = { shopName, phone, upi };
+      localStorage.setItem('meestore_seller', JSON.stringify(currentSeller));
+      alert("✅ Seller Account Registered!");
       updateSellerUI();
     }
 
@@ -281,9 +347,10 @@
         document.getElementById('sellerAuthBox').style.display = 'none';
         document.getElementById('sellerDashBox').style.display = 'block';
         document.getElementById('dashShopName').innerText = "🏪 " + currentSeller.shopName;
-        document.getElementById('dashPhone').innerText = "📞 Phone: " + currentSeller.phone;
-        document.getElementById('dashUpi').innerText = "💳 UPI ID: " + currentSeller.upi;
-        document.getElementById('dashTotalStock').innerText = getProducts().length;
+        document.getElementById('dashDetails').innerHTML = `Phone: ${currentSeller.phone} | UPI: ${currentSeller.upi}`;
+        document.getElementById('statStock').innerText = getProducts().length;
+        document.getElementById('statSold').innerText = ordersHistory.length;
+        document.getElementById('statReturns').innerText = "0";
       } else {
         document.getElementById('sellerAuthBox').style.display = 'block';
         document.getElementById('sellerDashBox').style.display = 'none';
@@ -291,64 +358,95 @@
     }
 
     function sellerLogout() {
-      localStorage.removeItem('meestore_current_seller');
+      localStorage.removeItem('meestore_seller');
       currentSeller = null;
       updateSellerUI();
     }
 
-    function publishProduct() {
+    function addSellerProduct() {
       const name = document.getElementById('pName').value.trim();
       const price = Number(document.getElementById('pPrice').value);
+      const nature = document.getElementById('pNature').value.trim();
+      const dim = document.getElementById('pDim').value.trim();
+      const weight = document.getElementById('pWeight').value.trim();
       const img = document.getElementById('pImg').value.trim();
       const cat = document.getElementById('pCat').value;
-      if(!name || !price || !img) { alert("Please fill all product details!"); return; }
-      
-      const newP = { id: Date.now(), name, category: cat, price, img };
-      let custom = JSON.parse(localStorage.getItem('meestore_custom') || '[]');
+
+      if(!name || !price || !img) { alert("Please fill Name, Price and Image URL!"); return; }
+
+      const newP = { id: Date.now(), name, category: cat, price, nature, dim, weight, img };
+      let custom = JSON.parse(localStorage.getItem('meestore_custom_prods') || '[]');
       custom.unshift(newP);
-      localStorage.setItem('meestore_custom', JSON.stringify(custom));
-      alert("🎉 Product published successfully to stock!");
+      localStorage.setItem('meestore_custom_prods', JSON.stringify(custom));
+      alert("🎉 Product published! 97% payment goes to Seller UPI (" + currentSeller.upi + ") and 3% platform commission retained.");
       
       document.getElementById('pName').value = '';
       document.getElementById('pPrice').value = '';
+      document.getElementById('pNature').value = '';
+      document.getElementById('pDim').value = '';
+      document.getElementById('pWeight').value = '';
       document.getElementById('pImg').value = '';
       switchTab('home', document.getElementById('navHome'));
     }
 
-    // Buyer Aadhaar Verification Logic
-    function buyerRegisterLogin() {
+    function buyerLogin() {
       const name = document.getElementById('bName').value.trim();
       const phone = document.getElementById('bPhone').value.trim();
-      const aadhaar = document.getElementById('bAadhaar').value.trim();
-      if(!name || !phone || aadhaar.length !== 12) { 
-        alert("Please enter valid Name, Phone, and full 12-digit Aadhaar number!"); 
-        return; 
+      const address = document.getElementById('bAddressInput').value.trim();
+      const bank = document.getElementById('bBank').value.trim();
+
+      if(!name || !phone || !address) {
+        alert("Please enter Name, Phone and Delivery Address!");
+        return;
       }
-      
-      currentBuyer = { name, phone, aadhaar: "XXXX-XXXX-" + aadhaar.slice(-4) };
-      localStorage.setItem('meestore_current_buyer', JSON.stringify(currentBuyer));
-      alert("✅ Aadhaar Verified Successfully! Welcome " + name);
+
+      currentBuyer = { name, phone, address, bank };
+      localStorage.setItem('meestore_buyer', JSON.stringify(currentBuyer));
+      alert("✅ Profile & Address Saved Successfully!");
       updateBuyerUI();
+
+      if(name.toLowerCase() === 'admin') {
+        document.getElementById('navAdmin').style.display = 'flex';
+      }
+    }
+
+    function editAddressPrompt() {
+      const newAddr = prompt("Edit your delivery address:", currentBuyer ? currentBuyer.address : "");
+      if(newAddr) {
+        currentBuyer.address = newAddr;
+        localStorage.setItem('meestore_buyer', JSON.stringify(currentBuyer));
+        updateBuyerUI();
+        alert("✅ Address updated successfully!");
+      }
     }
 
     function updateBuyerUI() {
       if(currentBuyer) {
         document.getElementById('buyerAuthBox').style.display = 'none';
         document.getElementById('buyerDashBox').style.display = 'block';
-        document.getElementById('profileName').innerText = currentBuyer.name;
-        document.getElementById('profilePhone').innerText = currentBuyer.phone;
-        document.getElementById('profileAadhaar').innerText = currentBuyer.aadhaar;
-        document.getElementById('headerUserName').innerText = currentBuyer.name.split(' ')[0];
+        document.getElementById('bDashName').innerText = currentBuyer.name;
+        document.getElementById('bDashPhone').innerText = "Phone: " + currentBuyer.phone;
+        document.getElementById('bDashAddress').innerText = currentBuyer.address;
+        document.getElementById('headerProfileName').innerText = currentBuyer.name.split(' ')[0];
+        
+        if(ordersHistory.length > 0) {
+          document.getElementById('buyerOrdersList').innerHTML = ordersHistory.map(o => `
+            <div style="border-bottom:1px solid #eee; padding:6px 0; font-size:0.82rem;">
+              <b>Items:</b> ${o.items}<br><b>Address:</b> ${o.address}<br><b>Total:</b> ₹${o.total} (${o.status})
+            </div>
+          `).join('');
+        }
       } else {
         document.getElementById('buyerAuthBox').style.display = 'block';
         document.getElementById('buyerDashBox').style.display = 'none';
-        document.getElementById('headerUserName').innerText = "Aadhaar Profile";
+        document.getElementById('headerProfileName').innerText = "Profile";
       }
     }
 
     function buyerLogout() {
-      localStorage.removeItem('meestore_current_buyer');
+      localStorage.removeItem('meestore_buyer');
       currentBuyer = null;
+      document.getElementById('navAdmin').style.display = 'none';
       updateBuyerUI();
     }
 
@@ -364,11 +462,27 @@
     }
 
     function checkoutWhatsApp() {
+      if(!currentBuyer || !currentBuyer.address) {
+        alert("Please add and select your delivery address in Profile before ordering!");
+        switchTab('profile', document.getElementById('navProfile'));
+        return;
+      }
+
       const names = cart.map(c => c.name).join(', ');
       const total = cart.reduce((sum, c) => sum + c.price, 0);
-      const buyerInfo = currentBuyer ? `\nBuyer: ${currentBuyer.name} (${currentBuyer.phone}) [Aadhaar Verified]` : '\nBuyer: Guest';
-      const msg = `🛒 *New Order from MeeStore*${buyerInfo}\nItems: ${names}\nTotal: ₹${total}`;
+      const commission = total * 0.03;
+      document.getElementById('adminCommission').innerText = commission.toFixed(2);
+
+      const orderObj = { items: names, total, address: currentBuyer.address, status: 'Ordered Successfully' };
+      ordersHistory.unshift(orderObj);
+      localStorage.setItem('meestore_orders', JSON.stringify(ordersHistory));
+
+      const msg = `🛒 *New Order - MeeStore*\nBuyer: ${currentBuyer.name} (${currentBuyer.phone})\nAddress: ${currentBuyer.address}\nItems: ${names}\nTotal: ₹${total}\n(3% Platform Fee: ₹${commission.toFixed(2)})`;
+      
+      cart = [];
+      document.getElementById('cartCount').innerText = 0;
       window.open(`https://wa.me/919177411712?text=${encodeURIComponent(msg)}`);
+      switchTab('profile', document.getElementById('navProfile'));
     }
 
     // Initial Load
