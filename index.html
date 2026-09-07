@@ -8,7 +8,7 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%); padding-bottom: 80px; font-size: 1.02rem; color: #333; min-height: 100vh; }
 
-    /* Splash Screen (Exact match to your screenshot) */
+    /* Splash Screen */
     #splashScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(180deg, #f8bbd0 0%, #e1bee7 100%); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease; }
     #splashScreen .logo-box { background: white; padding: 16px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); margin-bottom: 14px; }
     #splashScreen img { width: 72px; height: 72px; object-fit: contain; }
@@ -19,18 +19,16 @@
     .header { background: white; padding: 12px 16px; border-bottom: 1px solid #e0e0e0; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.05); }
     .brand-section { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .brand-section img { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; border: 1px solid #ce93d8; }
-    .brand-title { color: #6a1b9a; font-weight: 800; font-size: 1.35rem; line-height: 1.1; }
+    .brand-title { color: #6a1b9a; font-weight: 800; font-size: 1.25rem; line-height: 1.1; }
     .brand-sub { font-size: 0.75rem; color: #555; font-weight: 600; }
 
     .header-right { display: flex; gap: 8px; align-items: center; }
     .admin-btn { background: #f3e5f5; border: 1px solid #ce93d8; color: #6a1b9a; padding: 6px 12px; border-radius: 16px; font-weight: bold; font-size: 0.8rem; cursor: pointer; }
     .cart-btn { background: #f3e5f5; border: 1px solid #ce93d8; color: #6a1b9a; padding: 6px 12px; border-radius: 16px; font-weight: bold; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 4px; }
 
-    /* Search Bar */
+    /* Search Bar & Scroller */
     .search-container { padding: 12px 16px; background: white; border-bottom: 1px solid #eee; }
     .search-input { width: 100%; padding: 11px 16px; border: 1px solid #d1c4e9; border-radius: 24px; outline: none; font-size: 0.95rem; background: #fafafa; }
-
-    /* Category Horizontal Scroller */
     .cat-scroller { display: flex; gap: 10px; padding: 10px 16px; background: white; overflow-x: auto; white-space: nowrap; border-bottom: 1px solid #eee; }
     .cat-chip { display: flex; flex-direction: column; align-items: center; gap: 4px; background: #fcf8fc; border: 1px solid #e1bee7; padding: 8px 12px; border-radius: 14px; cursor: pointer; min-width: 75px; font-size: 0.75rem; font-weight: bold; color: #555; }
     .cat-chip.active { background: #6a1b9a; color: white; border-color: #6a1b9a; }
@@ -64,11 +62,12 @@
     .label { font-size: 0.88rem; font-weight: bold; color: #4a148c; display: block; margin-bottom: 4px; }
     .btn { background: #6a1b9a; color: white; border: none; padding: 11px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.95rem; }
     .security-badge { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; padding: 10px; border-radius: 8px; font-size: 0.85rem; text-align: center; margin-bottom: 12px; font-weight: bold; }
+    .profile-menu-item { padding: 12px 16px; background: #fdf8fd; border: 1px solid #e1bee7; border-radius: 8px; margin-bottom: 8px; font-weight: bold; color: #4a148c; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
   </style>
 </head>
 <body>
 
-  <!-- Splash Screen (1.5 Seconds) -->
+  <!-- Splash Screen -->
   <div id="splashScreen">
     <div class="logo-box">
       <img src="https://images.unsplash.com/photo-1555529771-835f59fc5efe?w=200" alt="Logo">
@@ -77,12 +76,12 @@
     <p>Smart Shopping for Everyone 🌸</p>
   </div>
 
-  <!-- Header -->
+  <!-- Header (Left: Customer Profile & Picture, Right: Admin & Cart) -->
   <header class="header">
-    <div class="brand-section" onclick="switchTab('profile', document.getElementById('navOrders'))">
+    <div class="brand-section" onclick="switchTab('profile', null)">
       <img id="headerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" alt="Avatar">
       <div>
-        <div class="brand-title">MeeStore</div>
+        <div class="brand-title" id="headerNameTitle">MeeStore</div>
         <div class="brand-sub" id="headerSubText">Hello, Sign In ></div>
       </div>
     </div>
@@ -93,7 +92,7 @@
   </header>
 
   <!-- Search Bar -->
-  <div class="search-container">
+  <div class="search-container" id="searchBarContainer">
     <input type="text" class="search-input" placeholder="Search Sarees, Groceries, Kurtis, Jewelry..." oninput="filterProducts(this.value)">
   </div>
 
@@ -109,7 +108,7 @@
   </div>
 
   <!-- Banner -->
-  <div class="banner">
+  <div class="banner" id="bannerContainer">
     <div>
       <h3>హోల్‌సేల్ ధరలకే షాపింగ్!</h3>
       <p>ఉచిత డెలివరీ & సులువుగా రిటర్న్స్</p>
@@ -124,7 +123,7 @@
     <div class="grid" id="productGrid"></div>
   </div>
 
-  <!-- VIEW 2: CATEGORIES (Full List) -->
+  <!-- VIEW 2: CATEGORIES -->
   <div id="viewCategories" class="view-container">
     <h3 style="color:#4a148c; margin-bottom:14px; font-size:1.2rem;">All Categories</h3>
     <div class="box" onclick="filterCatNav('Women Fashion')" style="cursor:pointer; font-weight:bold;">👗 Women Fashion (Kurtis, Sarees)</div>
@@ -135,7 +134,7 @@
     <div class="box" onclick="filterCatNav('Home & Kitchen')" style="cursor:pointer; font-weight:bold;">🏠 Home & Kitchen Appliances</div>
   </div>
 
-  <!-- VIEW 3: SELLER HUB (OTP Login & Detailed SKU/Product Add) -->
+  <!-- VIEW 3: SELLER HUB (OTP Login & SKU / Product ID) -->
   <div id="viewSeller" class="view-container">
     <div id="sellerAuthBox" class="box">
       <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">🏪 Seller Hub OTP Login & Register</h3>
@@ -178,12 +177,12 @@
       </div>
 
       <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:12px; font-size:1.1rem;">Add Detailed Product (Meesho Style)</h4>
+        <h4 style="color:#4a148c; margin-bottom:12px; font-size:1.1rem;">Add Detailed Product (SKU & Product ID)</h4>
         <label class="label">Product Name</label>
         <input type="text" id="pName" class="input" placeholder="Name">
         <div style="display:flex; gap:10px;">
           <div style="flex:1;"><label class="label">SKU ID</label><input type="text" id="pSku" class="input" placeholder="SKU12345"></div>
-          <div style="flex:1;"><label class="label">Product ID</label><input type="text" id="pIdNo" class="input" placeholder="PID987"></div>
+          <div style="flex:1;"><label class="label">Product ID / No.</label><input type="text" id="pIdNo" class="input" placeholder="PID987"></div>
         </div>
         <label class="label">Category</label>
         <select id="pCat" class="input">
@@ -209,7 +208,7 @@
     </div>
   </div>
 
-  <!-- VIEW 4: MY ORDERS & CUSTOMER PROFILE (Right side bottom as requested) -->
+  <!-- VIEW 4: CUSTOMER PROFILE & DASHBOARD (Orders, Returns, Bank, Settings, Address) -->
   <div id="viewProfile" class="view-container">
     <div id="buyerAuthBox" class="box">
       <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">👤 Customer OTP Login & Registration</h3>
@@ -228,29 +227,33 @@
       <input type="text" id="bAddressInput" class="input" placeholder="Door No, Street, City, Pincode">
       <label class="label">Bank Details (A/C & IFSC)</label>
       <input type="text" id="bBank" class="input" placeholder="Bank Details">
+      <label class="label">Profile Picture URL</label>
+      <input type="text" id="bAvatarInput" class="input" placeholder="Image URL for profile picture">
       <button class="btn" style="margin-top:8px;" onclick="verifyBuyerOTP()">Verify OTP & Save Profile</button>
     </div>
 
     <div id="buyerDashBox" style="display:none;">
       <div class="box" style="border-left: 5px solid #16a34a; display:flex; gap:14px; align-items:center;">
-        <img id="buyerAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" style="width:70px; height:70px; border-radius:50%; object-fit:cover;">
+        <img id="buyerDashAvatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100" style="width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid #16a34a;">
         <div>
           <h3 id="bDashName" style="color:#16a34a; font-size:1.2rem;"></h3>
           <p id="bDashPhone" style="font-size:0.9rem; color:#555;"></p>
         </div>
       </div>
       
-      <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">📍 Saved Delivery Address</h4>
-        <p id="bDashAddress" style="font-size:0.92rem; color:#444; margin-bottom:10px;"></p>
-        <button onclick="editAddressPrompt()" style="background:#e1bee7; color:#4a148c; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.85rem;">Edit Address</button>
+      <!-- Customer Interactive Options -->
+      <div class="profile-menu-item" onclick="openSubSection('orders')">📦 My Orders & Returns <span>➔</span></div>
+      <div class="profile-menu-item" onclick="openSubSection('bank')">🏦 Bank Account & Refunds <span>➔</span></div>
+      <div class="profile-menu-item" onclick="openSubSection('address')">📍 Delivery Address Manager <span>➔</span></div>
+      <div class="profile-menu-item" onclick="openSubSection('settings')">⚙️ Account Settings <span>➔</span></div>
+
+      <!-- Dynamic Sub-Section Display Box -->
+      <div class="box" id="profileSubBox" style="margin-top:12px; display:none;">
+        <h4 id="subBoxTitle" style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;"></h4>
+        <div id="subBoxContent"></div>
       </div>
 
-      <div class="box">
-        <h4 style="color:#4a148c; margin-bottom:10px; font-size:1.05rem;">📦 My Orders & Returns History</h4>
-        <div id="buyerOrdersList"><p style="font-size:0.9rem; color:#666;">No active orders found.</p></div>
-        <button onclick="buyerLogout()" style="margin-top:14px; background:#ffebee; color:#c62828; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.88rem;">Logout Profile</button>
-      </div>
+      <button onclick="buyerLogout()" style="margin-top:14px; background:#ffebee; color:#c62828; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.88rem; width:100%;">Logout Profile</button>
     </div>
   </div>
 
@@ -262,7 +265,7 @@
     <div class="box" style="margin-top:14px; background:#fafafa;">
       <h4 style="color:#4a148c; margin-bottom:8px; font-size:1.05rem;">📍 Select Delivery Address</h4>
       <p id="cartSelectedAddress" style="font-size:0.92rem; color:#333; margin-bottom:10px;">No address saved. Please update in Profile.</p>
-      <button onclick="switchTab('profile', document.getElementById('navOrders'))" style="background:#e1bee7; color:#4a148c; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.82rem;">Change / Add Address</button>
+      <button onclick="switchTab('profile', null)" style="background:#e1bee7; color:#4a148c; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.82rem;">Change / Add Address</button>
     </div>
 
     <div id="cartTotalBox" style="display:none; margin-top:14px;" class="box">
@@ -273,7 +276,7 @@
 
   <!-- VIEW 6: DETAILED PRODUCT PAGE -->
   <div id="viewProductDetail" class="view-container">
-    <button onclick="switchTab('home', document.getElementById('navHome'))" style="background:#eee; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; margin-bottom:14px; cursor:pointer; font-size:0.9rem;">← Back to Home</button>
+    <button onclick="switchTab('home', null)" style="background:#eee; border:none; padding:8px 14px; border-radius:6px; font-weight:bold; margin-bottom:14px; cursor:pointer; font-size:0.9rem;">← Back to Home</button>
     <div class="box" id="productDetailContent"></div>
   </div>
 
@@ -295,7 +298,7 @@
   </nav>
 
   <script>
-    // 1.5s Splash Screen Timer
+    // Splash Screen Timer
     setTimeout(() => {
       const splash = document.getElementById('splashScreen');
       splash.style.opacity = '0';
@@ -335,8 +338,9 @@
     function switchTab(tabName, btn) {
       document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-      document.querySelector('.search-container').style.display = (tabName === 'home') ? 'block' : 'none';
+      document.getElementById('searchBarContainer').style.display = (tabName === 'home') ? 'block' : 'none';
       document.getElementById('catScroller').style.display = (tabName === 'home') ? 'flex' : 'none';
+      document.getElementById('bannerContainer').style.display = (tabName === 'home') ? 'flex' : 'none';
       
       if(tabName === 'home') {
         document.getElementById('viewHome').classList.add('active');
@@ -370,8 +374,9 @@
       const p = getProducts().find(item => item.id === id);
       if(!p) return;
       document.querySelectorAll('.view-container').forEach(v => v.classList.remove('active'));
-      document.querySelector('.search-container').style.display = 'none';
+      document.getElementById('searchBarContainer').style.display = 'none';
       document.getElementById('catScroller').style.display = 'none';
+      document.getElementById('bannerContainer').style.display = 'none';
       document.getElementById('viewProductDetail').classList.add('active');
       
       document.getElementById('productDetailContent').innerHTML = `
@@ -481,13 +486,13 @@
       const img = document.getElementById('pImg').value.trim();
       const cat = document.getElementById('pCat').value;
 
-      if(!name || !price || !img) { alert("Please fill Name, Price and Image URL!"); return; }
+      if(!name || !price || !img || !sku || !pid) { alert("Please fill all fields including SKU ID and Product ID!"); return; }
 
       const newP = { id: Date.now(), name, sku, pid, category: cat, price, nature, dim, weight, img };
       let custom = JSON.parse(localStorage.getItem('meestore_custom_prods') || '[]');
       custom.unshift(newP);
       localStorage.setItem('meestore_custom_prods', JSON.stringify(custom));
-      alert("🎉 Product published! 97% payment goes to Seller UPI (" + currentSeller.upi + ") and 3% platform commission retained.");
+      alert("🎉 Product published with SKU: " + sku + " & ID: " + pid + "!");
       
       document.getElementById('pName').value = '';
       document.getElementById('pSku').value = '';
@@ -514,14 +519,48 @@
       const otp = document.getElementById('bOtpInput').value.trim();
       const address = document.getElementById('bAddressInput').value.trim();
       const bank = document.getElementById('bBank').value.trim();
+      let avatar = document.getElementById('bAvatarInput').value.trim();
 
       if(!name || !phone || !address) { alert("Please fill Name, Phone and Delivery Address!"); return; }
       if(otp !== '1234') { alert("Invalid OTP! Please enter 1234"); return; }
+      if(!avatar) avatar = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100";
 
-      currentBuyer = { name, phone, address, bank };
+      currentBuyer = { name, phone, address, bank, avatar };
       localStorage.setItem('meestore_buyer', JSON.stringify(currentBuyer));
       alert("✅ Customer OTP Verified & Saved Successfully!");
       updateBuyerUI();
+    }
+
+    function openSubSection(type) {
+      const box = document.getElementById('profileSubBox');
+      const title = document.getElementById('subBoxTitle');
+      const content = document.getElementById('subBoxContent');
+      box.style.display = 'block';
+
+      if(type === 'orders') {
+        title.innerText = "📦 My Orders & Returns History";
+        if(ordersHistory.length === 0) {
+          content.innerHTML = "<p style='color:#666; font-size:0.9rem;'>No active orders or returns.</p>";
+        } else {
+          content.innerHTML = ordersHistory.map(o => `
+            <div style="border-bottom:1px solid #eee; padding:8px 0; font-size:0.9rem;">
+              <b>Items:</b> ${o.items}<br><b>Address:</b> ${o.address}<br><b>Total:</b> ₹${o.total} (${o.status})
+            </div>
+          `).join('');
+        }
+      } else if(type === 'bank') {
+        title.innerText = "🏦 Bank Account & Refunds Details";
+        content.innerHTML = `<p style="font-size:0.92rem; color:#444;"><b>Bank Details:</b> ${currentBuyer.bank || 'Not Provided'}</p>`;
+      } else if(type === 'address') {
+        title.innerText = "📍 Delivery Address Manager";
+        content.innerHTML = `
+          <p style="font-size:0.92rem; color:#444; margin-bottom:8px;"><b>Current Address:</b> ${currentBuyer.address}</p>
+          <button onclick="editAddressPrompt()" style="background:#e1bee7; color:#4a148c; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer; font-size:0.85rem;">Edit Address</button>
+        `;
+      } else if(type === 'settings') {
+        title.innerText = "⚙️ Account Settings";
+        content.innerHTML = `<p style="font-size:0.9rem; color:#555;">App Version: 2.6.0 (Secure Mode Active)</p>`;
+      }
     }
 
     function editAddressPrompt() {
@@ -530,6 +569,7 @@
         currentBuyer.address = newAddr;
         localStorage.setItem('meestore_buyer', JSON.stringify(currentBuyer));
         updateBuyerUI();
+        openSubSection('address');
         alert("✅ Address updated successfully!");
       }
     }
@@ -540,25 +580,23 @@
         document.getElementById('buyerDashBox').style.display = 'block';
         document.getElementById('bDashName').innerText = currentBuyer.name;
         document.getElementById('bDashPhone').innerText = "Phone: " + currentBuyer.phone;
-        document.getElementById('bDashAddress').innerText = currentBuyer.address;
+        document.getElementById('bDashAvatar').src = currentBuyer.avatar;
         
-        document.getElementById('headerSubText').innerText = currentBuyer.name;
+        // Header Left update
+        document.getElementById('headerAvatar').src = currentBuyer.avatar;
+        document.getElementById('headerNameTitle').innerText = currentBuyer.name;
+        document.getElementById('headerSubText').innerText = "View Profile >";
         
         if(currentBuyer.name.toLowerCase() === 'admin') {
           document.getElementById('headerAdminBtn').style.display = 'inline-block';
-        }
-
-        if(ordersHistory.length > 0) {
-          document.getElementById('buyerOrdersList').innerHTML = ordersHistory.map(o => `
-            <div style="border-bottom:1px solid #eee; padding:8px 0; font-size:0.9rem;">
-              <b>Items:</b> ${o.items}<br><b>Address:</b> ${o.address}<br><b>Total:</b> ₹${o.total} (${o.status})
-            </div>
-          `).join('');
         }
       } else {
         document.getElementById('buyerAuthBox').style.display = 'block';
         document.getElementById('buyerDashBox').style.display = 'none';
         document.getElementById('buyerOtpSection').style.display = 'none';
+        document.getElementById('profileSubBox').style.display = 'none';
+        document.getElementById('headerAvatar').src = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100";
+        document.getElementById('headerNameTitle').innerText = "MeeStore";
         document.getElementById('headerSubText').innerText = "Hello, Sign In >";
         document.getElementById('headerAdminBtn').style.display = 'none';
       }
