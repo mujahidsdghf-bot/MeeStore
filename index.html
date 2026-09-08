@@ -64,6 +64,8 @@
     .input { width: 100%; padding: 12px; margin: 6px 0 14px 0; border: 1px solid #ccc; border-radius: 8px; outline: none; font-size: 1rem; }
     .label { font-size: 0.88rem; font-weight: bold; color: #4a148c; display: block; margin-bottom: 4px; }
     .btn { background: #6a1b9a; color: white; border: none; padding: 11px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 0.95rem; }
+    .btn-whatsapp { background-color: #25D366; }
+    .btn-whatsapp:hover { background-color: #1ebe5d; }
     .security-badge { background: #e8f5e9; border: 1px solid #a5d6a7; color: #2e7d32; padding: 10px; border-radius: 8px; font-size: 0.85rem; text-align: center; margin-bottom: 12px; font-weight: bold; }
     .profile-menu-item { padding: 12px 16px; background: #fdf8fd; border: 1px solid #e1bee7; border-radius: 8px; margin-bottom: 8px; font-weight: bold; color: #4a148c; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
   </style>
@@ -152,17 +154,17 @@
   <div id="viewSeller" class="view-container">
     <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div id="sellerAuthBox" class="box">
-      <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">🏪 Seller Hub OTP Login & Register</h3>
+      <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">🏪 Seller Hub WhatsApp OTP Login & Register</h3>
       <label class="label">Shop Name</label>
       <input type="text" id="sShopName" class="input" placeholder="e.g. Hyderabad Handlooms">
       <label class="label">Mobile Number</label>
       <div style="display:flex; gap:8px;">
-        <input type="tel" id="sPhone" class="input" placeholder="10-digit mobile" style="margin-bottom:0;">
-        <button class="btn" style="width:130px; padding:10px;" onclick="sendSellerOTP()">Send OTP</button>
+        <input type="tel" id="sPhone" class="input" placeholder="10-digit mobile" style="margin-bottom:0;" maxlength="10">
+        <button class="btn btn-whatsapp" style="width:150px; padding:10px;" onclick="sendSellerWhatsAppOTP()">Get WhatsApp OTP</button>
       </div>
       <div id="otpSection" style="display:none; margin-top:14px;">
-        <label class="label">Enter 4-Digit OTP (Use 1234)</label>
-        <input type="text" id="sOtpInput" class="input" maxlength="4" placeholder="1234">
+        <label class="label">Enter 6-Digit OTP received on WhatsApp</label>
+        <input type="text" id="sOtpInput" class="input" maxlength="6" placeholder="Enter OTP">
       </div>
       <label class="label" style="margin-top:10px;">Seller UPI ID (Payments go directly to you)</label>
       <input type="text" id="sUpi" class="input" placeholder="seller@ybl">
@@ -236,17 +238,17 @@
   <div id="viewProfile" class="view-container">
     <button class="back-btn" onclick="switchTab('home', document.getElementById('navHome'))">← Back to Home</button>
     <div id="buyerAuthBox" class="box">
-      <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">👤 Customer OTP Login & Registration</h3>
+      <h3 style="color:#6a1b9a; margin-bottom:14px; text-align:center; font-size:1.2rem;">👤 Customer WhatsApp OTP Login & Registration</h3>
       <label class="label">Customer Name</label>
       <input type="text" id="bName" class="input" placeholder="Enter your full name">
       <label class="label">Mobile Number</label>
       <div style="display:flex; gap:8px;">
-        <input type="tel" id="bPhone" class="input" placeholder="Mobile Number" style="margin-bottom:0;">
-        <button class="btn" style="width:130px; padding:10px;" onclick="sendBuyerOTP()">Send OTP</button>
+        <input type="tel" id="bPhone" class="input" placeholder="Mobile Number" style="margin-bottom:0;" maxlength="10">
+        <button class="btn btn-whatsapp" style="width:150px; padding:10px;" onclick="sendBuyerWhatsAppOTP()">Get WhatsApp OTP</button>
       </div>
       <div id="buyerOtpSection" style="display:none; margin-top:14px;">
-        <label class="label">Enter 4-Digit OTP (Use 1234)</label>
-        <input type="text" id="bOtpInput" class="input" maxlength="4" placeholder="1234">
+        <label class="label">Enter 6-Digit OTP received on WhatsApp</label>
+        <input type="text" id="bOtpInput" class="input" maxlength="6" placeholder="Enter OTP">
       </div>
       <label class="label" style="margin-top:10px;">Delivery Address</label>
       <input type="text" id="bAddressInput" class="input" placeholder="Door No, Street, City, Pincode">
@@ -517,11 +519,22 @@
       }
     }
 
-    function sendSellerOTP() {
+    // --- WHATSAPP OTP LOGIC FOR SELLER & BUYER ---
+    function sendSellerWhatsAppOTP() {
       const phone = document.getElementById('sPhone').value.trim();
       if(phone.length !== 10) { alert("Please enter valid 10-digit mobile number!"); return; }
+      
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      localStorage.setItem('meestore_temp_seller_otp', otp.toString());
+      localStorage.setItem('meestore_temp_seller_phone', phone);
+
       document.getElementById('otpSection').style.display = 'block';
-      alert("📲 OTP sent to " + phone + ". (Simulation OTP: 1234)");
+      
+      const msg = `మీ MeeStore సెల్లర్ లాగిన్ OTP కోడ్: *${otp}*. దీన్ని ఎవరితోనూ షేర్ చేయకండి.`;
+      const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(whatsappUrl, '_blank');
+      
+      alert("📲 WhatsApp ఓపెన్ అయింది! మీ సెల్లర్ OTP ని సెండ్ చేయండి.");
     }
 
     function verifySellerOTP() {
@@ -529,13 +542,14 @@
       const phone = document.getElementById('sPhone').value.trim();
       const otp = document.getElementById('sOtpInput').value.trim();
       const upi = document.getElementById('sUpi').value.trim();
+      const savedOtp = localStorage.getItem('meestore_temp_seller_otp');
 
       if(!shopName || !phone || !upi) { alert("Please fill Shop Name, Mobile and UPI ID!"); return; }
-      if(otp !== '1234') { alert("Invalid OTP! Please enter 1234"); return; }
+      if(!otp || otp !== savedOtp) { alert("Invalid OTP! Please check WhatsApp and enter correct 6-digit OTP."); return; }
 
       currentSeller = { shopName, phone, upi };
       localStorage.setItem('meestore_seller', JSON.stringify(currentSeller));
-      alert("✅ Seller OTP Verified & Logged in successfully!");
+      alert("✅ Seller WhatsApp OTP Verified & Logged in successfully!");
       updateSellerUI();
     }
 
@@ -623,11 +637,21 @@
       }
     }
 
-    function sendBuyerOTP() {
+    function sendBuyerWhatsAppOTP() {
       const phone = document.getElementById('bPhone').value.trim();
       if(phone.length !== 10) { alert("Please enter valid 10-digit mobile number!"); return; }
+      
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      localStorage.setItem('meestore_temp_buyer_otp', otp.toString());
+      localStorage.setItem('meestore_temp_buyer_phone', phone);
+
       document.getElementById('buyerOtpSection').style.display = 'block';
-      alert("📲 OTP sent to " + phone + ". (Simulation OTP: 1234)");
+      
+      const msg = `మీ MeeStore కస్టమర్ లాగిన్ OTP కోడ్: *${otp}*. దీన్ని ఎవరితోనూ షేర్ చేయకండి.`;
+      const whatsappUrl = `https://wa.me/91${phone}?text=${encodeURIComponent(msg)}`;
+      window.open(whatsappUrl, '_blank');
+      
+      alert("📲 WhatsApp ఓపెన్ అయింది! మీ కస్టమర్ OTP ని సెండ్ చేయండి.");
     }
 
     function verifyBuyerOTP() {
@@ -636,15 +660,16 @@
       const otp = document.getElementById('bOtpInput').value.trim();
       const address = document.getElementById('bAddressInput').value.trim();
       const bank = document.getElementById('bBank').value.trim();
+      const savedOtp = localStorage.getItem('meestore_temp_buyer_otp');
 
       if(!name || !phone || !address) { alert("Please fill Name, Phone and Delivery Address!"); return; }
-      if(otp !== '1234') { alert("Invalid OTP! Please enter 1234"); return; }
+      if(!otp || otp !== savedOtp) { alert("Invalid OTP! Please check WhatsApp and enter correct 6-digit OTP."); return; }
 
       let avatar = tempAvatarBase64 || (currentBuyer ? currentBuyer.avatar : "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100");
 
       currentBuyer = { name, phone, address, bank, avatar };
       localStorage.setItem('meestore_buyer', JSON.stringify(currentBuyer));
-      alert("✅ Customer OTP Verified & Profile Saved Successfully!");
+      alert("✅ Customer WhatsApp OTP Verified & Profile Saved Successfully!");
       updateBuyerUI();
     }
 
